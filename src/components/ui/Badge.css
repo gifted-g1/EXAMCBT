@@ -1,0 +1,16 @@
+.es-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.es-badge--success { background: var(--color-success-bg); color: var(--color-success); }
+.es-badge--warning { background: var(--color-warning-bg); color: var(--color-warning); }
+.es-badge--danger { background: var(--color-danger-bg); color: var(--color-danger); }
+.es-badge--critical { background: var(--color-critical-bg); color: var(--color-critical); }
+.es-badge--disconnected { background: var(--color-disconnected-bg); color: var(--color-disconnected); }
+.es-badge--neutral { background: var(--color-primary-light); color: var(--color-primary-dark); }

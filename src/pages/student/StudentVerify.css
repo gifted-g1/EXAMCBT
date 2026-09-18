@@ -1,0 +1,40 @@
+.es-verify {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.es-verify__card {
+  background: var(--color-surface-raised);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: 32px;
+  width: 100%;
+  max-width: 460px;
+  text-align: center;
+}
+
+.es-verify__hint {
+  color: var(--color-text-muted);
+  font-size: 14px;
+}
+
+.es-verify__camera {
+  background: #000;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  margin: 18px 0;
+  aspect-ratio: 4 / 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.es-verify__camera video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}

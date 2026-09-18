@@ -1,0 +1,16 @@
+.es-alert {
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  font-size: 14px;
+  border: 1px solid transparent;
+}
+
+.es-alert__title {
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+
+.es-alert--info { background: var(--color-primary-tint); color: var(--color-primary-dark); border-color: var(--color-primary-light); }
+.es-alert--success { background: var(--color-success-bg); color: var(--color-success); }
+.es-alert--warning { background: var(--color-warning-bg); color: var(--color-warning); }
+.es-alert--danger { background: var(--color-danger-bg); color: var(--color-danger); }

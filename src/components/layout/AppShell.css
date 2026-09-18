@@ -1,0 +1,114 @@
+.es-shell {
+  display: flex;
+  min-height: 100vh;
+}
+
+.es-sidebar {
+  width: var(--sidebar-width);
+  background: var(--color-surface);
+  border-right: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  padding: 20px 14px;
+  flex-shrink: 0;
+}
+
+.es-sidebar__brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: 18px;
+  color: var(--color-primary-dark);
+  padding: 6px 10px 22px 10px;
+}
+
+.es-sidebar__mark {
+  color: var(--color-primary);
+}
+
+.es-sidebar__nav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+
+.es-sidebar__link {
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  color: var(--color-text-muted);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.es-sidebar__link:hover {
+  background: var(--color-primary-tint);
+  color: var(--color-text);
+}
+
+.es-sidebar__link--active {
+  background: var(--color-primary-light);
+  color: var(--color-primary-dark);
+  font-weight: 700;
+}
+
+.es-sidebar__footer {
+  padding: 10px;
+  border-top: 1px solid var(--color-border);
+}
+
+.es-sidebar__role {
+  font-size: 12px;
+  color: var(--color-text-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.es-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.es-topbar {
+  height: var(--topbar-height);
+  border-bottom: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  background: var(--color-bg);
+  flex-shrink: 0;
+}
+
+.es-topbar__user {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 14px;
+  color: var(--color-text-muted);
+}
+
+.es-topbar__logout {
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 6px 12px;
+  cursor: pointer;
+  color: var(--color-text);
+}
+
+.es-topbar__logout:hover {
+  border-color: var(--color-border-strong);
+}
+
+.es-content {
+  flex: 1;
+  padding: 28px;
+  overflow-x: auto;
+  max-width: 100%;
+}

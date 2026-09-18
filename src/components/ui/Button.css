@@ -1,0 +1,48 @@
+.es-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 120ms ease, border-color 120ms ease, transform 60ms ease;
+  white-space: nowrap;
+}
+
+.es-btn:active {
+  transform: translateY(1px);
+}
+
+.es-btn--sm { padding: 6px 12px; font-size: 13px; }
+.es-btn--md { padding: 10px 18px; font-size: 14px; }
+.es-btn--lg { padding: 13px 24px; font-size: 15px; }
+
+.es-btn--full { width: 100%; }
+
+.es-btn--primary {
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+}
+.es-btn--primary:hover { background: var(--color-primary-hover); }
+.es-btn--primary:disabled { background: var(--color-border-strong); cursor: not-allowed; }
+
+.es-btn--secondary {
+  background: var(--color-primary-light);
+  color: var(--color-primary-dark);
+}
+.es-btn--secondary:hover { background: var(--color-border-strong); }
+
+.es-btn--ghost {
+  background: transparent;
+  color: var(--color-text-muted);
+  border-color: var(--color-border);
+}
+.es-btn--ghost:hover { border-color: var(--color-border-strong); color: var(--color-text); }
+
+.es-btn--danger {
+  background: var(--color-danger-bg);
+  color: var(--color-danger);
+}
+.es-btn--danger:hover { background: #fadcdc; }

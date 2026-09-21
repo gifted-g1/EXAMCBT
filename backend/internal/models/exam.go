@@ -36,30 +36,30 @@ const (
 // Exam is the top-level examination definition created by a lecturer
 // and reviewed/scheduled/published by an admin.
 type Exam struct {
-	ID                    uuid.UUID      `gorm:"type:uuid;primaryKey" json:"id"`
-	OrganizationID        uuid.UUID      `gorm:"type:uuid;index;not null" json:"organization_id"`
-	CreatedByUserID       uuid.UUID      `gorm:"type:uuid;index;not null" json:"created_by_user_id"`
-	Title                 string         `gorm:"not null" json:"title"`
-	Course                string         `json:"course"`
-	CourseCode            string         `json:"course_code"`
-	DurationMinutes       int            `gorm:"not null" json:"duration_minutes"`
-	StartAt               time.Time      `json:"start_at"`
-	EndAt                 time.Time      `json:"end_at"`
-	Mode                  ExamMode       `gorm:"not null;default:'ONLINE'" json:"mode"`
-	Status                ExamStatus     `gorm:"not null;default:'DRAFT';index" json:"status"`
-	RandomizeQuestions    bool           `gorm:"default:false" json:"randomize_questions"`
-	RandomizeAnswers      bool           `gorm:"default:false" json:"randomize_answers"`
-	AllowNavigation       bool           `gorm:"default:true" json:"allow_navigation"`
-	EnableAIMonitoring    bool           `gorm:"default:true" json:"enable_ai_monitoring"`
-	RequireFaceVerification bool         `gorm:"default:true" json:"require_face_verification"`
-	PassingScore          float64        `json:"passing_score"`
-	Instructions          string         `json:"instructions"`
+	ID                      uuid.UUID      `gorm:"type:char(36);primaryKey" json:"id"`
+	OrganizationID          uuid.UUID      `gorm:"type:char(36);index;not null" json:"organization_id"`
+	CreatedByUserID         uuid.UUID      `gorm:"type:char(36);index;not null" json:"created_by_user_id"`
+	Title                   string         `gorm:"type:varchar(255);not null" json:"title"`
+	Course                  string         `gorm:"type:varchar(255)" json:"course"`
+	CourseCode              string         `gorm:"type:varchar(100)" json:"course_code"`
+	DurationMinutes         int            `gorm:"not null" json:"duration_minutes"`
+	StartAt                 time.Time      `json:"start_at"`
+	EndAt                   time.Time      `json:"end_at"`
+	Mode                    ExamMode       `gorm:"type:varchar(20);not null;default:'ONLINE'" json:"mode"`
+	Status                  ExamStatus     `gorm:"type:varchar(20);not null;default:'DRAFT';index" json:"status"`
+	RandomizeQuestions      bool           `gorm:"default:false" json:"randomize_questions"`
+	RandomizeAnswers        bool           `gorm:"default:false" json:"randomize_answers"`
+	AllowNavigation         bool           `gorm:"default:true" json:"allow_navigation"`
+	EnableAIMonitoring      bool           `gorm:"default:true" json:"enable_ai_monitoring"`
+	RequireFaceVerification bool           `gorm:"default:true" json:"require_face_verification"`
+	PassingScore            float64        `json:"passing_score"`
+	Instructions            string         `gorm:"type:text" json:"instructions"`
 	// LAN-mode runtime info, populated when the exam server is started.
-	LANServerIP           string         `json:"lan_server_ip,omitempty"`
-	LANServerPort         int            `json:"lan_server_port,omitempty"`
-	CreatedAt             time.Time      `json:"created_at"`
-	UpdatedAt             time.Time      `json:"updated_at"`
-	DeletedAt             gorm.DeletedAt `gorm:"index" json:"-"`
+	LANServerIP             string         `gorm:"type:varchar(45)" json:"lan_server_ip,omitempty"`
+	LANServerPort           int            `json:"lan_server_port,omitempty"`
+	CreatedAt               time.Time      `json:"created_at"`
+	UpdatedAt               time.Time      `json:"updated_at"`
+	DeletedAt               gorm.DeletedAt `gorm:"index" json:"-"`
 
 	Questions []Question `json:"questions,omitempty"`
 }
@@ -74,13 +74,13 @@ func (e *Exam) BeforeCreate(tx *gorm.DB) error {
 // Question belongs to an exam. Additional question types can be added
 // by extending QuestionType and the grading logic in services/exam.
 type Question struct {
-	ID          uuid.UUID    `gorm:"type:uuid;primaryKey" json:"id"`
-	ExamID      uuid.UUID    `gorm:"type:uuid;index;not null" json:"exam_id"`
-	Type        QuestionType `gorm:"not null" json:"type"`
-	Text        string       `gorm:"not null" json:"text"`
+	ID          uuid.UUID    `gorm:"type:char(36);primaryKey" json:"id"`
+	ExamID      uuid.UUID    `gorm:"type:char(36);index;not null" json:"exam_id"`
+	Type        QuestionType `gorm:"type:varchar(30);not null" json:"type"`
+	Text        string       `gorm:"type:text;not null" json:"text"`
 	Points      float64      `gorm:"default:1" json:"points"`
 	OrderIndex  int          `json:"order_index"`
-	CorrectText string       `json:"correct_text,omitempty"` // used for SHORT_ANSWER / TRUE_FALSE
+	CorrectText string       `gorm:"type:text" json:"correct_text,omitempty"` // used for SHORT_ANSWER / TRUE_FALSE
 	CreatedAt   time.Time    `json:"created_at"`
 	UpdatedAt   time.Time    `json:"updated_at"`
 
@@ -96,9 +96,9 @@ func (q *Question) BeforeCreate(tx *gorm.DB) error {
 
 // Option is a possible answer for a MULTIPLE_CHOICE question.
 type Option struct {
-	ID         uuid.UUID `gorm:"type:uuid;primaryKey" json:"id"`
-	QuestionID uuid.UUID `gorm:"type:uuid;index;not null" json:"question_id"`
-	Text       string    `gorm:"not null" json:"text"`
+	ID         uuid.UUID `gorm:"type:char(36);primaryKey" json:"id"`
+	QuestionID uuid.UUID `gorm:"type:char(36);index;not null" json:"question_id"`
+	Text       string    `gorm:"type:text;not null" json:"text"`
 	IsCorrect  bool      `gorm:"default:false" json:"is_correct"`
 	OrderIndex int       `json:"order_index"`
 }
@@ -113,9 +113,9 @@ func (o *Option) BeforeCreate(tx *gorm.DB) error {
 type AttemptStatus string
 
 const (
-	AttemptNotStarted AttemptStatus = "NOT_STARTED"
-	AttemptInProgress AttemptStatus = "IN_PROGRESS"
-	AttemptSubmitted  AttemptStatus = "SUBMITTED"
+	AttemptNotStarted   AttemptStatus = "NOT_STARTED"
+	AttemptInProgress   AttemptStatus = "IN_PROGRESS"
+	AttemptSubmitted    AttemptStatus = "SUBMITTED"
 	AttemptDisconnected AttemptStatus = "DISCONNECTED"
 )
 
@@ -123,17 +123,17 @@ const (
 // index on (exam_id, student_id) enforces one attempt per student,
 // preventing duplicate submissions at the database level.
 type ExamAttempt struct {
-	ID             uuid.UUID     `gorm:"type:uuid;primaryKey" json:"id"`
-	ExamID         uuid.UUID     `gorm:"type:uuid;index:idx_exam_student,unique;not null" json:"exam_id"`
-	StudentID      uuid.UUID     `gorm:"type:uuid;index:idx_exam_student,unique;not null" json:"student_id"`
-	Status         AttemptStatus `gorm:"not null;default:'NOT_STARTED';index" json:"status"`
-	VerifiedFace   bool          `gorm:"default:false" json:"verified_face"`
-	StartedAt      *time.Time    `json:"started_at,omitempty"`
-	SubmittedAt    *time.Time    `json:"submitted_at,omitempty"`
-	Score          *float64      `json:"score,omitempty"`
-	IPAddress      string        `json:"ip_address,omitempty"`
-	CreatedAt      time.Time     `json:"created_at"`
-	UpdatedAt      time.Time     `json:"updated_at"`
+	ID           uuid.UUID     `gorm:"type:char(36);primaryKey" json:"id"`
+	ExamID       uuid.UUID     `gorm:"type:char(36);index:idx_exam_student,unique;not null" json:"exam_id"`
+	StudentID    uuid.UUID     `gorm:"type:char(36);index:idx_exam_student,unique;not null" json:"student_id"`
+	Status       AttemptStatus `gorm:"type:varchar(20);not null;default:'NOT_STARTED';index" json:"status"`
+	VerifiedFace bool          `gorm:"default:false" json:"verified_face"`
+	StartedAt    *time.Time    `json:"started_at,omitempty"`
+	SubmittedAt  *time.Time    `json:"submitted_at,omitempty"`
+	Score        *float64      `json:"score,omitempty"`
+	IPAddress    string        `gorm:"type:varchar(45)" json:"ip_address,omitempty"`
+	CreatedAt    time.Time     `json:"created_at"`
+	UpdatedAt    time.Time     `json:"updated_at"`
 }
 
 func (a *ExamAttempt) BeforeCreate(tx *gorm.DB) error {
@@ -147,14 +147,14 @@ func (a *ExamAttempt) BeforeCreate(tx *gorm.DB) error {
 // an attempt. A unique index prevents double-answering the same
 // question within an attempt (updates overwrite instead).
 type Answer struct {
-	ID           uuid.UUID `gorm:"type:uuid;primaryKey" json:"id"`
-	AttemptID    uuid.UUID `gorm:"type:uuid;index:idx_attempt_question,unique;not null" json:"attempt_id"`
-	QuestionID   uuid.UUID `gorm:"type:uuid;index:idx_attempt_question,unique;not null" json:"question_id"`
-	SelectedOptionID *uuid.UUID `gorm:"type:uuid" json:"selected_option_id,omitempty"`
-	TextAnswer   string    `json:"text_answer,omitempty"`
-	IsCorrect    *bool     `json:"is_correct,omitempty"`
-	AwardedPoints float64  `json:"awarded_points"`
-	AnsweredAt   time.Time `json:"answered_at"`
+	ID               uuid.UUID  `gorm:"type:char(36);primaryKey" json:"id"`
+	AttemptID        uuid.UUID  `gorm:"type:char(36);index:idx_attempt_question,unique;not null" json:"attempt_id"`
+	QuestionID       uuid.UUID  `gorm:"type:char(36);index:idx_attempt_question,unique;not null" json:"question_id"`
+	SelectedOptionID *uuid.UUID `gorm:"type:char(36)" json:"selected_option_id,omitempty"`
+	TextAnswer       string     `gorm:"type:text" json:"text_answer,omitempty"`
+	IsCorrect        *bool      `json:"is_correct,omitempty"`
+	AwardedPoints    float64    `json:"awarded_points"`
+	AnsweredAt       time.Time  `json:"answered_at"`
 }
 
 func (a *Answer) BeforeCreate(tx *gorm.DB) error {

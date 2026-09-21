@@ -1,22 +1,39 @@
 version: "3.9"
 
 services:
-  postgres:
-    image: postgres:16-alpine
+  mysql:
+    image: mysql:8.0
     restart: unless-stopped
+    command: --default-authentication-plugin=mysql_native_password
     environment:
-      POSTGRES_USER: examshield
-      POSTGRES_PASSWORD: examshield
-      POSTGRES_DB: examshield
+      MYSQL_ROOT_PASSWORD: examshield_root
+      MYSQL_DATABASE: examshield
+      MYSQL_USER: examshield
+      MYSQL_PASSWORD: examshield
     ports:
-      - "5432:5432"
+      - "3306:3306"
     volumes:
-      - examshield_pgdata:/var/lib/postgresql/data
+      - examshield_mysqldata:/var/lib/mysql
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U examshield"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "examshield", "-pexamshield"]
       interval: 5s
       timeout: 5s
       retries: 10
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      PMA_USER: root
+      PMA_PASSWORD: examshield_root
+      UPLOAD_LIMIT: 64M
+    ports:
+      - "8081:80"
 
   ai-service:
     build: ./ai-service
@@ -31,14 +48,14 @@ services:
     build: ./backend
     restart: unless-stopped
     depends_on:
-      postgres:
+      mysql:
         condition: service_healthy
       ai-service:
         condition: service_started
     environment:
       APP_ENV: production
       HTTP_PORT: 8080
-      DATABASE_URL: "host=postgres user=examshield password=examshield dbname=examshield port=5432 sslmode=disable"
+      DATABASE_URL: "examshield:examshield@tcp(mysql:3306)/examshield?charset=utf8mb4&parseTime=True&loc=Local"
       JWT_SECRET: "change-me-in-production"
       JWT_ACCESS_TTL_MINUTES: "15"
       JWT_REFRESH_TTL_MINUTES: "10080"
@@ -63,4 +80,4 @@ services:
       - "5173:80"
 
 volumes:
-  examshield_pgdata:
+  examshield_mysqldata:

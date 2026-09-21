@@ -10,14 +10,12 @@ require (
 	github.com/rs/cors v1.10.1
 	github.com/skip2/go-qrcode v0.0.0-20200617195104-da1b6568686e
 	golang.org/x/crypto v0.21.0
-	gorm.io/driver/postgres v1.5.6
+	gorm.io/driver/mysql v1.5.2
 	gorm.io/gorm v1.25.7
 )
 
 require (
-	github.com/jackc/pgpassfile v1.0.0 // indirect
-	github.com/jackc/pgservicefile v0.0.0-20221227161230-091c0ba34f0a // indirect
-	github.com/jackc/pgx/v5 v5.4.3 // indirect
+	github.com/go-sql-driver/mysql v1.7.0 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
 	golang.org/x/net v0.21.0 // indirect
@@ -36,6 +34,5 @@ replace (
 	golang.org/x/text => github.com/golang/text v0.14.0
 	gopkg.in/check.v1 => github.com/go-check/check v0.0.0-20161208181325-20d25e280405
 	gopkg.in/yaml.v3 => github.com/go-yaml/yaml v3.0.1+incompatible
-	gorm.io/driver/postgres => github.com/go-gorm/postgres v1.5.6
 	gorm.io/gorm => github.com/go-gorm/gorm v1.25.7
 )

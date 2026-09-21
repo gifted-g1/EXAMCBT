@@ -28,7 +28,7 @@ func Load() *Config {
 	return &Config{
 		Env:                getEnv("APP_ENV", "development"),
 		HTTPPort:           getEnv("HTTP_PORT", "8080"),
-		DatabaseURL:        getEnv("DATABASE_URL", "host=localhost user=examshield password=examshield dbname=examshield port=5432 sslmode=disable"),
+		DatabaseURL:        getEnv("DATABASE_URL", "root:@tcp(127.0.0.1:3306)/examshield?charset=utf8mb4&parseTime=True&loc=Local"),
 		JWTSecret:          getEnv("JWT_SECRET", "change-me-in-production"),
 		JWTAccessTTL:       getDurationMinutes("JWT_ACCESS_TTL_MINUTES", 15),
 		JWTRefreshTTL:      getDurationMinutes("JWT_REFRESH_TTL_MINUTES", 60*24*7),

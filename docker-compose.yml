@@ -1,0 +1,78 @@
+version: "3.9"
+
+services:
+  mysql:
+    image: mysql:8.0
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: examshield
+      MYSQL_USER: examshield
+      MYSQL_PASSWORD: examshield
+    ports:
+      - "3306:3306"
+    volumes:
+      - examshield_mysqldata:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "examshield", "-pexamshield"]
+      interval: 5s
+      timeout: 5s
+      retries: 15
+
+  # phpMyAdmin — a browser-based MySQL admin UI, handy for inspecting
+  # or manually editing the database (e.g. creating the first Super
+  # Admin account) without needing the mysql CLI installed locally.
+  phpmyadmin:
+    image: phpmyadmin:5-apache
+    restart: unless-stopped
+    environment:
+      PMA_HOST: mysql
+      PMA_USER: examshield
+      PMA_PASSWORD: examshield
+      UPLOAD_LIMIT: 64M
+    depends_on:
+      mysql:
+        condition: service_healthy
+    ports:
+      - "8081:80"
+
+  ai-service:
+    build: ./ai-service
+    restart: unless-stopped
+    environment:
+      AI_SERVICE_PORT: 9000
+      AI_SERVICE_HOST: 0.0.0.0
+    ports:
+      - "9000:9000"
+
+  # The backend image is built from the REPOSITORY ROOT as its
+  # context (not ./backend), because its Dockerfile builds the React
+  # frontend first and embeds it into the Go binary via go:embed —
+  # see backend/Dockerfile. This is what makes the same server able to
+  # serve the UI, the REST/WebSocket API, and — crucially — a genuine
+  # offline LAN exam, all from one process on one port.
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+      ai-service:
+        condition: service_started
+    environment:
+      APP_ENV: production
+      HTTP_PORT: 8080
+      DATABASE_URL: "examshield:examshield@tcp(mysql:3306)/examshield?charset=utf8mb4&parseTime=True&loc=Local"
+      JWT_SECRET: "change-me-in-production"
+      JWT_ACCESS_TTL_MINUTES: "15"
+      JWT_REFRESH_TTL_MINUTES: "10080"
+      AI_SERVICE_URL: "http://ai-service:9000"
+      CORS_ALLOWED_ORIGIN: "http://localhost:8080"
+      LOG_LEVEL: "info"
+    ports:
+      - "8080:8080"
+
+volumes:
+  examshield_mysqldata:

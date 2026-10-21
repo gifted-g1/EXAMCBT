@@ -13,7 +13,12 @@ async function staffToken(request: APIRequestContext, username = '20010078', pas
 test('staff sign-in shows the dashboard and the IP/PIN/QR access card', async ({ page }) => {
   await page.goto('/staff')
   await page.getByLabel('Staff ID').fill('19990045')
-  await page.getByLabel('Password').fill('olawale') // upper-cased by the form
+  await page.getByLabel(/^Password/).fill('olawale') // upper-cased by the form
+  const pw = page.getByLabel(/^Password/)
+  await expect(pw).toHaveAttribute('type', 'password')
+  await page.getByRole('button', { name: 'Show password' }).click()
+  await expect(pw).toHaveAttribute('type', 'text')
+  await expect(pw).toHaveValue('OLAWALE')
   await page.getByRole('button', { name: 'Sign in' }).click()
   await expect(page.getByRole('heading', { name: 'Exams' })).toBeVisible()
   await page.getByRole('link', { name: /Demo Proctored Quiz/ }).click()
@@ -27,7 +32,7 @@ test('staff sign-in shows the dashboard and the IP/PIN/QR access card', async ({
 test('wrong staff password is rejected', async ({ page }) => {
   await page.goto('/staff')
   await page.getByLabel('Staff ID').fill('19980012')
-  await page.getByLabel('Password').fill('WRONGPASS')
+  await page.getByLabel(/^Password/).fill('WRONGPASS')
   await page.getByRole('button', { name: 'Sign in' }).click()
   await expect(page.getByRole('alert')).toContainText('incorrect')
 })
@@ -130,7 +135,7 @@ test('camera-free exam: no selfie, no fullscreen gate; admin toggles in dashboar
   // Admin switches everything off with the "Open book" preset in the dashboard.
   await page.goto('/staff')
   await page.getByLabel('Staff ID').fill('20010078')
-  await page.getByLabel('Password').fill('MUSTAPHA')
+  await page.getByLabel(/^Password/).fill('MUSTAPHA')
   await page.getByRole('button', { name: 'Sign in' }).click()
   await expect(page.getByRole('heading', { name: 'Exams' })).toBeVisible()
   // Full page load: the session is restored from the refresh cookie.

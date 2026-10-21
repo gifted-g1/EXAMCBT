@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState, type FormEvent } from 'react'
 import { staffApi } from '../../api/staff'
 import type { User } from '../../api/types'
-import { Button, Card, ErrorText, Field, Spinner, errorMessage, inputClass } from '../ui'
+import { Button, Card, ErrorText, Field, PasswordInput, Spinner, errorMessage, inputClass } from '../ui'
 
 export function UsersView({ me }: { me: User }) {
   const [users, setUsers] = useState<User[] | null>(null)
@@ -116,7 +116,7 @@ function CreateUser({ onCreated }: { onCreated: () => void }) {
           <input className={inputClass} value={fullName} onChange={(e) => setFullName(e.target.value)} required />
         </Field>
         <Field label="Password">
-          <input className={inputClass} type="password" value={password} onChange={(e) => setPassword(e.target.value.toUpperCase())} required minLength={6} />
+          <PasswordInput value={password} onChange={(v) => setPassword(v.toUpperCase())} required minLength={6} autoComplete="new-password" />
         </Field>
         <Field label="Role">
           <select className={inputClass} value={role} onChange={(e) => setRole(e.target.value)}>

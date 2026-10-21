@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from 'react'
 import { ApiError } from '../api/client'
 import { staffApi } from '../api/staff'
-import { Button, ErrorText, Field, inputClass } from '../components/ui'
+import { Button, ErrorText, Field, PasswordInput, inputClass } from '../components/ui'
 
 /** The only login form in Exam Shield: 8-digit staff ID + password. */
 export default function StaffLogin() {
@@ -32,7 +32,7 @@ export default function StaffLogin() {
           <p className="text-sm font-semibold text-brand-700">Exam Shield</p>
           <h1 className="text-2xl font-semibold text-slate-900">Staff sign in</h1>
         </div>
-        <Field label="Staff ID" hint="8 digits">
+        <Field label="Staff ID" hint="Exactly 8 digits (e.g. 12345678)">
           <input
             className={`${inputClass} font-mono`}
             inputMode="numeric"
@@ -44,15 +44,8 @@ export default function StaffLogin() {
             required
           />
         </Field>
-        <Field label="Password" hint="Uppercase letters">
-          <input
-            className={inputClass}
-            type="password"
-            autoComplete="current-password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value.toUpperCase())}
-            required
-          />
+        <Field label="Password" hint="Capital letters only, at least 6 (e.g. ADEBAYO)">
+          <PasswordInput value={password} onChange={(v) => setPassword(v.toUpperCase())} required />
         </Field>
         <ErrorText>{error}</ErrorText>
         <Button type="submit" className="w-full" disabled={!valid || busy}>

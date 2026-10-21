@@ -27,6 +27,7 @@ export default function Landing() {
       )}
       <Hero />
       <TrustStrip />
+      <SignInFormat />
       <HowItWorks />
       <PowerCut />
       <Features />
@@ -51,6 +52,9 @@ function Nav() {
           Exam Shield
         </a>
         <nav aria-label="Main" className="hidden items-center gap-6 text-sm text-slate-300 md:flex">
+          <a href="#signin" className="hover:text-white">
+            Sign-in format
+          </a>
           <a href="#how" className="hover:text-white">
             How it works
           </a>
@@ -209,6 +213,121 @@ function TrustStrip() {
           </div>
         ))}
       </dl>
+    </section>
+  )
+}
+
+// --- Sign-in format ----------------------------------------------------------------
+
+/** A mock input showing what a valid value looks like. */
+function MockField({ label, children, hint }: { label: string; children: ReactNode; hint: string }) {
+  return (
+    <div>
+      <p className="mb-1 text-xs font-medium text-slate-400">{label}</p>
+      <div className="flex h-11 items-center rounded-lg bg-slate-950/70 px-3 font-mono text-base text-white ring-1 ring-white/15">
+        {children}
+      </div>
+      <p className="mt-1 text-xs text-slate-500">{hint}</p>
+    </div>
+  )
+}
+
+function Rule({ children }: { children: ReactNode }) {
+  return (
+    <li className="flex gap-2">
+      <span className="mt-0.5 text-emerald-400">✓</span>
+      <span>{children}</span>
+    </li>
+  )
+}
+
+function SignInFormat() {
+  const staffId = '12345678'
+  const matric = 'CSC/23/1234'
+  return (
+    <section id="signin" className="scroll-mt-20 px-4 py-24">
+      <div className="mx-auto max-w-6xl">
+        <SectionTitle
+          kicker="Sign-in format"
+          title="What to type, exactly"
+          sub="Staff sign in with a staff ID and password. Students never need a password — just the exam PIN and their matric number."
+        />
+
+        <div className="mt-12 grid gap-6 lg:grid-cols-2">
+          {/* Staff */}
+          <div className="reveal rounded-2xl border border-white/10 bg-white/[0.03] p-6" style={{ '--delay': '0ms' } as CSSProperties}>
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg font-semibold text-white">Staff login</h3>
+              <span className="rounded-full bg-brand-500/15 px-3 py-1 text-xs font-medium text-brand-300 ring-1 ring-brand-400/30">at /staff</span>
+            </div>
+            <div className="mt-5 grid gap-4 sm:grid-cols-2">
+              <MockField label="Staff ID" hint="Exactly 8 digits — numbers only">
+                <span className="es-typing" style={{ '--chars': `${staffId.length}ch`, '--steps': staffId.length } as CSSProperties}>
+                  {staffId}
+                </span>
+              </MockField>
+              <MockField label="Password" hint="Capital letters A–Z, at least 6">
+                <span className="relative flex-1">
+                  <span className="es-swap-a absolute inset-y-0 left-0 flex items-center tracking-widest">•••••••</span>
+                  <span className="es-swap-b absolute inset-y-0 left-0 flex items-center">ADEBAYO</span>
+                  &nbsp;
+                </span>
+                <span className="ml-2 text-slate-400" aria-hidden>
+                  👁
+                </span>
+              </MockField>
+            </div>
+            <ul className="mt-5 space-y-2 text-sm text-slate-300">
+              <Rule>
+                <b>Staff ID:</b> your 8-digit staff number, for example <code className="text-brand-300">{staffId}</code>.
+              </Rule>
+              <Rule>
+                <b>Password:</b> capital letters only, 6 or more, for example <code className="text-brand-300">ADEBAYO</code>. Lower-case
+                letters are converted to capitals for you.
+              </Rule>
+              <Rule>
+                Tap the <b>eye</b> icon to show the password and check it before signing in.
+              </Rule>
+              <Rule>After 5 wrong attempts that staff ID is paused for 15 minutes.</Rule>
+            </ul>
+            <Link to="/staff" className="mt-6 inline-flex rounded-lg bg-white/10 px-4 py-2 text-sm font-semibold text-white hover:bg-white/15">
+              Go to staff sign in →
+            </Link>
+          </div>
+
+          {/* Student */}
+          <div className="reveal rounded-2xl border border-white/10 bg-white/[0.03] p-6" style={{ '--delay': '120ms' } as CSSProperties}>
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg font-semibold text-white">Student entry</h3>
+              <span className="rounded-full bg-emerald-500/15 px-3 py-1 text-xs font-medium text-emerald-300 ring-1 ring-emerald-400/30">no password</span>
+            </div>
+            <div className="mt-5 grid gap-4 sm:grid-cols-2">
+              <MockField label="Exam PIN" hint="4 digits from the projector">
+                <span className="tracking-[0.5em]">4821</span>
+              </MockField>
+              <MockField label="Matric number" hint="DEPT / YEAR / NUMBER">
+                <span className="es-typing" style={{ '--chars': `${matric.length}ch`, '--steps': matric.length } as CSSProperties}>
+                  {matric}
+                </span>
+              </MockField>
+            </div>
+            <ul className="mt-5 space-y-2 text-sm text-slate-300">
+              <Rule>
+                <b>Exam PIN:</b> the 4-digit number shown by your invigilator. Scanning the QR code fills it in for you.
+              </Rule>
+              <Rule>
+                <b>Matric number:</b> 2–4 letters, a slash, the 2-digit year, a slash and 4 digits — for example{' '}
+                <code className="text-brand-300">{matric}</code>. Capitals are added automatically.
+              </Rule>
+              <Rule>Tick the consent box, then take a selfie if your exam uses face verification.</Rule>
+              <Rule>You must be on the exam hall Wi-Fi when you type the address.</Rule>
+            </ul>
+            <Link to="/exam" className="mt-6 inline-flex rounded-lg bg-emerald-500/20 px-4 py-2 text-sm font-semibold text-emerald-100 hover:bg-emerald-500/30">
+              Start my exam →
+            </Link>
+          </div>
+        </div>
+      </div>
     </section>
   )
 }

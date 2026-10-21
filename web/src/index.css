@@ -75,3 +75,30 @@ html {
     border-right: 0;
   }
 }
+
+/* Landing "sign-in format" demo: hidden password dots swap to visible text. */
+.es-swap-a,
+.es-swap-b {
+  animation: es-swap 6s ease-in-out infinite;
+}
+.es-swap-b {
+  animation-delay: -3s;
+}
+@keyframes es-swap {
+  0%,
+  45% {
+    opacity: 1;
+  }
+  50%,
+  95% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .es-swap-b {
+    opacity: 0;
+  }
+}

@@ -1,4 +1,4 @@
-import type { ButtonHTMLAttributes, ReactNode } from 'react'
+import { useState, type ButtonHTMLAttributes, type ReactNode } from 'react'
 import type { Severity } from '../api/types'
 
 type Variant = 'primary' | 'secondary' | 'danger' | 'ghost'
@@ -88,4 +88,64 @@ export function Spinner({ label = 'Loading…' }: { label?: string }) {
 export function errorMessage(e: unknown): string {
   if (e instanceof Error) return e.message
   return 'Something went wrong.'
+}
+
+/**
+ * Password input with a show/hide toggle. The button sits beside the input
+ * (not over typed text) and announces its state via aria-pressed.
+ */
+export function PasswordInput({
+  value,
+  onChange,
+  id,
+  autoComplete = 'current-password',
+  required,
+  minLength,
+  autoFocus,
+}: {
+  value: string
+  onChange: (v: string) => void
+  id?: string
+  autoComplete?: string
+  required?: boolean
+  minLength?: number
+  autoFocus?: boolean
+}) {
+  const [shown, setShown] = useState(false)
+  return (
+    <div className="relative">
+      <input
+        id={id}
+        className={`${inputClass} pr-11`}
+        type={shown ? 'text' : 'password'}
+        autoComplete={autoComplete}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        required={required}
+        minLength={minLength}
+        autoFocus={autoFocus}
+        spellCheck={false}
+        autoCapitalize="characters"
+      />
+      <button
+        type="button"
+        onClick={() => setShown((s) => !s)}
+        aria-label={shown ? 'Hide password' : 'Show password'}
+        aria-pressed={shown}
+        title={shown ? 'Hide password' : 'Show password'}
+        className="absolute inset-y-0 right-0 grid w-10 place-items-center rounded-r-lg text-slate-500 hover:text-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
+      >
+        {shown ? (
+          <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden>
+            <path d="M3 3l18 18M10.6 10.6a2 2 0 0 0 2.8 2.8M9.9 5.1A9.8 9.8 0 0 1 12 5c6.5 0 10 7 10 7a17.6 17.6 0 0 1-3.2 4.2M6.6 6.6C3.9 8.4 2 12 2 12s3.5 7 10 7a9.6 9.6 0 0 0 5.4-1.6" />
+          </svg>
+        ) : (
+          <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden>
+            <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z" />
+            <circle cx="12" cy="12" r="3" />
+          </svg>
+        )}
+      </button>
+    </div>
+  )
 }

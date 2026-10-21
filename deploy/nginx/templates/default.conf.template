@@ -1,0 +1,90 @@
+# Exam Shield reverse proxy (rendered by the nginx image's envsubst).
+# Binds ONLY to the LAN interface; refuses non-LAN clients before they reach
+# the API (which enforces the same rule again).
+
+limit_req_zone $binary_remote_addr zone=es_verify:10m rate=10r/m;
+limit_req_zone $binary_remote_addr zone=es_login:10m  rate=20r/m;
+
+map $http_upgrade $connection_upgrade {
+    default upgrade;
+    ''      close;
+}
+
+upstream exam_shield_api {
+    server 127.0.0.1:8080;
+    keepalive 32;
+}
+
+# Plain HTTP: students type http://<LAN_IP>; send them to HTTPS, which the
+# browser requires for webcam access.
+server {
+    listen ${LAN_IP}:80 default_server;
+    server_name _;
+    ${LAN_CIDRS_NGINX}
+    deny all;
+    location / {
+        return 308 https://${LAN_IP}$request_uri;
+    }
+}
+
+server {
+    listen ${LAN_IP}:443 ssl default_server;
+    http2 on;
+    server_name _;
+
+    ssl_certificate     /etc/nginx/certs/server.crt;
+    ssl_certificate_key /etc/nginx/certs/server.key;
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_session_cache shared:es_tls:10m;
+
+    ${LAN_CIDRS_NGINX}
+    deny all;
+
+    server_tokens off;
+    client_max_body_size 10m;
+
+    # The API trusts these headers only from this proxy (TRUSTED_PROXIES).
+    # X-Forwarded-For is overwritten, never appended, so a client cannot
+    # smuggle a fake LAN address into the chain.
+    proxy_set_header Host              $host;
+    proxy_set_header X-Real-IP         $remote_addr;
+    proxy_set_header X-Forwarded-For   $remote_addr;
+    proxy_set_header X-Forwarded-Proto https;
+    proxy_http_version 1.1;
+    proxy_set_header Connection "";
+
+    location = /api/student/verify {
+        limit_req zone=es_verify burst=5 nodelay;
+        proxy_pass http://exam_shield_api;
+    }
+
+    location = /api/staff/auth/login {
+        limit_req zone=es_login burst=5 nodelay;
+        proxy_pass http://exam_shield_api;
+    }
+
+    location = /api/staff/students/photos {
+        client_max_body_size 200m;
+        proxy_request_buffering off;
+        proxy_read_timeout 300s;
+        proxy_pass http://exam_shield_api;
+    }
+
+    location ~ ^/api/staff/exams/[0-9]+/questions/parse-pdf$ {
+        client_max_body_size 25m;
+        proxy_read_timeout 120s;
+        proxy_pass http://exam_shield_api;
+    }
+
+    location = /api/staff/ws {
+        proxy_set_header Upgrade    $http_upgrade;
+        proxy_set_header Connection $connection_upgrade;
+        proxy_read_timeout 3600s;
+        proxy_send_timeout 3600s;
+        proxy_pass http://exam_shield_api;
+    }
+
+    location / {
+        proxy_pass http://exam_shield_api;
+    }
+}

@@ -1,0 +1,132 @@
+%PDF-1.4
+%‚„œ”
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [5 0 R 7 0 R 9 0 R] /Count 3 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 6 0 R >>
+endobj
+6 0 obj
+<< /Length 1189 >>
+stream
+BT /F2 12.0 Tf 56.0 644.6 Td (EXAM SHIELD) Tj ET
+BT /F2 26.0 Tf 56.0 600.9 Td (Cyber Security Question Bank) Tj ET
+BT /F1 13.0 Tf 56.0 578.0 Td (Security principles, threats, cryptography and defence.) Tj ET
+BT /F1 11.0 Tf 56.0 544.1 Td (10 questions: 8 multiple choice and 2 written. Total 17 marks.) Tj ET
+BT /F1 11.0 Tf 56.0 528.1 Td (Edition: with answers \(staff copy, ready to import into Exam Shield\).) Tj ET
+BT /F2 14.0 Tf 56.0 479.8 Td (How this paper is laid out) Tj ET
+BT /F1 10.5 Tf 68.0 462.6 Td (Questions are numbered in one sequence. Multiple-choice options are lettered with a full stop;) Tj ET
+BT /F1 10.5 Tf 68.0 447.4 Td (each multiple-choice question is worth one mark unless stated.) Tj ET
+BT /F1 10.5 Tf 68.0 430.2 Td (Written questions show their marks in square brackets and are marked by an examiner.) Tj ET
+BT /F1 10.5 Tf 68.0 412.9 Td (To use this paper in Exam Shield, open an exam, choose Questions and then Import from PDF, and) Tj ET
+BT /F1 10.5 Tf 68.0 397.7 Td (upload this file. Review the preview and import.) Tj ET
+0.6 g
+BT /F1 8.0 Tf 56.0 34.0 Td (Exam Shield - Cyber Security Question Bank) Tj ET
+BT /F1 8.0 Tf 479.0 34.0 Td (Page 1 of 3) Tj ET
+0 g
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 8 0 R >>
+endobj
+8 0 obj
+<< /Length 2728 >>
+stream
+BT /F2 17.0 Tf 56.0 757.4 Td (Section 1: Cyber Security) Tj ET
+BT /F1 10.5 Tf 56.0 740.1 Td (Security principles, threats, cryptography and defence.) Tj ET
+BT /F2 11.0 Tf 56.0 714.2 Td (1. What do the letters of the CIA triad stand for?) Tj ET
+BT /F1 11.0 Tf 74.0 698.2 Td (A. Cipher, Identity, Access) Tj ET
+BT /F1 11.0 Tf 74.0 682.3 Td (B. Control, Inspection, Audit) Tj ET
+BT /F1 11.0 Tf 74.0 666.3 Td (C. Compliance, Integrity, Authentication) Tj ET
+BT /F1 11.0 Tf 74.0 650.4 Td (D. Confidentiality, Integrity, Availability) Tj ET
+BT /F1 10.0 Tf 74.0 633.9 Td (Answer: D) Tj ET
+BT /F2 11.0 Tf 56.0 607.9 Td (2. What is phishing?) Tj ET
+BT /F1 11.0 Tf 74.0 592.0 Td (A. Guessing passwords by trying every combination) Tj ET
+BT /F1 11.0 Tf 74.0 576.0 Td (B. Tricking people into revealing information through fake messages) Tj ET
+BT /F1 11.0 Tf 74.0 560.1 Td (C. Capturing packets on a network) Tj ET
+BT /F1 11.0 Tf 74.0 544.1 Td (D. Flooding a server with requests) Tj ET
+BT /F1 10.0 Tf 74.0 527.6 Td (Answer: B) Tj ET
+BT /F2 11.0 Tf 56.0 501.7 Td (3. Which of these is an asymmetric \(public-key\) algorithm?) Tj ET
+BT /F1 11.0 Tf 74.0 485.7 Td (A. AES) Tj ET
+BT /F1 11.0 Tf 74.0 469.8 Td (B. DES) Tj ET
+BT /F1 11.0 Tf 74.0 453.8 Td (C. 3DES) Tj ET
+BT /F1 11.0 Tf 74.0 437.9 Td (D. RSA) Tj ET
+BT /F1 10.0 Tf 74.0 421.4 Td (Answer: D) Tj ET
+BT /F2 11.0 Tf 56.0 395.4 Td (4. What is the most effective defence against SQL injection?) Tj ET
+BT /F1 11.0 Tf 74.0 379.5 Td (A. Longer passwords) Tj ET
+BT /F1 11.0 Tf 74.0 363.5 Td (B. Parameterised queries) Tj ET
+BT /F1 11.0 Tf 74.0 347.6 Td (C. Using HTTPS) Tj ET
+BT /F1 11.0 Tf 74.0 331.6 Td (D. Installing a firewall) Tj ET
+BT /F1 10.0 Tf 74.0 315.1 Td (Answer: B) Tj ET
+BT /F2 11.0 Tf 56.0 289.2 Td (5. What does multi-factor authentication require?) Tj ET
+BT /F1 11.0 Tf 74.0 273.2 Td (A. Two or more independent proofs of identity) Tj ET
+BT /F1 11.0 Tf 74.0 257.3 Td (B. Two or more administrator accounts) Tj ET
+BT /F1 11.0 Tf 74.0 241.3 Td (C. Two or more firewalls) Tj ET
+BT /F1 11.0 Tf 74.0 225.4 Td (D. Two or more backups) Tj ET
+BT /F1 10.0 Tf 74.0 208.9 Td (Answer: A) Tj ET
+BT /F2 11.0 Tf 56.0 182.9 Td (6. Which property describes a cryptographic hash function?) Tj ET
+BT /F1 11.0 Tf 74.0 167.0 Td (A. It is one-way and cannot practically be reversed) Tj ET
+BT /F1 11.0 Tf 74.0 151.0 Td (B. It compresses files losslessly) Tj ET
+BT /F1 11.0 Tf 74.0 135.1 Td (C. It can be decrypted with the right key) Tj ET
+BT /F1 11.0 Tf 74.0 119.1 Td (D. It is the same as Base64 encoding) Tj ET
+BT /F1 10.0 Tf 74.0 102.6 Td (Answer: A) Tj ET
+0.6 g
+BT /F1 8.0 Tf 56.0 34.0 Td (Exam Shield - Cyber Security Question Bank) Tj ET
+BT /F1 8.0 Tf 479.0 34.0 Td (Page 2 of 3) Tj ET
+0 g
+endstream
+endobj
+9 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 10 0 R >>
+endobj
+10 0 obj
+<< /Length 1229 >>
+stream
+BT /F2 11.0 Tf 56.0 766.0 Td (7. A DDoS attack mainly threatens which security goal?) Tj ET
+BT /F1 11.0 Tf 74.0 750.1 Td (A. Confidentiality) Tj ET
+BT /F1 11.0 Tf 74.0 734.1 Td (B. Integrity) Tj ET
+BT /F1 11.0 Tf 74.0 718.2 Td (C. Non-repudiation) Tj ET
+BT /F1 11.0 Tf 74.0 702.2 Td (D. Availability) Tj ET
+BT /F1 10.0 Tf 74.0 685.7 Td (Answer: D) Tj ET
+BT /F2 11.0 Tf 56.0 659.8 Td (8. What does the principle of least privilege mean?) Tj ET
+BT /F1 11.0 Tf 74.0 643.8 Td (A. Every user is an administrator) Tj ET
+BT /F1 11.0 Tf 74.0 627.9 Td (B. All users have read-only access to everything) Tj ET
+BT /F1 11.0 Tf 74.0 611.9 Td (C. Passwords are not required) Tj ET
+BT /F1 11.0 Tf 74.0 596.0 Td (D. Users get only the access they need to do their work) Tj ET
+BT /F1 10.0 Tf 74.0 579.5 Td (Answer: D) Tj ET
+BT /F2 11.0 Tf 56.0 553.5 Td (9. Explain the difference between symmetric and asymmetric encryption, with an example) Tj ET
+BT /F2 11.0 Tf 56.0 537.6 Td (of each. [4 marks]) Tj ET
+BT /F2 11.0 Tf 56.0 511.6 Td (10. Describe the main phases of an incident response plan. [5 marks]) Tj ET
+0.6 g
+BT /F1 8.0 Tf 56.0 34.0 Td (Exam Shield - Cyber Security Question Bank) Tj ET
+BT /F1 8.0 Tf 479.0 34.0 Td (Page 3 of 3) Tj ET
+0 g
+endstream
+endobj
+xref
+0 11
+0000000000 65535 f 
+0000000015 00000 n 
+0000000064 00000 n 
+0000000133 00000 n 
+0000000230 00000 n 
+0000000332 00000 n 
+0000000468 00000 n 
+0000001708 00000 n 
+0000001844 00000 n 
+0000004623 00000 n 
+0000004760 00000 n 
+trailer
+<< /Size 11 /Root 1 0 R >>
+startxref
+6041
+%%EOF

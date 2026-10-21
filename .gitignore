@@ -1,17 +1,27 @@
-# Go
-backend/examshield-server
-
-# Node
-frontend/node_modules/
-frontend/dist/
-
-# Python
-ai-service/**/__pycache__/
-ai-service/**/*.pyc
-
-# Env
+# Secrets & local config
 .env
 *.local
 
-# OS
-.DS_Store
+# Runtime data (standalone mode)
+data/
+
+# TLS material — never commit keys
+deploy/certs/*
+!deploy/certs/.gitkeep
+
+# Model weights (download with scripts/download-models.sh)
+models/*.onnx
+models/*.pt
+models/*.zip
+
+# Build output (go build -o bin/... ; on Windows *.exe). Do not list
+# /api or /seed here: those names are also source folders.
+/bin/
+/ai-worker
+/migrate
+*.exe
+
+# Web
+web/node_modules/
+web/test-results/
+web/playwright-report/

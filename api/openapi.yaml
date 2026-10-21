@@ -1,0 +1,888 @@
+openapi: 3.0.3
+info:
+  title: Exam Shield API
+  version: 1.0.0
+  description: |
+    Network-locked AI exam proctoring. Every request is first checked by the
+    LAN gate: clients outside `LAN_CIDRS` (or inside `LAN_DENY_CIDRS`) receive
+    `403 LAN_REQUIRED` before any route runs.
+
+    * **Students** have no credentials. They pass the exam gate (subnet +
+      window + optional PIN), verify their face, and then use an HTTP-only
+      `es_student` cookie bound to their device id (`X-Device-FP` header).
+    * **Staff** sign in with an 8-digit ID and password and send
+      `Authorization: Bearer <access_token>` (15 min). The refresh token is an
+      HTTP-only `es_refresh` cookie scoped to `/api/staff/auth` (7 days,
+      rotated on every use, reuse revokes the family).
+
+    All errors share one body: `{"error": "<CODE>", "message": "...", "details": ...}`.
+servers:
+  - url: https://192.168.1.45
+    description: Exam server on the hall LAN (example)
+
+tags:
+  - name: student
+  - name: staff-auth
+  - name: exams
+  - name: monitoring
+  - name: roster
+  - name: users
+  - name: system
+
+components:
+  securitySchemes:
+    staffBearer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    studentCookie:
+      type: apiKey
+      in: cookie
+      name: es_student
+    refreshCookie:
+      type: apiKey
+      in: cookie
+      name: es_refresh
+
+  parameters:
+    DeviceFP:
+      name: X-Device-FP
+      in: header
+      required: true
+      description: Per-browser device id, `[A-Za-z0-9_-]{16,128}`.
+      schema: { type: string, pattern: '^[A-Za-z0-9_-]{16,128}$' }
+    ExamPIN:
+      name: X-Exam-PIN
+      in: header
+      required: false
+      description: 4-digit exam PIN (alternatively the `pin` query parameter).
+      schema: { type: string, pattern: '^\d{4}$' }
+    PinQuery:
+      name: pin
+      in: query
+      required: false
+      schema: { type: string, pattern: '^\d{4}$' }
+    ExamID:
+      name: id
+      in: path
+      required: true
+      schema: { type: integer, format: int64 }
+    SessionID:
+      name: sid
+      in: path
+      required: true
+      schema: { type: integer, format: int64 }
+
+  responses:
+    Error:
+      description: Error
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    LanRequired:
+      description: Client is not on the exam LAN (`LAN_REQUIRED`).
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    GateFailure:
+      description: |
+        `423 EXAM_NOT_OPEN` (no ACTIVE exam in its window for this subnet),
+        `401 PIN_REQUIRED` / `401 PIN_INVALID`, `409 CONFLICT` (several PIN-less
+        exams on one subnet), `429 RATE_LIMITED` (PIN brute force).
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    Unauthorized:
+      description: Missing/invalid credentials (`UNAUTHORIZED`, `DEVICE_MISMATCH`).
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    Forbidden:
+      description: Role or ownership check failed (`FORBIDDEN`).
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    NotFound:
+      description: Not found.
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    Validation:
+      description: Invalid input (`VALIDATION_FAILED`).
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    Conflict:
+      description: Invalid state transition or conflicting resource (`CONFLICT`).
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+
+  schemas:
+    Error:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: string
+          example: EXAM_NOT_OPEN
+          enum: [LAN_REQUIRED, EXAM_NOT_OPEN, PIN_REQUIRED, PIN_INVALID, DEVICE_IN_USE, STUDENT_ACTIVE_ELSEWHERE,
+                 DEVICE_MISMATCH, ALREADY_SUBMITTED, NOT_ON_ROSTER, FACE_MISMATCH, NO_FACE_DETECTED, MULTIPLE_FACES,
+                 NO_REFERENCE_PHOTO, CONSENT_REQUIRED, SESSION_ENDED, SESSION_LOCK_LOST, UNAUTHORIZED, FORBIDDEN,
+                 INVALID_CREDENTIALS, RATE_LIMITED, VALIDATION_FAILED, NOT_FOUND, CONFLICT, INTERNAL_ERROR,
+                 CROSS_ORIGIN_FORBIDDEN]
+        message: { type: string }
+        details: {}
+    Role: { type: string, enum: [proctor, admin] }
+    ExamStatus: { type: string, enum: [DRAFT, SCHEDULED, ACTIVE, CLOSED] }
+    SessionStatus: { type: string, enum: [INIT, ACTIVE, SUBMITTED, CLOSED] }
+    Severity: { type: string, enum: [LOW, MEDIUM, HIGH, CRITICAL] }
+    User:
+      type: object
+      properties:
+        id: { type: integer, format: int64 }
+        username: { type: string, pattern: '^\d{8}$', example: '19990045' }
+        full_name: { type: string }
+        role: { $ref: '#/components/schemas/Role' }
+        is_active: { type: boolean }
+        created_at: { type: string, format: date-time }
+    LoginResponse:
+      type: object
+      properties:
+        access_token: { type: string }
+        expires_at: { type: string, format: date-time }
+        user: { $ref: '#/components/schemas/User' }
+    Exam:
+      type: object
+      properties:
+        id: { type: integer, format: int64 }
+        title: { type: string }
+        description: { type: string }
+        created_by: { type: integer, format: int64 }
+        starts_at: { type: string, format: date-time }
+        ends_at: { type: string, format: date-time }
+        status: { $ref: '#/components/schemas/ExamStatus' }
+        lan_cidr: { type: string, example: 192.168.1.0/24 }
+        pin_code: { type: string, nullable: true, example: '4821' }
+        questions_count: { type: integer }
+    ExamInput:
+      type: object
+      required: [title, starts_at, ends_at]
+      properties:
+        title: { type: string, minLength: 3, maxLength: 150 }
+        description: { type: string, maxLength: 5000 }
+        starts_at: { type: string, format: date-time }
+        ends_at: { type: string, format: date-time, description: 'After starts_at; window ≤ 12 h.' }
+        lan_cidr: { type: string, description: 'Private CIDR overlapping the server LAN; blank = server LAN.' }
+        require_pin: { type: boolean }
+    AccessCard:
+      type: object
+      properties:
+        ip: { type: string }
+        url: { type: string, example: https://192.168.1.45 }
+        pin: { type: string, nullable: true }
+        qr_url: { type: string, example: 'https://192.168.1.45/?pin=4821' }
+        qr_png_base64: { type: string }
+        lan_cidr: { type: string }
+        status: { $ref: '#/components/schemas/ExamStatus' }
+    Question:
+      type: object
+      properties:
+        id: { type: integer, format: int64 }
+        exam_id: { type: integer, format: int64 }
+        position: { type: integer }
+        kind: { type: string, enum: [MCQ, TEXT] }
+        prompt: { type: string }
+        options: { type: array, items: { type: string }, nullable: true }
+        correct_option: { type: integer, nullable: true, description: Staff only. }
+        marks: { type: number }
+    QuestionInput:
+      type: object
+      required: [prompt]
+      properties:
+        kind: { type: string, enum: [MCQ, TEXT], default: MCQ }
+        prompt: { type: string }
+        options: { type: array, items: { type: string }, minItems: 2, maxItems: 8 }
+        correct_option: { type: integer }
+        marks: { type: number, default: 1 }
+        position: { type: integer }
+    GateInfo:
+      type: object
+      properties:
+        exam_id: { type: integer, format: int64 }
+        title: { type: string }
+        description: { type: string }
+        starts_at: { type: string, format: date-time }
+        ends_at: { type: string, format: date-time }
+        server_time: { type: string, format: date-time }
+        consent_version: { type: string }
+        face_match_threshold: { type: number, example: 0.75 }
+    SessionState:
+      type: object
+      description: Never contains correct answers.
+      properties:
+        session_id: { type: integer, format: int64 }
+        status: { $ref: '#/components/schemas/SessionStatus' }
+        exam_id: { type: integer, format: int64 }
+        exam_title: { type: string }
+        ends_at: { type: string, format: date-time }
+        server_time: { type: string, format: date-time }
+        student:
+          type: object
+          properties:
+            matric_no: { type: string }
+            full_name: { type: string }
+        questions:
+          type: array
+          items:
+            type: object
+            properties:
+              id: { type: integer, format: int64 }
+              position: { type: integer }
+              kind: { type: string, enum: [MCQ, TEXT] }
+              prompt: { type: string }
+              options: { type: array, items: { type: string } }
+              marks: { type: number }
+        answers:
+          type: object
+          additionalProperties: { type: string }
+          description: question_id → response (MCQ responses are option indexes).
+    SessionRow:
+      type: object
+      properties:
+        id: { type: integer, format: int64 }
+        exam_id: { type: integer, format: int64 }
+        student_id: { type: integer, format: int64 }
+        matric_no: { type: string }
+        full_name: { type: string }
+        status: { $ref: '#/components/schemas/SessionStatus' }
+        client_ip: { type: string }
+        started_at: { type: string, format: date-time }
+        ended_at: { type: string, format: date-time, nullable: true }
+        last_seen_at: { type: string, format: date-time, nullable: true }
+        integrity_score: { type: number }
+        face_match_score: { type: number, nullable: true }
+        score: { type: number, nullable: true }
+        auto_submitted: { type: boolean }
+        violations_count: { type: integer }
+        high_count: { type: integer }
+        answered_count: { type: integer }
+    Violation:
+      type: object
+      properties:
+        id: { type: integer, format: int64 }
+        session_id: { type: integer, format: int64 }
+        event_type: { type: string, example: PHONE_DETECTED }
+        severity: { $ref: '#/components/schemas/Severity' }
+        source: { type: string, enum: [CLIENT, AI, PROCTOR] }
+        occurred_at: { type: string, format: date-time }
+        media_ref: { type: string, nullable: true }
+        ai_confidence: { type: number, nullable: true }
+        metadata: { type: object, additionalProperties: true }
+        review_status: { type: string, enum: [PENDING, CONFIRMED, DISMISSED] }
+        matric_no: { type: string }
+        full_name: { type: string }
+    Student:
+      type: object
+      properties:
+        id: { type: integer, format: int64 }
+        matric_no: { type: string, example: IFT/22/9203 }
+        full_name: { type: string }
+        photo_url: { type: string, description: '"blob:roster/…" when a reference photo was uploaded.' }
+    Report:
+      type: object
+      properties:
+        exam: { $ref: '#/components/schemas/Exam' }
+        generated_at: { type: string, format: date-time }
+        summary:
+          type: object
+          properties:
+            candidates: { type: integer }
+            submitted: { type: integer }
+            average_score: { type: number }
+            average_integrity: { type: number }
+            flagged_high: { type: integer }
+        rows:
+          type: array
+          items:
+            type: object
+            properties:
+              matric_no: { type: string }
+              full_name: { type: string }
+              status: { type: string }
+              score: { type: number, nullable: true }
+              max_score: { type: number }
+              integrity_score: { type: number }
+              face_match_score: { type: number, nullable: true }
+              violations: { type: integer }
+              high_violations: { type: integer }
+              auto_submitted: { type: boolean }
+              needs_manual_marking: { type: boolean }
+
+security: []
+
+paths:
+  /healthz:
+    get:
+      tags: [system]
+      summary: Liveness + dependency health
+      responses:
+        '200': { description: All dependencies up }
+        '503': { description: Database or Redis down }
+
+  # ---------------------------------------------------------------- student
+  /api/student/gate:
+    get:
+      tags: [student]
+      summary: Resolve the open exam for this subnet (LAN gate + window + PIN)
+      parameters: [{ $ref: '#/components/parameters/ExamPIN' }, { $ref: '#/components/parameters/PinQuery' }]
+      responses:
+        '200': { description: Exam is open, content: { application/json: { schema: { $ref: '#/components/schemas/GateInfo' } } } }
+        '401': { $ref: '#/components/responses/GateFailure' }
+        '403': { $ref: '#/components/responses/LanRequired' }
+        '409': { $ref: '#/components/responses/GateFailure' }
+        '423': { $ref: '#/components/responses/GateFailure' }
+        '429': { $ref: '#/components/responses/GateFailure' }
+  /api/student/verify:
+    post:
+      tags: [student]
+      summary: Identify against the roster with a selfie (and optional ID photo); starts or resumes the session
+      description: |
+        Requires consent. Binds device ↔ student in Redis (`session_lock:<fp>`,
+        `student_lock:<exam>:<student>`). Face score is a calibrated 0–1 value;
+        with ArcFace (`assurance: high`) a score below `FACE_MATCH_THRESHOLD`
+        is refused, with the Go fallback the student is admitted and
+        `FACE_REVIEW_REQUIRED` is raised for a proctor (`FACE_MATCH_ENFORCE`).
+        Sets the `es_student` cookie. Rate limited to 10 / 5 min per IP.
+      parameters:
+        - { $ref: '#/components/parameters/DeviceFP' }
+        - { $ref: '#/components/parameters/ExamPIN' }
+        - { $ref: '#/components/parameters/PinQuery' }
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [matric_no, consent, selfie]
+              properties:
+                matric_no: { type: string, example: IFT/22/9203 }
+                consent: { type: boolean }
+                selfie: { type: string, format: binary, description: 'JPEG/PNG ≤ 4 MB, exactly one face' }
+                id_photo: { type: string, format: binary }
+      responses:
+        '200':
+          description: Verified
+          headers:
+            Set-Cookie: { schema: { type: string }, description: 'es_student=…; HttpOnly; SameSite=Strict; Path=/api/student' }
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  expires_at: { type: string, format: date-time }
+                  face_match_score: { type: number, nullable: true }
+                  assurance: { type: string, enum: [high, low] }
+                  state: { $ref: '#/components/schemas/SessionState' }
+        '400': { description: 'CONSENT_REQUIRED or VALIDATION_FAILED', content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+        '404': { description: NOT_ON_ROSTER, content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+        '409': { description: 'DEVICE_IN_USE, DEVICE_MISMATCH, ALREADY_SUBMITTED, STUDENT_ACTIVE_ELSEWHERE', content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+        '422': { description: 'FACE_MISMATCH (details.score/threshold), NO_FACE_DETECTED, MULTIPLE_FACES, NO_REFERENCE_PHOTO', content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+        '423': { $ref: '#/components/responses/GateFailure' }
+  /api/student/session:
+    get:
+      tags: [student]
+      summary: Current session state (resume after reload)
+      security: [{ studentCookie: [] }]
+      parameters: [{ $ref: '#/components/parameters/DeviceFP' }]
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/SessionState' } } } }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+  /api/student/answers:
+    put:
+      tags: [student]
+      summary: Save (upsert) one answer
+      security: [{ studentCookie: [] }]
+      parameters: [{ $ref: '#/components/parameters/DeviceFP' }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [question_id, response]
+              properties:
+                question_id: { type: integer, format: int64 }
+                response: { type: string, maxLength: 20000, description: 'MCQ: option index as a string' }
+      responses:
+        '200': { description: Saved, content: { application/json: { schema: { type: object, properties: { saved_at: { type: string, format: date-time } } } } } }
+        '400': { $ref: '#/components/responses/Validation' }
+        '410': { description: SESSION_ENDED (submitted, or window + grace over), content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+  /api/student/heartbeat:
+    post:
+      tags: [student]
+      summary: Keep device/student locks alive (every 30 s); returns current end time
+      security: [{ studentCookie: [] }]
+      parameters: [{ $ref: '#/components/parameters/DeviceFP' }]
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { type: object, properties: { server_time: { type: string, format: date-time }, ends_at: { type: string, format: date-time } } } } } }
+        '409': { description: SESSION_LOCK_LOST, content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+        '410': { description: SESSION_ENDED, content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+  /api/student/events:
+    post:
+      tags: [student]
+      summary: Report a browser integrity event
+      security: [{ studentCookie: [] }]
+      parameters: [{ $ref: '#/components/parameters/DeviceFP' }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [type]
+              properties:
+                type:
+                  type: string
+                  enum: [TAB_SWITCH, WINDOW_BLUR, FULLSCREEN_EXIT, COPY_PASTE, CONTEXT_MENU, DEVTOOLS_SHORTCUT,
+                         PRINT_SCREEN, CAMERA_UNAVAILABLE, MIC_UNAVAILABLE, MULTIPLE_DISPLAYS, NETWORK_OFFLINE]
+                metadata: { type: object, additionalProperties: true, description: '≤ 8 scalar keys' }
+      responses:
+        '202': { description: Recorded (or suppressed by cooldown) }
+        '400': { $ref: '#/components/responses/Validation' }
+  /api/student/frames:
+    post:
+      tags: [student]
+      summary: Upload one webcam frame for AI analysis (≥ FRAME_MIN_INTERVAL apart)
+      security: [{ studentCookie: [] }]
+      parameters: [{ $ref: '#/components/parameters/DeviceFP' }]
+      requestBody:
+        required: true
+        content:
+          image/jpeg: { schema: { type: string, format: binary, maxLength: 524288 } }
+      responses:
+        '202': { description: Queued on events.frames }
+        '400': { $ref: '#/components/responses/Validation' }
+        '429': { description: Too frequent, content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+  /api/student/audio:
+    post:
+      tags: [student]
+      summary: Upload a 0.25–5 s audio clip (PCM16LE, 16 kHz, mono) for voice detection
+      security: [{ studentCookie: [] }]
+      parameters: [{ $ref: '#/components/parameters/DeviceFP' }]
+      requestBody:
+        required: true
+        content:
+          application/octet-stream: { schema: { type: string, format: binary } }
+      responses:
+        '202': { description: Queued }
+        '400': { $ref: '#/components/responses/Validation' }
+        '429': { description: Too frequent, content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+  /api/student/submit:
+    post:
+      tags: [student]
+      summary: Submit (idempotent); grades MCQs, releases locks, clears the cookie
+      security: [{ studentCookie: [] }]
+      parameters: [{ $ref: '#/components/parameters/DeviceFP' }]
+      responses:
+        '200': { description: Submitted, content: { application/json: { schema: { type: object, properties: { status: { $ref: '#/components/schemas/SessionStatus' }, ended_at: { type: string, format: date-time } } } } } }
+
+  # ---------------------------------------------------------------- staff auth
+  /api/staff/auth/login:
+    post:
+      tags: [staff-auth]
+      summary: Staff sign-in (5 failures / 15 min per username → 429)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [username, password]
+              properties:
+                username: { type: string, pattern: '^\d{8}$', example: '19990045' }
+                password: { type: string, pattern: '^[A-Z]{6,64}$', example: OLAWALE }
+      responses:
+        '200':
+          description: Signed in
+          headers:
+            Set-Cookie: { schema: { type: string }, description: 'es_refresh=…; HttpOnly; SameSite=Strict; Path=/api/staff/auth' }
+          content: { application/json: { schema: { $ref: '#/components/schemas/LoginResponse' } } }
+        '401': { description: INVALID_CREDENTIALS, content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+        '429': { description: RATE_LIMITED, content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+        '503': { description: Throttle store unavailable (fail-closed) }
+  /api/staff/auth/refresh:
+    post:
+      tags: [staff-auth]
+      summary: Rotate the refresh cookie and get a new access token
+      security: [{ refreshCookie: [] }]
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/LoginResponse' } } } }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+  /api/staff/auth/logout:
+    post:
+      tags: [staff-auth]
+      summary: Revoke the refresh token family
+      security: [{ refreshCookie: [] }]
+      responses:
+        '204': { description: Signed out }
+  /api/staff/me:
+    get:
+      tags: [staff-auth]
+      security: [{ staffBearer: [] }]
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/User' } } } }
+  /api/staff/system:
+    get:
+      tags: [system]
+      summary: Mode, AI backends per capability, face-match assurance, caller IP as seen by the gate
+      security: [{ staffBearer: [] }]
+      responses:
+        '200': { description: OK }
+
+  # ---------------------------------------------------------------- exams
+  /api/staff/exams:
+    get:
+      tags: [exams]
+      security: [{ staffBearer: [] }]
+      parameters: [{ name: mine, in: query, schema: { type: string, enum: ['1'] } }]
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { type: object, properties: { exams: { type: array, items: { $ref: '#/components/schemas/Exam' } } } } } } }
+    post:
+      tags: [exams]
+      security: [{ staffBearer: [] }]
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/ExamInput' } } } }
+      responses:
+        '201': { description: Created (DRAFT), content: { application/json: { schema: { $ref: '#/components/schemas/Exam' } } } }
+        '400': { $ref: '#/components/responses/Validation' }
+        '409': { description: lan_cidr outside the server LAN, content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+  /api/staff/exams/{id}:
+    parameters: [{ $ref: '#/components/parameters/ExamID' }]
+    get:
+      tags: [exams]
+      security: [{ staffBearer: [] }]
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { type: object, properties: { exam: { $ref: '#/components/schemas/Exam' }, can_manage: { type: boolean } } } } } }
+        '404': { $ref: '#/components/responses/NotFound' }
+    put:
+      tags: [exams]
+      summary: Edit (owner/admin). ACTIVE exams may only change title, description and extend ends_at.
+      security: [{ staffBearer: [] }]
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/ExamInput' } } } }
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/Exam' } } } }
+        '403': { $ref: '#/components/responses/Forbidden' }
+        '409': { $ref: '#/components/responses/Conflict' }
+    delete:
+      tags: [exams]
+      summary: Delete a DRAFT or CLOSED exam (owner/admin); cascades sessions
+      security: [{ staffBearer: [] }]
+      responses:
+        '204': { description: Deleted }
+        '409': { $ref: '#/components/responses/Conflict' }
+  /api/staff/exams/{id}/status:
+    parameters: [{ $ref: '#/components/parameters/ExamID' }]
+    post:
+      tags: [exams]
+      summary: 'Lifecycle: schedule (DRAFT→SCHEDULED), open (→ACTIVE), close (→CLOSED, auto-submits sessions)'
+      security: [{ staffBearer: [] }]
+      requestBody:
+        required: true
+        content: { application/json: { schema: { type: object, required: [action], properties: { action: { type: string, enum: [schedule, open, close] } } } } }
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/Exam' } } } }
+        '409': { description: 'Invalid state, no questions, window passed, or subnet conflict without PINs', content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+  /api/staff/exams/{id}/pin:
+    parameters: [{ $ref: '#/components/parameters/ExamID' }]
+    post:
+      tags: [exams]
+      summary: Rotate (enabled=true) or remove the 4-digit PIN; PINs are unique among live exams
+      security: [{ staffBearer: [] }]
+      requestBody:
+        required: true
+        content: { application/json: { schema: { type: object, properties: { enabled: { type: boolean } } } } }
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/Exam' } } } }
+  /api/staff/exams/{id}/access-card:
+    parameters: [{ $ref: '#/components/parameters/ExamID' }]
+    get:
+      tags: [exams]
+      summary: IP / URL / PIN / QR to project for students
+      security: [{ staffBearer: [] }]
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { $ref: '#/components/schemas/AccessCard' } } } }
+  /api/staff/exams/{id}/questions:
+    parameters: [{ $ref: '#/components/parameters/ExamID' }]
+    get:
+      tags: [exams]
+      security: [{ staffBearer: [] }]
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { type: object, properties: { questions: { type: array, items: { $ref: '#/components/schemas/Question' } } } } } } }
+    post:
+      tags: [exams]
+      summary: Add one question or {"questions":[...]} (≤ 500); locked once ACTIVE
+      security: [{ staffBearer: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/QuestionInput'
+                - type: object
+                  properties:
+                    questions: { type: array, items: { $ref: '#/components/schemas/QuestionInput' } }
+      responses:
+        '201': { description: Created }
+        '400': { $ref: '#/components/responses/Validation' }
+  /api/staff/exams/{id}/questions/{qid}:
+    parameters:
+      - { $ref: '#/components/parameters/ExamID' }
+      - { name: qid, in: path, required: true, schema: { type: integer, format: int64 } }
+    put:
+      tags: [exams]
+      security: [{ staffBearer: [] }]
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/QuestionInput' } } } }
+      responses: { '204': { description: Updated } }
+    delete:
+      tags: [exams]
+      security: [{ staffBearer: [] }]
+      responses: { '204': { description: Deleted } }
+  /api/staff/exams/{id}/report:
+    parameters:
+      - { $ref: '#/components/parameters/ExamID' }
+      - { name: format, in: query, schema: { type: string, enum: [csv] } }
+    get:
+      tags: [monitoring]
+      security: [{ staffBearer: [] }]
+      responses:
+        '200':
+          description: JSON report, or CSV with formula-injection-safe cells
+          content:
+            application/json: { schema: { $ref: '#/components/schemas/Report' } }
+            text/csv: { schema: { type: string } }
+  /api/staff/exams/{id}/purge-media:
+    parameters: [{ $ref: '#/components/parameters/ExamID' }]
+    post:
+      tags: [monitoring]
+      summary: Delete all frames/audio/verification images + AI findings of a CLOSED exam (admin)
+      security: [{ staffBearer: [] }]
+      responses: { '204': { description: Purged }, '409': { $ref: '#/components/responses/Conflict' } }
+
+  # ---------------------------------------------------------------- monitoring
+  /api/staff/exams/{id}/sessions:
+    parameters: [{ $ref: '#/components/parameters/ExamID' }]
+    get:
+      tags: [monitoring]
+      summary: Live grid
+      security: [{ staffBearer: [] }]
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { type: object, properties: { exam: { $ref: '#/components/schemas/Exam' }, server_time: { type: string, format: date-time }, sessions: { type: array, items: { $ref: '#/components/schemas/SessionRow' } } } } } } }
+  /api/staff/exams/{id}/violations:
+    parameters:
+      - { $ref: '#/components/parameters/ExamID' }
+      - { name: limit, in: query, schema: { type: integer, default: 200, maximum: 1000 } }
+    get:
+      tags: [monitoring]
+      summary: Alert feed, newest first
+      security: [{ staffBearer: [] }]
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { type: object, properties: { violations: { type: array, items: { $ref: '#/components/schemas/Violation' } } } } } } }
+  /api/staff/exams/{id}/violations/{vid}/review:
+    parameters:
+      - { $ref: '#/components/parameters/ExamID' }
+      - { name: vid, in: path, required: true, schema: { type: integer, format: int64 } }
+    post:
+      tags: [monitoring]
+      summary: Confirm / dismiss a violation; integrity score is recomputed
+      security: [{ staffBearer: [] }]
+      requestBody:
+        required: true
+        content: { application/json: { schema: { type: object, properties: { status: { type: string, enum: [CONFIRMED, DISMISSED, PENDING] } } } } }
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { type: object, properties: { integrity_score: { type: number } } } } } }
+  /api/staff/sessions/{sid}:
+    parameters: [{ $ref: '#/components/parameters/SessionID' }]
+    get:
+      tags: [monitoring]
+      security: [{ staffBearer: [] }]
+      responses: { '200': { description: 'Session, violations, recent AI findings' } }
+  /api/staff/sessions/{sid}/image/{which}:
+    parameters:
+      - { $ref: '#/components/parameters/SessionID' }
+      - { name: which, in: path, required: true, schema: { type: string, enum: [latest, reference, id] } }
+    get:
+      tags: [monitoring]
+      security: [{ staffBearer: [] }]
+      responses:
+        '200': { description: JPEG, content: { image/jpeg: { schema: { type: string, format: binary } } } }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /api/staff/sessions/{sid}/unlock:
+    parameters: [{ $ref: '#/components/parameters/SessionID' }]
+    post:
+      tags: [monitoring]
+      summary: Release the device binding so the student can continue elsewhere (re-verifies face)
+      security: [{ staffBearer: [] }]
+      responses: { '204': { description: Unlocked } }
+  /api/staff/sessions/{sid}/terminate:
+    parameters: [{ $ref: '#/components/parameters/SessionID' }]
+    post:
+      tags: [monitoring]
+      summary: End a session now (auto-submit)
+      security: [{ staffBearer: [] }]
+      responses: { '200': { description: OK } }
+  /api/staff/sessions/{sid}/flag:
+    parameters: [{ $ref: '#/components/parameters/SessionID' }]
+    post:
+      tags: [monitoring]
+      summary: Record a proctor observation
+      security: [{ staffBearer: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [severity]
+              properties:
+                event_type: { type: string, default: PROCTOR_NOTE }
+                severity: { $ref: '#/components/schemas/Severity' }
+                note: { type: string, maxLength: 500 }
+      responses: { '201': { description: Created, content: { application/json: { schema: { $ref: '#/components/schemas/Violation' } } } } }
+  /api/staff/media:
+    get:
+      tags: [monitoring]
+      summary: Evidence image by blob key (frames/, verify/, roster/ only)
+      security: [{ staffBearer: [] }]
+      parameters: [{ name: key, in: query, required: true, schema: { type: string } }]
+      responses: { '200': { description: JPEG }, '404': { $ref: '#/components/responses/NotFound' } }
+  /api/staff/ws-ticket:
+    post:
+      tags: [monitoring]
+      summary: One-time 30 s ticket for the WebSocket (browsers can't send headers on WS)
+      security: [{ staffBearer: [] }]
+      requestBody:
+        required: true
+        content: { application/json: { schema: { type: object, properties: { exam_id: { type: integer, format: int64 } } } } }
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { type: object, properties: { ticket: { type: string }, expires_in: { type: integer } } } } } }
+  /api/staff/ws:
+    get:
+      tags: [monitoring]
+      summary: 'WebSocket: live events {type: violation|session|exam|review|verify_failed, exam_id, at, data}'
+      parameters: [{ name: ticket, in: query, required: true, schema: { type: string } }]
+      responses:
+        '101': { description: Switching protocols }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+
+  # ---------------------------------------------------------------- roster
+  /api/staff/students:
+    get:
+      tags: [roster]
+      security: [{ staffBearer: [] }]
+      parameters:
+        - { name: q, in: query, schema: { type: string } }
+        - { name: page, in: query, schema: { type: integer, default: 1 } }
+        - { name: per_page, in: query, schema: { type: integer, default: 50, maximum: 200 } }
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { type: object, properties: { students: { type: array, items: { $ref: '#/components/schemas/Student' } }, total: { type: integer }, page: { type: integer }, per_page: { type: integer } } } } } }
+    post:
+      tags: [roster]
+      security: [{ staffBearer: [] }]
+      requestBody:
+        required: true
+        content: { application/json: { schema: { type: object, required: [matric_no, full_name], properties: { matric_no: { type: string }, full_name: { type: string } } } } }
+      responses: { '201': { description: Created }, '409': { $ref: '#/components/responses/Conflict' } }
+  /api/staff/students/import:
+    post:
+      tags: [roster]
+      summary: 'CSV import: header matric_no,full_name[,photo_url]; all rows validated; upsert by matric_no'
+      security: [{ staffBearer: [] }]
+      requestBody:
+        required: true
+        content: { multipart/form-data: { schema: { type: object, properties: { file: { type: string, format: binary } } } } }
+      responses:
+        '200': { description: OK, content: { application/json: { schema: { type: object, properties: { imported: { type: integer }, rejected: { type: array, items: { type: object, properties: { line: { type: integer }, error: { type: string } } } } } } } } }
+  /api/staff/students/photos:
+    post:
+      tags: [roster]
+      summary: Bulk reference photos named like IFT-22-9203.jpg (each must contain one face)
+      security: [{ staffBearer: [] }]
+      requestBody:
+        required: true
+        content: { multipart/form-data: { schema: { type: object, properties: { photos: { type: array, items: { type: string, format: binary } } } } } }
+      responses: { '200': { description: Per-file results } }
+  /api/staff/students/{id}/photo:
+    parameters: [{ $ref: '#/components/parameters/ExamID' }]
+    get:
+      tags: [roster]
+      security: [{ staffBearer: [] }]
+      responses: { '200': { description: JPEG } }
+    post:
+      tags: [roster]
+      security: [{ staffBearer: [] }]
+      requestBody:
+        required: true
+        content: { multipart/form-data: { schema: { type: object, properties: { photo: { type: string, format: binary } } } } }
+      responses: { '204': { description: Saved }, '422': { description: No face / several faces } }
+  /api/staff/students/{id}/export:
+    parameters: [{ $ref: '#/components/parameters/ExamID' }]
+    get:
+      tags: [roster]
+      summary: Data-subject access export (admin)
+      security: [{ staffBearer: [] }]
+      responses: { '200': { description: JSON of everything held about the student } }
+  /api/staff/students/{id}:
+    parameters: [{ $ref: '#/components/parameters/ExamID' }]
+    delete:
+      tags: [roster]
+      summary: Right to erasure — deletes the student, sessions, answers, violations, findings and all media (admin)
+      security: [{ staffBearer: [] }]
+      responses: { '204': { description: Erased } }
+
+  # ---------------------------------------------------------------- users
+  /api/staff/users:
+    get:
+      tags: [users]
+      security: [{ staffBearer: [] }]
+      responses: { '200': { description: OK }, '403': { $ref: '#/components/responses/Forbidden' } }
+    post:
+      tags: [users]
+      security: [{ staffBearer: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [username, password, full_name, role]
+              properties:
+                username: { type: string, pattern: '^\d{8}$' }
+                password: { type: string, pattern: '^[A-Z]{6,64}$' }
+                full_name: { type: string }
+                role: { $ref: '#/components/schemas/Role' }
+      responses: { '201': { description: Created }, '409': { $ref: '#/components/responses/Conflict' } }
+  /api/staff/users/{id}:
+    parameters: [{ $ref: '#/components/parameters/ExamID' }]
+    patch:
+      tags: [users]
+      summary: Update role / active / password / name; password change or deactivation revokes refresh tokens
+      security: [{ staffBearer: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                is_active: { type: boolean }
+                role: { $ref: '#/components/schemas/Role' }
+                password: { type: string }
+                full_name: { type: string }
+      responses: { '200': { description: OK }, '409': { description: Would remove the last active admin } }
+  /api/staff/audit:
+    get:
+      tags: [users]
+      summary: Last 500 audit entries (admin)
+      security: [{ staffBearer: [] }]
+      responses: { '200': { description: OK } }

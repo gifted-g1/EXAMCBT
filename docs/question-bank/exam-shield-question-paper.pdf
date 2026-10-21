@@ -1,0 +1,861 @@
+%PDF-1.4
+%‚„œ”
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [5 0 R 7 0 R 9 0 R 11 0 R 13 0 R 15 0 R 17 0 R 19 0 R 21 0 R 23 0 R 25 0 R 27 0 R 29 0 R 31 0 R 33 0 R 35 0 R 37 0 R 39 0 R 41 0 R 43 0 R 45 0 R 47 0 R 49 0 R] /Count 23 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 6 0 R >>
+endobj
+6 0 obj
+<< /Length 2102 >>
+stream
+BT /F2 12.0 Tf 56.0 644.6 Td (EXAM SHIELD) Tj ET
+BT /F2 26.0 Tf 56.0 600.9 Td (Question Paper) Tj ET
+BT /F1 13.0 Tf 56.0 578.0 Td (Computing question bank: 11 subjects for proctored exams) Tj ET
+BT /F1 11.0 Tf 56.0 544.1 Td (110 questions: 88 multiple choice and 22 written. Total 174 marks.) Tj ET
+BT /F1 11.0 Tf 56.0 528.1 Td (Edition: question paper \(no answers shown\).) Tj ET
+BT /F2 14.0 Tf 56.0 479.8 Td (Contents) Tj ET
+BT /F1 11.0 Tf 68.0 463.9 Td (Section 1: Golang - questions 1 to 10) Tj ET
+BT /F1 11.0 Tf 68.0 447.9 Td (Section 2: Python - questions 11 to 20) Tj ET
+BT /F1 11.0 Tf 68.0 432.0 Td (Section 3: JavaScript - questions 21 to 30) Tj ET
+BT /F1 11.0 Tf 68.0 416.0 Td (Section 4: PHP - questions 31 to 40) Tj ET
+BT /F1 11.0 Tf 68.0 400.1 Td (Section 5: Laravel - questions 41 to 50) Tj ET
+BT /F1 11.0 Tf 68.0 384.1 Td (Section 6: Computer Science - questions 51 to 60) Tj ET
+BT /F1 11.0 Tf 68.0 368.2 Td (Section 7: Information Technology - questions 61 to 70) Tj ET
+BT /F1 11.0 Tf 68.0 352.2 Td (Section 8: Information Systems - questions 71 to 80) Tj ET
+BT /F1 11.0 Tf 68.0 336.3 Td (Section 9: Cyber Security - questions 81 to 90) Tj ET
+BT /F1 11.0 Tf 68.0 320.3 Td (Section 10: Software Engineering - questions 91 to 100) Tj ET
+BT /F1 11.0 Tf 68.0 304.4 Td (Section 11: DevOps Engineering - questions 101 to 110) Tj ET
+BT /F2 14.0 Tf 56.0 256.1 Td (How this paper is laid out) Tj ET
+BT /F1 10.5 Tf 68.0 238.9 Td (Questions are numbered in one sequence. Multiple-choice options are lettered with a full stop;) Tj ET
+BT /F1 10.5 Tf 68.0 223.6 Td (each multiple-choice question is worth one mark unless stated.) Tj ET
+BT /F1 10.5 Tf 68.0 206.4 Td (Written questions show their marks in square brackets and are marked by an examiner.) Tj ET
+BT /F1 10.5 Tf 68.0 189.2 Td (To use this paper in Exam Shield, open an exam, choose Questions and then Import from PDF, and) Tj ET
+BT /F1 10.5 Tf 68.0 174.0 Td (upload this file. Review the preview and import.) Tj ET
+0.6 g
+BT /F1 8.0 Tf 56.0 34.0 Td (Exam Shield - Question Paper) Tj ET
+BT /F1 8.0 Tf 479.0 34.0 Td (Page 1 of 23) Tj ET
+0 g
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 8 0 R >>
+endobj
+8 0 obj
+<< /Length 2706 >>
+stream
+BT /F2 17.0 Tf 56.0 757.4 Td (Section 1: Golang) Tj ET
+BT /F1 10.5 Tf 56.0 740.1 Td (Concurrency, error handling, types and tooling in Go.) Tj ET
+BT /F2 11.0 Tf 56.0 714.2 Td (1. Which keyword starts a new goroutine?) Tj ET
+BT /F1 11.0 Tf 74.0 698.2 Td (A. go) Tj ET
+BT /F1 11.0 Tf 74.0 682.3 Td (B. spawn) Tj ET
+BT /F1 11.0 Tf 74.0 666.3 Td (C. async) Tj ET
+BT /F1 11.0 Tf 74.0 650.4 Td (D. thread) Tj ET
+BT /F2 11.0 Tf 56.0 624.4 Td (2. What is the value of a map declared with var m map[string]int before it is initialised?) Tj ET
+BT /F1 11.0 Tf 74.0 608.5 Td (A. A map with one zero entry) Tj ET
+BT /F1 11.0 Tf 74.0 592.5 Td (B. An empty map ready for writes) Tj ET
+BT /F1 11.0 Tf 74.0 576.6 Td (C. It does not compile) Tj ET
+BT /F1 11.0 Tf 74.0 560.6 Td (D. nil) Tj ET
+BT /F2 11.0 Tf 56.0 534.7 Td (3. What happens when a program writes to a nil map in Go?) Tj ET
+BT /F1 11.0 Tf 74.0 518.7 Td (A. The map is created automatically) Tj ET
+BT /F1 11.0 Tf 74.0 502.8 Td (B. The write is silently ignored) Tj ET
+BT /F1 11.0 Tf 74.0 486.8 Td (C. A compile-time error) Tj ET
+BT /F1 11.0 Tf 74.0 470.9 Td (D. A runtime panic) Tj ET
+BT /F2 11.0 Tf 56.0 444.9 Td (4. Which statement schedules a function call to run when the surrounding function returns?) Tj ET
+BT /F1 11.0 Tf 74.0 429.0 Td (A. later) Tj ET
+BT /F1 11.0 Tf 74.0 413.0 Td (B. defer) Tj ET
+BT /F1 11.0 Tf 74.0 397.1 Td (C. await) Tj ET
+BT /F1 11.0 Tf 74.0 381.1 Td (D. finally) Tj ET
+BT /F2 11.0 Tf 56.0 355.2 Td (5. How does idiomatic Go report a recoverable failure from a function?) Tj ET
+BT /F1 11.0 Tf 74.0 339.2 Td (A. By throwing an exception) Tj ET
+BT /F1 11.0 Tf 74.0 323.3 Td (B. By returning an error value as the last result) Tj ET
+BT /F1 11.0 Tf 74.0 307.3 Td (C. By setting a global errno variable) Tj ET
+BT /F1 11.0 Tf 74.0 291.4 Td (D. By calling panic in every case) Tj ET
+BT /F2 11.0 Tf 56.0 265.4 Td (6. Which built-in function creates a channel of integers?) Tj ET
+BT /F1 11.0 Tf 74.0 249.5 Td (A. channel\(int\)) Tj ET
+BT /F1 11.0 Tf 74.0 233.5 Td (B. new\(chan int\)) Tj ET
+BT /F1 11.0 Tf 74.0 217.6 Td (C. make\(chan int\)) Tj ET
+BT /F1 11.0 Tf 74.0 201.6 Td (D. chan.New\(int\)) Tj ET
+BT /F2 11.0 Tf 56.0 175.7 Td (7. What does a select statement do in Go?) Tj ET
+BT /F1 11.0 Tf 74.0 159.7 Td (A. Waits on several channel operations and runs the one that is ready) Tj ET
+BT /F1 11.0 Tf 74.0 143.8 Td (B. Chooses which goroutine the scheduler stops) Tj ET
+BT /F1 11.0 Tf 74.0 127.8 Td (C. Selects rows from a database table) Tj ET
+BT /F1 11.0 Tf 74.0 111.9 Td (D. Sorts the elements of a slice) Tj ET
+0.6 g
+BT /F1 8.0 Tf 56.0 34.0 Td (Exam Shield - Question Paper) Tj ET
+BT /F1 8.0 Tf 479.0 34.0 Td (Page 2 of 23) Tj ET
+0 g
+endstream
+endobj
+9 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 10 0 R >>
+endobj
+10 0 obj
+<< /Length 730 >>
+stream
+BT /F2 11.0 Tf 56.0 766.0 Td (8. Which command formats Go source code to the standard style?) Tj ET
+BT /F1 11.0 Tf 74.0 750.1 Td (A. go style) Tj ET
+BT /F1 11.0 Tf 74.0 734.1 Td (B. gopretty) Tj ET
+BT /F1 11.0 Tf 74.0 718.2 Td (C. gofmt) Tj ET
+BT /F1 11.0 Tf 74.0 702.2 Td (D. golint) Tj ET
+BT /F2 11.0 Tf 56.0 676.3 Td (9. Explain the difference between an array and a slice in Go, including how each is passed) Tj ET
+BT /F2 11.0 Tf 56.0 660.3 Td (to a function. [4 marks]) Tj ET
+BT /F2 11.0 Tf 56.0 634.4 Td (10. What is a data race? Describe how the Go race detector helps you find one. [4 marks]) Tj ET
+0.6 g
+BT /F1 8.0 Tf 56.0 34.0 Td (Exam Shield - Question Paper) Tj ET
+BT /F1 8.0 Tf 479.0 34.0 Td (Page 3 of 23) Tj ET
+0 g
+endstream
+endobj
+11 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 12 0 R >>
+endobj
+12 0 obj
+<< /Length 2323 >>
+stream
+BT /F2 17.0 Tf 56.0 757.4 Td (Section 2: Python) Tj ET
+BT /F1 10.5 Tf 56.0 740.1 Td (Core syntax, data types and idioms of Python 3.) Tj ET
+BT /F2 11.0 Tf 56.0 714.2 Td (11. Which of these Python types is immutable?) Tj ET
+BT /F1 11.0 Tf 74.0 698.2 Td (A. dict) Tj ET
+BT /F1 11.0 Tf 74.0 682.3 Td (B. tuple) Tj ET
+BT /F1 11.0 Tf 74.0 666.3 Td (C. set) Tj ET
+BT /F1 11.0 Tf 74.0 650.4 Td (D. list) Tj ET
+BT /F2 11.0 Tf 56.0 624.4 Td (12. Which keyword defines a function in Python?) Tj ET
+BT /F1 11.0 Tf 74.0 608.5 Td (A. def) Tj ET
+BT /F1 11.0 Tf 74.0 592.5 Td (B. func) Tj ET
+BT /F1 11.0 Tf 74.0 576.6 Td (C. fn) Tj ET
+BT /F1 11.0 Tf 74.0 560.6 Td (D. function) Tj ET
+BT /F2 11.0 Tf 56.0 534.7 Td (13. What does len\("hello"\) return?) Tj ET
+BT /F1 11.0 Tf 74.0 518.7 Td (A. 6) Tj ET
+BT /F1 11.0 Tf 74.0 502.8 Td (B. 4) Tj ET
+BT /F1 11.0 Tf 74.0 486.8 Td (C. An error) Tj ET
+BT /F1 11.0 Tf 74.0 470.9 Td (D. 5) Tj ET
+BT /F2 11.0 Tf 56.0 444.9 Td (14. What is the result of the expression 7 // 2 in Python 3?) Tj ET
+BT /F1 11.0 Tf 74.0 429.0 Td (A. 1) Tj ET
+BT /F1 11.0 Tf 74.0 413.0 Td (B. 3.5) Tj ET
+BT /F1 11.0 Tf 74.0 397.1 Td (C. 3) Tj ET
+BT /F1 11.0 Tf 74.0 381.1 Td (D. 4) Tj ET
+BT /F2 11.0 Tf 56.0 355.2 Td (15. Which line is a valid dictionary comprehension?) Tj ET
+BT /F1 11.0 Tf 74.0 339.2 Td (A. [k: v for k, v in pairs]) Tj ET
+BT /F1 11.0 Tf 74.0 323.3 Td (B. \(k: v for k, v in pairs\)) Tj ET
+BT /F1 11.0 Tf 74.0 307.3 Td (C. {k: v for k, v in pairs}) Tj ET
+BT /F1 11.0 Tf 74.0 291.4 Td (D. dict[k for k in pairs]) Tj ET
+BT /F2 11.0 Tf 56.0 265.4 Td (16. What does a with open\(path\) as fh: block guarantee?) Tj ET
+BT /F1 11.0 Tf 74.0 249.5 Td (A. The file is closed when the block exits) Tj ET
+BT /F1 11.0 Tf 74.0 233.5 Td (B. The file is locked for other processes) Tj ET
+BT /F1 11.0 Tf 74.0 217.6 Td (C. The file is deleted afterwards) Tj ET
+BT /F1 11.0 Tf 74.0 201.6 Td (D. The file is opened read-only) Tj ET
+BT /F2 11.0 Tf 56.0 175.7 Td (17. Which tool installs third-party Python packages?) Tj ET
+BT /F1 11.0 Tf 74.0 159.7 Td (A. npm) Tj ET
+BT /F1 11.0 Tf 74.0 143.8 Td (B. gem) Tj ET
+BT /F1 11.0 Tf 74.0 127.8 Td (C. composer) Tj ET
+BT /F1 11.0 Tf 74.0 111.9 Td (D. pip) Tj ET
+0.6 g
+BT /F1 8.0 Tf 56.0 34.0 Td (Exam Shield - Question Paper) Tj ET
+BT /F1 8.0 Tf 479.0 34.0 Td (Page 4 of 23) Tj ET
+0 g
+endstream
+endobj
+13 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 14 0 R >>
+endobj
+14 0 obj
+<< /Length 737 >>
+stream
+BT /F2 11.0 Tf 56.0 766.0 Td (18. What does print\(type\([]\)\) display?) Tj ET
+BT /F1 11.0 Tf 74.0 750.1 Td (A. <class 'list'>) Tj ET
+BT /F1 11.0 Tf 74.0 734.1 Td (B. <class 'dict'>) Tj ET
+BT /F1 11.0 Tf 74.0 718.2 Td (C. <class 'array'>) Tj ET
+BT /F1 11.0 Tf 74.0 702.2 Td (D. <class 'tuple'>) Tj ET
+BT /F2 11.0 Tf 56.0 676.3 Td (19. Explain the Global Interpreter Lock \(GIL\) and its effect on multi-threaded, CPU-bound) Tj ET
+BT /F2 11.0 Tf 56.0 660.3 Td (Python code. [4 marks]) Tj ET
+BT /F2 11.0 Tf 56.0 634.4 Td (20. Compare a list with a generator. When is a generator the better choice? [4 marks]) Tj ET
+0.6 g
+BT /F1 8.0 Tf 56.0 34.0 Td (Exam Shield - Question Paper) Tj ET
+BT /F1 8.0 Tf 479.0 34.0 Td (Page 5 of 23) Tj ET
+0 g
+endstream
+endobj
+15 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 16 0 R >>
+endobj
+16 0 obj
+<< /Length 2454 >>
+stream
+BT /F2 17.0 Tf 56.0 757.4 Td (Section 3: JavaScript) Tj ET
+BT /F1 10.5 Tf 56.0 740.1 Td (Language fundamentals, types and asynchronous programming.) Tj ET
+BT /F2 11.0 Tf 56.0 714.2 Td (21. Which keyword declares a block-scoped variable that cannot be reassigned?) Tj ET
+BT /F1 11.0 Tf 74.0 698.2 Td (A. var) Tj ET
+BT /F1 11.0 Tf 74.0 682.3 Td (B. let) Tj ET
+BT /F1 11.0 Tf 74.0 666.3 Td (C. const) Tj ET
+BT /F1 11.0 Tf 74.0 650.4 Td (D. static) Tj ET
+BT /F2 11.0 Tf 56.0 624.4 Td (22. What does typeof null evaluate to?) Tj ET
+BT /F1 11.0 Tf 74.0 608.5 Td (A. "null") Tj ET
+BT /F1 11.0 Tf 74.0 592.5 Td (B. "object") Tj ET
+BT /F1 11.0 Tf 74.0 576.6 Td (C. "number") Tj ET
+BT /F1 11.0 Tf 74.0 560.6 Td (D. "undefined") Tj ET
+BT /F2 11.0 Tf 56.0 534.7 Td (23. What is the result of "5" + 3 in JavaScript?) Tj ET
+BT /F1 11.0 Tf 74.0 518.7 Td (A. "53") Tj ET
+BT /F1 11.0 Tf 74.0 502.8 Td (B. A TypeError) Tj ET
+BT /F1 11.0 Tf 74.0 486.8 Td (C. 8) Tj ET
+BT /F1 11.0 Tf 74.0 470.9 Td (D. NaN) Tj ET
+BT /F2 11.0 Tf 56.0 444.9 Td (24. Which operator compares both value and type without coercion?) Tj ET
+BT /F1 11.0 Tf 74.0 429.0 Td (A. =>) Tj ET
+BT /F1 11.0 Tf 74.0 413.0 Td (B. ==) Tj ET
+BT /F1 11.0 Tf 74.0 397.1 Td (C. =) Tj ET
+BT /F1 11.0 Tf 74.0 381.1 Td (D. ===) Tj ET
+BT /F2 11.0 Tf 56.0 355.2 Td (25. Which method turns a JSON string into a JavaScript object?) Tj ET
+BT /F1 11.0 Tf 74.0 339.2 Td (A. JSON.toObject) Tj ET
+BT /F1 11.0 Tf 74.0 323.3 Td (B. Object.fromJSON) Tj ET
+BT /F1 11.0 Tf 74.0 307.3 Td (C. JSON.parse) Tj ET
+BT /F1 11.0 Tf 74.0 291.4 Td (D. JSON.stringify) Tj ET
+BT /F2 11.0 Tf 56.0 265.4 Td (26. Which syntax, standardised in ES2017, lets you write promise-based code that reads) Tj ET
+BT /F2 11.0 Tf 56.0 249.5 Td (synchronously?) Tj ET
+BT /F1 11.0 Tf 74.0 233.5 Td (A. async / await) Tj ET
+BT /F1 11.0 Tf 74.0 217.6 Td (B. XMLHttpRequest) Tj ET
+BT /F1 11.0 Tf 74.0 201.6 Td (C. Generators with yield) Tj ET
+BT /F1 11.0 Tf 74.0 185.7 Td (D. Callbacks) Tj ET
+BT /F2 11.0 Tf 56.0 159.7 Td (27. Which array method returns a new array containing each element transformed by a) Tj ET
+BT /F2 11.0 Tf 56.0 143.8 Td (function?) Tj ET
+BT /F1 11.0 Tf 74.0 127.8 Td (A. push) Tj ET
+BT /F1 11.0 Tf 74.0 111.9 Td (B. splice) Tj ET
+BT /F1 11.0 Tf 74.0 95.9 Td (C. map) Tj ET
+BT /F1 11.0 Tf 74.0 80.0 Td (D. forEach) Tj ET
+0.6 g
+BT /F1 8.0 Tf 56.0 34.0 Td (Exam Shield - Question Paper) Tj ET
+BT /F1 8.0 Tf 479.0 34.0 Td (Page 6 of 23) Tj ET
+0 g
+endstream
+endobj
+17 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 18 0 R >>
+endobj
+18 0 obj
+<< /Length 765 >>
+stream
+BT /F2 11.0 Tf 56.0 766.0 Td (28. When does a setTimeout callback with a delay of 0 ms run?) Tj ET
+BT /F1 11.0 Tf 74.0 750.1 Td (A. After the current call stack and pending microtasks finish) Tj ET
+BT /F1 11.0 Tf 74.0 734.1 Td (B. Immediately, before the next line of code) Tj ET
+BT /F1 11.0 Tf 74.0 718.2 Td (C. Never; a delay of 0 is ignored) Tj ET
+BT /F1 11.0 Tf 74.0 702.2 Td (D. Before any pending promise callbacks) Tj ET
+BT /F2 11.0 Tf 56.0 676.3 Td (29. Explain what a closure is and give one practical use case. [4 marks]) Tj ET
+BT /F2 11.0 Tf 56.0 650.3 Td (30. Describe the differences between var, let and const. [3 marks]) Tj ET
+0.6 g
+BT /F1 8.0 Tf 56.0 34.0 Td (Exam Shield - Question Paper) Tj ET
+BT /F1 8.0 Tf 479.0 34.0 Td (Page 7 of 23) Tj ET
+0 g
+endstream
+endobj
+19 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 20 0 R >>
+endobj
+20 0 obj
+<< /Length 2417 >>
+stream
+BT /F2 17.0 Tf 56.0 757.4 Td (Section 4: PHP) Tj ET
+BT /F1 10.5 Tf 56.0 740.1 Td (Server-side PHP: syntax, forms, security and tooling.) Tj ET
+BT /F2 11.0 Tf 56.0 714.2 Td (31. Which character begins every variable name in PHP?) Tj ET
+BT /F1 11.0 Tf 74.0 698.2 Td (A. @) Tj ET
+BT /F1 11.0 Tf 74.0 682.3 Td (B. $) Tj ET
+BT /F1 11.0 Tf 74.0 666.3 Td (C. #) Tj ET
+BT /F1 11.0 Tf 74.0 650.4 Td (D. &) Tj ET
+BT /F2 11.0 Tf 56.0 624.4 Td (32. Which superglobal holds data submitted by an HTML form using the POST method?) Tj ET
+BT /F1 11.0 Tf 74.0 608.5 Td (A. $_POST) Tj ET
+BT /F1 11.0 Tf 74.0 592.5 Td (B. $_FORM) Tj ET
+BT /F1 11.0 Tf 74.0 576.6 Td (C. $_SERVER) Tj ET
+BT /F1 11.0 Tf 74.0 560.6 Td (D. $_GET) Tj ET
+BT /F2 11.0 Tf 56.0 534.7 Td (33. Which operator joins two strings in PHP?) Tj ET
+BT /F1 11.0 Tf 74.0 518.7 Td (A. . \(dot\)) Tj ET
+BT /F1 11.0 Tf 74.0 502.8 Td (B. ++ \(increment\)) Tj ET
+BT /F1 11.0 Tf 74.0 486.8 Td (C. + \(plus\)) Tj ET
+BT /F1 11.0 Tf 74.0 470.9 Td (D. & \(ampersand\)) Tj ET
+BT /F2 11.0 Tf 56.0 444.9 Td (34. Which function checks that a variable exists and is not null?) Tj ET
+BT /F1 11.0 Tf 74.0 429.0 Td (A. isset\(\)) Tj ET
+BT /F1 11.0 Tf 74.0 413.0 Td (B. is_null\(\)) Tj ET
+BT /F1 11.0 Tf 74.0 397.1 Td (C. empty\(\)) Tj ET
+BT /F1 11.0 Tf 74.0 381.1 Td (D. defined\(\)) Tj ET
+BT /F2 11.0 Tf 56.0 355.2 Td (35. What is the correct way to prevent SQL injection when using PDO?) Tj ET
+BT /F1 11.0 Tf 74.0 339.2 Td (A. Calling addslashes\(\) on input) Tj ET
+BT /F1 11.0 Tf 74.0 323.3 Td (B. Running strip_tags\(\) on input) Tj ET
+BT /F1 11.0 Tf 74.0 307.3 Td (C. Hashing the input with md5\(\)) Tj ET
+BT /F1 11.0 Tf 74.0 291.4 Td (D. Prepared statements with bound parameters) Tj ET
+BT /F2 11.0 Tf 56.0 265.4 Td (36. Which tool manages PHP project dependencies?) Tj ET
+BT /F1 11.0 Tf 74.0 249.5 Td (A. npm) Tj ET
+BT /F1 11.0 Tf 74.0 233.5 Td (B. pip) Tj ET
+BT /F1 11.0 Tf 74.0 217.6 Td (C. Maven) Tj ET
+BT /F1 11.0 Tf 74.0 201.6 Td (D. Composer) Tj ET
+BT /F2 11.0 Tf 56.0 175.7 Td (37. Which function should be used to hash user passwords?) Tj ET
+BT /F1 11.0 Tf 74.0 159.7 Td (A. password_hash\(\)) Tj ET
+BT /F1 11.0 Tf 74.0 143.8 Td (B. md5\(\)) Tj ET
+BT /F1 11.0 Tf 74.0 127.8 Td (C. base64_encode\(\)) Tj ET
+BT /F1 11.0 Tf 74.0 111.9 Td (D. sha1\(\)) Tj ET
+0.6 g
+BT /F1 8.0 Tf 56.0 34.0 Td (Exam Shield - Question Paper) Tj ET
+BT /F1 8.0 Tf 479.0 34.0 Td (Page 8 of 23) Tj ET
+0 g
+endstream
+endobj
+21 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 22 0 R >>
+endobj
+22 0 obj
+<< /Length 601 >>
+stream
+BT /F2 11.0 Tf 56.0 766.0 Td (38. What does echo 10 <=> 5; print?) Tj ET
+BT /F1 11.0 Tf 74.0 750.1 Td (A. 1) Tj ET
+BT /F1 11.0 Tf 74.0 734.1 Td (B. 0) Tj ET
+BT /F1 11.0 Tf 74.0 718.2 Td (C. -1) Tj ET
+BT /F1 11.0 Tf 74.0 702.2 Td (D. true) Tj ET
+BT /F2 11.0 Tf 56.0 676.3 Td (39. Explain the difference between include and require in PHP. [3 marks]) Tj ET
+BT /F2 11.0 Tf 56.0 650.3 Td (40. What are PHP sessions? List two measures that keep session data secure. [4 marks]) Tj ET
+0.6 g
+BT /F1 8.0 Tf 56.0 34.0 Td (Exam Shield - Question Paper) Tj ET
+BT /F1 8.0 Tf 479.0 34.0 Td (Page 9 of 23) Tj ET
+0 g
+endstream
+endobj
+23 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 24 0 R >>
+endobj
+24 0 obj
+<< /Length 2477 >>
+stream
+BT /F2 17.0 Tf 56.0 757.4 Td (Section 5: Laravel) Tj ET
+BT /F1 10.5 Tf 56.0 740.1 Td (The Laravel framework: routing, Eloquent, Blade and Artisan.) Tj ET
+BT /F2 11.0 Tf 56.0 714.2 Td (41. What is the name of Laravel's command-line tool?) Tj ET
+BT /F1 11.0 Tf 74.0 698.2 Td (A. Tinker) Tj ET
+BT /F1 11.0 Tf 74.0 682.3 Td (B. Artisan) Tj ET
+BT /F1 11.0 Tf 74.0 666.3 Td (C. Forge) Tj ET
+BT /F1 11.0 Tf 74.0 650.4 Td (D. Blade) Tj ET
+BT /F2 11.0 Tf 56.0 624.4 Td (42. Which templating engine ships with Laravel?) Tj ET
+BT /F1 11.0 Tf 74.0 608.5 Td (A. Twig) Tj ET
+BT /F1 11.0 Tf 74.0 592.5 Td (B. Smarty) Tj ET
+BT /F1 11.0 Tf 74.0 576.6 Td (C. Blade) Tj ET
+BT /F1 11.0 Tf 74.0 560.6 Td (D. Mustache) Tj ET
+BT /F2 11.0 Tf 56.0 534.7 Td (43. What is Laravel's built-in ORM called?) Tj ET
+BT /F1 11.0 Tf 74.0 518.7 Td (A. Sequelize) Tj ET
+BT /F1 11.0 Tf 74.0 502.8 Td (B. Hibernate) Tj ET
+BT /F1 11.0 Tf 74.0 486.8 Td (C. Eloquent) Tj ET
+BT /F1 11.0 Tf 74.0 470.9 Td (D. Doctrine) Tj ET
+BT /F2 11.0 Tf 56.0 444.9 Td (44. Which command creates a new migration file?) Tj ET
+BT /F1 11.0 Tf 74.0 429.0 Td (A. php artisan make:migration create_posts_table) Tj ET
+BT /F1 11.0 Tf 74.0 413.0 Td (B. php artisan db:create posts) Tj ET
+BT /F1 11.0 Tf 74.0 397.1 Td (C. php artisan migrate:new posts) Tj ET
+BT /F1 11.0 Tf 74.0 381.1 Td (D. composer make:migration posts) Tj ET
+BT /F2 11.0 Tf 56.0 355.2 Td (45. In which file are browser \(web\) routes normally defined?) Tj ET
+BT /F1 11.0 Tf 74.0 339.2 Td (A. app/routes.php) Tj ET
+BT /F1 11.0 Tf 74.0 323.3 Td (B. routes/web.php) Tj ET
+BT /F1 11.0 Tf 74.0 307.3 Td (C. config/routes.php) Tj ET
+BT /F1 11.0 Tf 74.0 291.4 Td (D. public/routes.php) Tj ET
+BT /F2 11.0 Tf 56.0 265.4 Td (46. What is the main purpose of middleware in Laravel?) Tj ET
+BT /F1 11.0 Tf 74.0 249.5 Td (A. Defining the database schema) Tj ET
+BT /F1 11.0 Tf 74.0 233.5 Td (B. Filtering HTTP requests entering the application) Tj ET
+BT /F1 11.0 Tf 74.0 217.6 Td (C. Compiling front-end assets) Tj ET
+BT /F1 11.0 Tf 74.0 201.6 Td (D. Rendering Blade views) Tj ET
+BT /F2 11.0 Tf 56.0 175.7 Td (47. Which Blade directive adds a CSRF token field to a form?) Tj ET
+BT /F1 11.0 Tf 74.0 159.7 Td (A. @protect) Tj ET
+BT /F1 11.0 Tf 74.0 143.8 Td (B. @secure) Tj ET
+BT /F1 11.0 Tf 74.0 127.8 Td (C. @csrf) Tj ET
+BT /F1 11.0 Tf 74.0 111.9 Td (D. @token) Tj ET
+0.6 g
+BT /F1 8.0 Tf 56.0 34.0 Td (Exam Shield - Question Paper) Tj ET
+BT /F1 8.0 Tf 479.0 34.0 Td (Page 10 of 23) Tj ET
+0 g
+endstream
+endobj
+25 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 26 0 R >>
+endobj
+26 0 obj
+<< /Length 718 >>
+stream
+BT /F2 11.0 Tf 56.0 766.0 Td (48. Which command applies all pending database migrations?) Tj ET
+BT /F1 11.0 Tf 74.0 750.1 Td (A. php artisan db:run) Tj ET
+BT /F1 11.0 Tf 74.0 734.1 Td (B. composer migrate) Tj ET
+BT /F1 11.0 Tf 74.0 718.2 Td (C. php artisan migrate) Tj ET
+BT /F1 11.0 Tf 74.0 702.2 Td (D. php artisan schema:apply) Tj ET
+BT /F2 11.0 Tf 56.0 676.3 Td (49. Explain mass assignment and how the $fillable property protects against it. [4 marks]) Tj ET
+BT /F2 11.0 Tf 56.0 650.3 Td (50. Describe Laravel's service container and how it supports dependency injection. [4 marks]) Tj ET
+0.6 g
+BT /F1 8.0 Tf 56.0 34.0 Td (Exam Shield - Question Paper) Tj ET
+BT /F1 8.0 Tf 479.0 34.0 Td (Page 11 of 23) Tj ET
+0 g
+endstream
+endobj
+27 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 28 0 R >>
+endobj
+28 0 obj
+<< /Length 2504 >>
+stream
+BT /F2 17.0 Tf 56.0 757.4 Td (Section 6: Computer Science) Tj ET
+BT /F1 10.5 Tf 56.0 740.1 Td (Algorithms, data structures, number systems and systems.) Tj ET
+BT /F2 11.0 Tf 56.0 714.2 Td (51. What is the time complexity of binary search on a sorted array?) Tj ET
+BT /F1 11.0 Tf 74.0 698.2 Td (A. O\(1\)) Tj ET
+BT /F1 11.0 Tf 74.0 682.3 Td (B. O\(log n\)) Tj ET
+BT /F1 11.0 Tf 74.0 666.3 Td (C. O\(n\)) Tj ET
+BT /F1 11.0 Tf 74.0 650.4 Td (D. O\(n log n\)) Tj ET
+BT /F2 11.0 Tf 56.0 624.4 Td (52. Which data structure follows Last-In, First-Out \(LIFO\) order?) Tj ET
+BT /F1 11.0 Tf 74.0 608.5 Td (A. Queue) Tj ET
+BT /F1 11.0 Tf 74.0 592.5 Td (B. Linked list) Tj ET
+BT /F1 11.0 Tf 74.0 576.6 Td (C. Binary search tree) Tj ET
+BT /F1 11.0 Tf 74.0 560.6 Td (D. Stack) Tj ET
+BT /F2 11.0 Tf 56.0 534.7 Td (53. What is the average-case time complexity of quicksort?) Tj ET
+BT /F1 11.0 Tf 74.0 518.7 Td (A. O\(n log n\)) Tj ET
+BT /F1 11.0 Tf 74.0 502.8 Td (B. O\(n^2\)) Tj ET
+BT /F1 11.0 Tf 74.0 486.8 Td (C. O\(n\)) Tj ET
+BT /F1 11.0 Tf 74.0 470.9 Td (D. O\(log n\)) Tj ET
+BT /F2 11.0 Tf 56.0 444.9 Td (54. What is the binary representation of decimal 10?) Tj ET
+BT /F1 11.0 Tf 74.0 429.0 Td (A. 1100) Tj ET
+BT /F1 11.0 Tf 74.0 413.0 Td (B. 0110) Tj ET
+BT /F1 11.0 Tf 74.0 397.1 Td (C. 1001) Tj ET
+BT /F1 11.0 Tf 74.0 381.1 Td (D. 1010) Tj ET
+BT /F2 11.0 Tf 56.0 355.2 Td (55. Which algorithm finds shortest paths in a graph with non-negative edge weights?) Tj ET
+BT /F1 11.0 Tf 74.0 339.2 Td (A. Depth-first search) Tj ET
+BT /F1 11.0 Tf 74.0 323.3 Td (B. Dijkstra's algorithm) Tj ET
+BT /F1 11.0 Tf 74.0 307.3 Td (C. Kruskal's algorithm) Tj ET
+BT /F1 11.0 Tf 74.0 291.4 Td (D. Prim's algorithm) Tj ET
+BT /F2 11.0 Tf 56.0 265.4 Td (56. What does a compiler do?) Tj ET
+BT /F1 11.0 Tf 74.0 249.5 Td (A. Translates source code into machine or target code) Tj ET
+BT /F1 11.0 Tf 74.0 233.5 Td (B. Executes source code one line at a time) Tj ET
+BT /F1 11.0 Tf 74.0 217.6 Td (C. Compresses files for storage) Tj ET
+BT /F1 11.0 Tf 74.0 201.6 Td (D. Translates machine code back into source code) Tj ET
+BT /F2 11.0 Tf 56.0 175.7 Td (57. What is the average time to look up a key in a hash table?) Tj ET
+BT /F1 11.0 Tf 74.0 159.7 Td (A. O\(1\)) Tj ET
+BT /F1 11.0 Tf 74.0 143.8 Td (B. O\(n^2\)) Tj ET
+BT /F1 11.0 Tf 74.0 127.8 Td (C. O\(n\)) Tj ET
+BT /F1 11.0 Tf 74.0 111.9 Td (D. O\(log n\)) Tj ET
+0.6 g
+BT /F1 8.0 Tf 56.0 34.0 Td (Exam Shield - Question Paper) Tj ET
+BT /F1 8.0 Tf 479.0 34.0 Td (Page 12 of 23) Tj ET
+0 g
+endstream
+endobj
+29 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 30 0 R >>
+endobj
+30 0 obj
+<< /Length 697 >>
+stream
+BT /F2 11.0 Tf 56.0 766.0 Td (58. Which of these is NOT a core operating system function?) Tj ET
+BT /F1 11.0 Tf 74.0 750.1 Td (A. Compiling user programs) Tj ET
+BT /F1 11.0 Tf 74.0 734.1 Td (B. Process scheduling) Tj ET
+BT /F1 11.0 Tf 74.0 718.2 Td (C. Memory management) Tj ET
+BT /F1 11.0 Tf 74.0 702.2 Td (D. File management) Tj ET
+BT /F2 11.0 Tf 56.0 676.3 Td (59. Explain recursion and the role of the base case. Give a simple example. [3 marks]) Tj ET
+BT /F2 11.0 Tf 56.0 650.3 Td (60. Compare a stack and a queue, giving one real-world use for each. [4 marks]) Tj ET
+0.6 g
+BT /F1 8.0 Tf 56.0 34.0 Td (Exam Shield - Question Paper) Tj ET
+BT /F1 8.0 Tf 479.0 34.0 Td (Page 13 of 23) Tj ET
+0 g
+endstream
+endobj
+31 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 32 0 R >>
+endobj
+32 0 obj
+<< /Length 2446 >>
+stream
+BT /F2 17.0 Tf 56.0 757.4 Td (Section 7: Information Technology) Tj ET
+BT /F1 10.5 Tf 56.0 740.1 Td (Networking, infrastructure, cloud services and IT operations.) Tj ET
+BT /F2 11.0 Tf 56.0 714.2 Td (61. Which protocol automatically assigns IP addresses to devices on a network?) Tj ET
+BT /F1 11.0 Tf 74.0 698.2 Td (A. FTP) Tj ET
+BT /F1 11.0 Tf 74.0 682.3 Td (B. DNS) Tj ET
+BT /F1 11.0 Tf 74.0 666.3 Td (C. SMTP) Tj ET
+BT /F1 11.0 Tf 74.0 650.4 Td (D. DHCP) Tj ET
+BT /F2 11.0 Tf 56.0 624.4 Td (62. What is the main job of DNS?) Tj ET
+BT /F1 11.0 Tf 74.0 608.5 Td (A. Assigning MAC addresses) Tj ET
+BT /F1 11.0 Tf 74.0 592.5 Td (B. Translating domain names into IP addresses) Tj ET
+BT /F1 11.0 Tf 74.0 576.6 Td (C. Routing email between servers) Tj ET
+BT /F1 11.0 Tf 74.0 560.6 Td (D. Encrypting web traffic) Tj ET
+BT /F2 11.0 Tf 56.0 534.7 Td (63. What is the default port for HTTPS?) Tj ET
+BT /F1 11.0 Tf 74.0 518.7 Td (A. 80) Tj ET
+BT /F1 11.0 Tf 74.0 502.8 Td (B. 443) Tj ET
+BT /F1 11.0 Tf 74.0 486.8 Td (C. 21) Tj ET
+BT /F1 11.0 Tf 74.0 470.9 Td (D. 8080) Tj ET
+BT /F2 11.0 Tf 56.0 444.9 Td (64. Which device forwards traffic between different networks?) Tj ET
+BT /F1 11.0 Tf 74.0 429.0 Td (A. Repeater) Tj ET
+BT /F1 11.0 Tf 74.0 413.0 Td (B. Router) Tj ET
+BT /F1 11.0 Tf 74.0 397.1 Td (C. Hub) Tj ET
+BT /F1 11.0 Tf 74.0 381.1 Td (D. Switch) Tj ET
+BT /F2 11.0 Tf 56.0 355.2 Td (65. What does RAID 1 provide?) Tj ET
+BT /F1 11.0 Tf 74.0 339.2 Td (A. Distributed parity across three disks) Tj ET
+BT /F1 11.0 Tf 74.0 323.3 Td (B. Striping without redundancy) Tj ET
+BT /F1 11.0 Tf 74.0 307.3 Td (C. Mirroring of data across disks) Tj ET
+BT /F1 11.0 Tf 74.0 291.4 Td (D. Data compression) Tj ET
+BT /F2 11.0 Tf 56.0 265.4 Td (66. Which of these is a cloud service model?) Tj ET
+BT /F1 11.0 Tf 74.0 249.5 Td (A. LAN \(Local Area Network\)) Tj ET
+BT /F1 11.0 Tf 74.0 233.5 Td (B. VPN \(Virtual Private Network\)) Tj ET
+BT /F1 11.0 Tf 74.0 217.6 Td (C. SaaS \(Software as a Service\)) Tj ET
+BT /F1 11.0 Tf 74.0 201.6 Td (D. DHCP \(Dynamic Host Configuration Protocol\)) Tj ET
+BT /F2 11.0 Tf 56.0 175.7 Td (67. How many bits are in an IPv4 address?) Tj ET
+BT /F1 11.0 Tf 74.0 159.7 Td (A. 32) Tj ET
+BT /F1 11.0 Tf 74.0 143.8 Td (B. 64) Tj ET
+BT /F1 11.0 Tf 74.0 127.8 Td (C. 128) Tj ET
+BT /F1 11.0 Tf 74.0 111.9 Td (D. 16) Tj ET
+0.6 g
+BT /F1 8.0 Tf 56.0 34.0 Td (Exam Shield - Question Paper) Tj ET
+BT /F1 8.0 Tf 479.0 34.0 Td (Page 14 of 23) Tj ET
+0 g
+endstream
+endobj
+33 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 34 0 R >>
+endobj
+34 0 obj
+<< /Length 797 >>
+stream
+BT /F2 11.0 Tf 56.0 766.0 Td (68. What does the 3-2-1 backup rule recommend?) Tj ET
+BT /F1 11.0 Tf 74.0 750.1 Td (A. 3 servers, 2 administrators and 1 user) Tj ET
+BT /F1 11.0 Tf 74.0 734.1 Td (B. Daily, weekly and monthly backups only) Tj ET
+BT /F1 11.0 Tf 74.0 718.2 Td (C. 3 copies of data, on 2 types of media, with 1 copy offsite) Tj ET
+BT /F1 11.0 Tf 74.0 702.2 Td (D. 3 disks in a RAID 2 array plus 1 spare) Tj ET
+BT /F2 11.0 Tf 56.0 676.3 Td (69. Explain the difference between a LAN and a WAN, with one example of each. [3 marks]) Tj ET
+BT /F2 11.0 Tf 56.0 650.3 Td (70. Describe the role of an IT help desk and how a ticketing system supports it. [4 marks]) Tj ET
+0.6 g
+BT /F1 8.0 Tf 56.0 34.0 Td (Exam Shield - Question Paper) Tj ET
+BT /F1 8.0 Tf 479.0 34.0 Td (Page 15 of 23) Tj ET
+0 g
+endstream
+endobj
+35 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 36 0 R >>
+endobj
+36 0 obj
+<< /Length 2756 >>
+stream
+BT /F2 17.0 Tf 56.0 757.4 Td (Section 8: Information Systems) Tj ET
+BT /F1 10.5 Tf 56.0 740.1 Td (How organisations use data, systems and processes.) Tj ET
+BT /F2 11.0 Tf 56.0 714.2 Td (71. What does TPS stand for in information systems?) Tj ET
+BT /F1 11.0 Tf 74.0 698.2 Td (A. Team Performance System) Tj ET
+BT /F1 11.0 Tf 74.0 682.3 Td (B. Total Planning Service) Tj ET
+BT /F1 11.0 Tf 74.0 666.3 Td (C. Text Processing Software) Tj ET
+BT /F1 11.0 Tf 74.0 650.4 Td (D. Transaction Processing System) Tj ET
+BT /F2 11.0 Tf 56.0 624.4 Td (72. What does an ERP system do?) Tj ET
+BT /F1 11.0 Tf 74.0 608.5 Td (A. Handles only accounting) Tj ET
+BT /F1 11.0 Tf 74.0 592.5 Td (B. Hosts the company website) Tj ET
+BT /F1 11.0 Tf 74.0 576.6 Td (C. Manages only email) Tj ET
+BT /F1 11.0 Tf 74.0 560.6 Td (D. Integrates core business processes across departments) Tj ET
+BT /F2 11.0 Tf 56.0 534.7 Td (73. How does information differ from data?) Tj ET
+BT /F1 11.0 Tf 74.0 518.7 Td (A. There is no difference) Tj ET
+BT /F1 11.0 Tf 74.0 502.8 Td (B. Information is raw, unprocessed facts) Tj ET
+BT /F1 11.0 Tf 74.0 486.8 Td (C. Information is data processed into a meaningful form) Tj ET
+BT /F1 11.0 Tf 74.0 470.9 Td (D. Information refers to computer hardware) Tj ET
+BT /F2 11.0 Tf 56.0 444.9 Td (74. What is a Decision Support System \(DSS\) mainly used for?) Tj ET
+BT /F1 11.0 Tf 74.0 429.0 Td (A. Printing documents) Tj ET
+BT /F1 11.0 Tf 74.0 413.0 Td (B. Running payroll only) Tj ET
+BT /F1 11.0 Tf 74.0 397.1 Td (C. Helping managers analyse options and make decisions) Tj ET
+BT /F1 11.0 Tf 74.0 381.1 Td (D. Routing network traffic) Tj ET
+BT /F2 11.0 Tf 56.0 355.2 Td (75. What is the main goal of database normalisation?) Tj ET
+BT /F1 11.0 Tf 74.0 339.2 Td (A. Increasing hardware speed) Tj ET
+BT /F1 11.0 Tf 74.0 323.3 Td (B. Adding more users) Tj ET
+BT /F1 11.0 Tf 74.0 307.3 Td (C. Encrypting the database) Tj ET
+BT /F1 11.0 Tf 74.0 291.4 Td (D. Reducing data redundancy) Tj ET
+BT /F2 11.0 Tf 56.0 265.4 Td (76. Which SDLC phase identifies what users need from a new system?) Tj ET
+BT /F1 11.0 Tf 74.0 249.5 Td (A. Deployment) Tj ET
+BT /F1 11.0 Tf 74.0 233.5 Td (B. Maintenance) Tj ET
+BT /F1 11.0 Tf 74.0 217.6 Td (C. Testing) Tj ET
+BT /F1 11.0 Tf 74.0 201.6 Td (D. Requirements analysis) Tj ET
+BT /F2 11.0 Tf 56.0 175.7 Td (77. What does a CRM system focus on?) Tj ET
+BT /F1 11.0 Tf 74.0 159.7 Td (A. Managing CPU scheduling) Tj ET
+BT /F1 11.0 Tf 74.0 143.8 Td (B. Managing legal compliance) Tj ET
+BT /F1 11.0 Tf 74.0 127.8 Td (C. Managing source code) Tj ET
+BT /F1 11.0 Tf 74.0 111.9 Td (D. Managing relationships with customers) Tj ET
+0.6 g
+BT /F1 8.0 Tf 56.0 34.0 Td (Exam Shield - Question Paper) Tj ET
+BT /F1 8.0 Tf 479.0 34.0 Td (Page 16 of 23) Tj ET
+0 g
+endstream
+endobj
+37 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 38 0 R >>
+endobj
+38 0 obj
+<< /Length 748 >>
+stream
+BT /F2 11.0 Tf 56.0 766.0 Td (78. What does a primary key do in a relational table?) Tj ET
+BT /F1 11.0 Tf 74.0 750.1 Td (A. Encrypts the table) Tj ET
+BT /F1 11.0 Tf 74.0 734.1 Td (B. Sorts rows alphabetically) Tj ET
+BT /F1 11.0 Tf 74.0 718.2 Td (C. Uniquely identifies each row) Tj ET
+BT /F1 11.0 Tf 74.0 702.2 Td (D. Links to a table in another database only) Tj ET
+BT /F2 11.0 Tf 56.0 676.3 Td (79. Explain how a Management Information System \(MIS\) supports middle management. [4 marks]) Tj ET
+BT /F2 11.0 Tf 56.0 650.3 Td (80. Discuss two ethical issues that arise from the use of information systems. [4 marks]) Tj ET
+0.6 g
+BT /F1 8.0 Tf 56.0 34.0 Td (Exam Shield - Question Paper) Tj ET
+BT /F1 8.0 Tf 479.0 34.0 Td (Page 17 of 23) Tj ET
+0 g
+endstream
+endobj
+39 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 40 0 R >>
+endobj
+40 0 obj
+<< /Length 2748 >>
+stream
+BT /F2 17.0 Tf 56.0 757.4 Td (Section 9: Cyber Security) Tj ET
+BT /F1 10.5 Tf 56.0 740.1 Td (Security principles, threats, cryptography and defence.) Tj ET
+BT /F2 11.0 Tf 56.0 714.2 Td (81. What do the letters of the CIA triad stand for?) Tj ET
+BT /F1 11.0 Tf 74.0 698.2 Td (A. Cipher, Identity, Access) Tj ET
+BT /F1 11.0 Tf 74.0 682.3 Td (B. Control, Inspection, Audit) Tj ET
+BT /F1 11.0 Tf 74.0 666.3 Td (C. Compliance, Integrity, Authentication) Tj ET
+BT /F1 11.0 Tf 74.0 650.4 Td (D. Confidentiality, Integrity, Availability) Tj ET
+BT /F2 11.0 Tf 56.0 624.4 Td (82. What is phishing?) Tj ET
+BT /F1 11.0 Tf 74.0 608.5 Td (A. Guessing passwords by trying every combination) Tj ET
+BT /F1 11.0 Tf 74.0 592.5 Td (B. Tricking people into revealing information through fake messages) Tj ET
+BT /F1 11.0 Tf 74.0 576.6 Td (C. Capturing packets on a network) Tj ET
+BT /F1 11.0 Tf 74.0 560.6 Td (D. Flooding a server with requests) Tj ET
+BT /F2 11.0 Tf 56.0 534.7 Td (83. Which of these is an asymmetric \(public-key\) algorithm?) Tj ET
+BT /F1 11.0 Tf 74.0 518.7 Td (A. AES) Tj ET
+BT /F1 11.0 Tf 74.0 502.8 Td (B. DES) Tj ET
+BT /F1 11.0 Tf 74.0 486.8 Td (C. 3DES) Tj ET
+BT /F1 11.0 Tf 74.0 470.9 Td (D. RSA) Tj ET
+BT /F2 11.0 Tf 56.0 444.9 Td (84. What is the most effective defence against SQL injection?) Tj ET
+BT /F1 11.0 Tf 74.0 429.0 Td (A. Longer passwords) Tj ET
+BT /F1 11.0 Tf 74.0 413.0 Td (B. Parameterised queries) Tj ET
+BT /F1 11.0 Tf 74.0 397.1 Td (C. Using HTTPS) Tj ET
+BT /F1 11.0 Tf 74.0 381.1 Td (D. Installing a firewall) Tj ET
+BT /F2 11.0 Tf 56.0 355.2 Td (85. What does multi-factor authentication require?) Tj ET
+BT /F1 11.0 Tf 74.0 339.2 Td (A. Two or more independent proofs of identity) Tj ET
+BT /F1 11.0 Tf 74.0 323.3 Td (B. Two or more administrator accounts) Tj ET
+BT /F1 11.0 Tf 74.0 307.3 Td (C. Two or more firewalls) Tj ET
+BT /F1 11.0 Tf 74.0 291.4 Td (D. Two or more backups) Tj ET
+BT /F2 11.0 Tf 56.0 265.4 Td (86. Which property describes a cryptographic hash function?) Tj ET
+BT /F1 11.0 Tf 74.0 249.5 Td (A. It is one-way and cannot practically be reversed) Tj ET
+BT /F1 11.0 Tf 74.0 233.5 Td (B. It compresses files losslessly) Tj ET
+BT /F1 11.0 Tf 74.0 217.6 Td (C. It can be decrypted with the right key) Tj ET
+BT /F1 11.0 Tf 74.0 201.6 Td (D. It is the same as Base64 encoding) Tj ET
+BT /F2 11.0 Tf 56.0 175.7 Td (87. A DDoS attack mainly threatens which security goal?) Tj ET
+BT /F1 11.0 Tf 74.0 159.7 Td (A. Confidentiality) Tj ET
+BT /F1 11.0 Tf 74.0 143.8 Td (B. Integrity) Tj ET
+BT /F1 11.0 Tf 74.0 127.8 Td (C. Non-repudiation) Tj ET
+BT /F1 11.0 Tf 74.0 111.9 Td (D. Availability) Tj ET
+0.6 g
+BT /F1 8.0 Tf 56.0 34.0 Td (Exam Shield - Question Paper) Tj ET
+BT /F1 8.0 Tf 479.0 34.0 Td (Page 18 of 23) Tj ET
+0 g
+endstream
+endobj
+41 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 42 0 R >>
+endobj
+42 0 obj
+<< /Length 818 >>
+stream
+BT /F2 11.0 Tf 56.0 766.0 Td (88. What does the principle of least privilege mean?) Tj ET
+BT /F1 11.0 Tf 74.0 750.1 Td (A. Every user is an administrator) Tj ET
+BT /F1 11.0 Tf 74.0 734.1 Td (B. All users have read-only access to everything) Tj ET
+BT /F1 11.0 Tf 74.0 718.2 Td (C. Passwords are not required) Tj ET
+BT /F1 11.0 Tf 74.0 702.2 Td (D. Users get only the access they need to do their work) Tj ET
+BT /F2 11.0 Tf 56.0 676.3 Td (89. Explain the difference between symmetric and asymmetric encryption, with an example) Tj ET
+BT /F2 11.0 Tf 56.0 660.3 Td (of each. [4 marks]) Tj ET
+BT /F2 11.0 Tf 56.0 634.4 Td (90. Describe the main phases of an incident response plan. [5 marks]) Tj ET
+0.6 g
+BT /F1 8.0 Tf 56.0 34.0 Td (Exam Shield - Question Paper) Tj ET
+BT /F1 8.0 Tf 479.0 34.0 Td (Page 19 of 23) Tj ET
+0 g
+endstream
+endobj
+43 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 44 0 R >>
+endobj
+44 0 obj
+<< /Length 2582 >>
+stream
+BT /F2 17.0 Tf 56.0 757.4 Td (Section 10: Software Engineering) Tj ET
+BT /F1 10.5 Tf 56.0 740.1 Td (Processes, design principles, testing and collaboration.) Tj ET
+BT /F2 11.0 Tf 56.0 714.2 Td (91. Which agile framework organises work into fixed-length sprints?) Tj ET
+BT /F1 11.0 Tf 74.0 698.2 Td (A. Spiral) Tj ET
+BT /F1 11.0 Tf 74.0 682.3 Td (B. Scrum) Tj ET
+BT /F1 11.0 Tf 74.0 666.3 Td (C. Waterfall) Tj ET
+BT /F1 11.0 Tf 74.0 650.4 Td (D. V-model) Tj ET
+BT /F2 11.0 Tf 56.0 624.4 Td (92. What does unit testing focus on?) Tj ET
+BT /F1 11.0 Tf 74.0 608.5 Td (A. Only the user interface) Tj ET
+BT /F1 11.0 Tf 74.0 592.5 Td (B. Only the hardware) Tj ET
+BT /F1 11.0 Tf 74.0 576.6 Td (C. The smallest testable parts of a program) Tj ET
+BT /F1 11.0 Tf 74.0 560.6 Td (D. The whole system end to end) Tj ET
+BT /F2 11.0 Tf 56.0 534.7 Td (93. Which Git command records staged changes in the repository history?) Tj ET
+BT /F1 11.0 Tf 74.0 518.7 Td (A. git push) Tj ET
+BT /F1 11.0 Tf 74.0 502.8 Td (B. git commit) Tj ET
+BT /F1 11.0 Tf 74.0 486.8 Td (C. git clone) Tj ET
+BT /F1 11.0 Tf 74.0 470.9 Td (D. git status) Tj ET
+BT /F2 11.0 Tf 56.0 444.9 Td (94. In the SOLID principles, what does the S stand for?) Tj ET
+BT /F1 11.0 Tf 74.0 429.0 Td (A. Simple design) Tj ET
+BT /F1 11.0 Tf 74.0 413.0 Td (B. Static typing) Tj ET
+BT /F1 11.0 Tf 74.0 397.1 Td (C. Single responsibility) Tj ET
+BT /F1 11.0 Tf 74.0 381.1 Td (D. Secure coding) Tj ET
+BT /F2 11.0 Tf 56.0 355.2 Td (95. What is refactoring?) Tj ET
+BT /F1 11.0 Tf 74.0 339.2 Td (A. Rewriting the program in another language) Tj ET
+BT /F1 11.0 Tf 74.0 323.3 Td (B. Adding new features) Tj ET
+BT /F1 11.0 Tf 74.0 307.3 Td (C. Improving code structure without changing its behaviour) Tj ET
+BT /F1 11.0 Tf 74.0 291.4 Td (D. Deleting failing tests) Tj ET
+BT /F2 11.0 Tf 56.0 265.4 Td (96. What does CI stand for in modern development practice?) Tj ET
+BT /F1 11.0 Tf 74.0 249.5 Td (A. Code Inspection) Tj ET
+BT /F1 11.0 Tf 74.0 233.5 Td (B. Central Index) Tj ET
+BT /F1 11.0 Tf 74.0 217.6 Td (C. Compiled Interface) Tj ET
+BT /F1 11.0 Tf 74.0 201.6 Td (D. Continuous Integration) Tj ET
+BT /F2 11.0 Tf 56.0 175.7 Td (97. Which UML diagram shows how objects interact over time?) Tj ET
+BT /F1 11.0 Tf 74.0 159.7 Td (A. Sequence diagram) Tj ET
+BT /F1 11.0 Tf 74.0 143.8 Td (B. Class diagram) Tj ET
+BT /F1 11.0 Tf 74.0 127.8 Td (C. Entity-relationship diagram) Tj ET
+BT /F1 11.0 Tf 74.0 111.9 Td (D. Deployment diagram) Tj ET
+0.6 g
+BT /F1 8.0 Tf 56.0 34.0 Td (Exam Shield - Question Paper) Tj ET
+BT /F1 8.0 Tf 479.0 34.0 Td (Page 20 of 23) Tj ET
+0 g
+endstream
+endobj
+45 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 46 0 R >>
+endobj
+46 0 obj
+<< /Length 730 >>
+stream
+BT /F2 11.0 Tf 56.0 766.0 Td (98. What is technical debt?) Tj ET
+BT /F1 11.0 Tf 74.0 750.1 Td (A. Unpaid developer salaries) Tj ET
+BT /F1 11.0 Tf 74.0 734.1 Td (B. Loans used to buy hardware) Tj ET
+BT /F1 11.0 Tf 74.0 718.2 Td (C. Money owed for software licences) Tj ET
+BT /F1 11.0 Tf 74.0 702.2 Td (D. The future cost of shortcuts taken in code today) Tj ET
+BT /F2 11.0 Tf 56.0 676.3 Td (99. Compare the Waterfall and Agile approaches to software development. [5 marks]) Tj ET
+BT /F2 11.0 Tf 56.0 650.3 Td (100. Explain the purpose of code reviews and two benefits they bring to a team. [3 marks]) Tj ET
+0.6 g
+BT /F1 8.0 Tf 56.0 34.0 Td (Exam Shield - Question Paper) Tj ET
+BT /F1 8.0 Tf 479.0 34.0 Td (Page 21 of 23) Tj ET
+0 g
+endstream
+endobj
+47 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 48 0 R >>
+endobj
+48 0 obj
+<< /Length 2596 >>
+stream
+BT /F2 17.0 Tf 56.0 757.4 Td (Section 11: DevOps Engineering) Tj ET
+BT /F1 10.5 Tf 56.0 740.1 Td (Containers, orchestration, automation and observability.) Tj ET
+BT /F2 11.0 Tf 56.0 714.2 Td (101. In Docker, what is a container?) Tj ET
+BT /F1 11.0 Tf 74.0 698.2 Td (A. A hypervisor for virtual machines) Tj ET
+BT /F1 11.0 Tf 74.0 682.3 Td (B. A registry that stores images) Tj ET
+BT /F1 11.0 Tf 74.0 666.3 Td (C. A running instance of an image) Tj ET
+BT /F1 11.0 Tf 74.0 650.4 Td (D. A script that builds an image) Tj ET
+BT /F2 11.0 Tf 56.0 624.4 Td (102. Which file describes how to build a Docker image?) Tj ET
+BT /F1 11.0 Tf 74.0 608.5 Td (A. Dockerfile) Tj ET
+BT /F1 11.0 Tf 74.0 592.5 Td (B. Makefile) Tj ET
+BT /F1 11.0 Tf 74.0 576.6 Td (C. Jenkinsfile) Tj ET
+BT /F1 11.0 Tf 74.0 560.6 Td (D. package.json) Tj ET
+BT /F2 11.0 Tf 56.0 534.7 Td (103. What is the smallest deployable unit in Kubernetes?) Tj ET
+BT /F1 11.0 Tf 74.0 518.7 Td (A. Cluster) Tj ET
+BT /F1 11.0 Tf 74.0 502.8 Td (B. Pod) Tj ET
+BT /F1 11.0 Tf 74.0 486.8 Td (C. Namespace) Tj ET
+BT /F1 11.0 Tf 74.0 470.9 Td (D. Node) Tj ET
+BT /F2 11.0 Tf 56.0 444.9 Td (104. Which tool is used for Infrastructure as Code?) Tj ET
+BT /F1 11.0 Tf 74.0 429.0 Td (A. Terraform) Tj ET
+BT /F1 11.0 Tf 74.0 413.0 Td (B. Wireshark) Tj ET
+BT /F1 11.0 Tf 74.0 397.1 Td (C. Postman) Tj ET
+BT /F1 11.0 Tf 74.0 381.1 Td (D. Photoshop) Tj ET
+BT /F2 11.0 Tf 56.0 355.2 Td (105. What is a blue-green deployment?) Tj ET
+BT /F1 11.0 Tf 74.0 339.2 Td (A. A debugging technique) Tj ET
+BT /F1 11.0 Tf 74.0 323.3 Td (B. Running two identical environments and switching traffic between them) Tj ET
+BT /F1 11.0 Tf 74.0 307.3 Td (C. A code formatting standard) Tj ET
+BT /F1 11.0 Tf 74.0 291.4 Td (D. A colour scheme for dashboards) Tj ET
+BT /F2 11.0 Tf 56.0 265.4 Td (106. Which tool collects and stores time-series metrics for monitoring?) Tj ET
+BT /F1 11.0 Tf 74.0 249.5 Td (A. Webpack) Tj ET
+BT /F1 11.0 Tf 74.0 233.5 Td (B. Babel) Tj ET
+BT /F1 11.0 Tf 74.0 217.6 Td (C. Prometheus) Tj ET
+BT /F1 11.0 Tf 74.0 201.6 Td (D. Figma) Tj ET
+BT /F2 11.0 Tf 56.0 175.7 Td (107. In a CI/CD pipeline, what normally happens in the test stage?) Tj ET
+BT /F1 11.0 Tf 74.0 159.7 Td (A. Servers are physically installed) Tj ET
+BT /F1 11.0 Tf 74.0 143.8 Td (B. Automated tests run against the new build) Tj ET
+BT /F1 11.0 Tf 74.0 127.8 Td (C. Old builds are archived) Tj ET
+BT /F1 11.0 Tf 74.0 111.9 Td (D. The release is announced to customers) Tj ET
+0.6 g
+BT /F1 8.0 Tf 56.0 34.0 Td (Exam Shield - Question Paper) Tj ET
+BT /F1 8.0 Tf 479.0 34.0 Td (Page 22 of 23) Tj ET
+0 g
+endstream
+endobj
+49 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 50 0 R >>
+endobj
+50 0 obj
+<< /Length 728 >>
+stream
+BT /F2 11.0 Tf 56.0 766.0 Td (108. Which command lists the running Docker containers?) Tj ET
+BT /F1 11.0 Tf 74.0 750.1 Td (A. docker show) Tj ET
+BT /F1 11.0 Tf 74.0 734.1 Td (B. docker ps) Tj ET
+BT /F1 11.0 Tf 74.0 718.2 Td (C. docker ls-run) Tj ET
+BT /F1 11.0 Tf 74.0 702.2 Td (D. docker images) Tj ET
+BT /F2 11.0 Tf 56.0 676.3 Td (109. Explain what a CI/CD pipeline is and describe three benefits it brings. [5 marks]) Tj ET
+BT /F2 11.0 Tf 56.0 650.3 Td (110. Compare containers with virtual machines in terms of isolation, size and start-up time.) Tj ET
+BT /F2 11.0 Tf 56.0 634.4 Td ([4 marks]) Tj ET
+0.6 g
+BT /F1 8.0 Tf 56.0 34.0 Td (Exam Shield - Question Paper) Tj ET
+BT /F1 8.0 Tf 479.0 34.0 Td (Page 23 of 23) Tj ET
+0 g
+endstream
+endobj
+xref
+0 51
+0000000000 65535 f 
+0000000015 00000 n 
+0000000064 00000 n 
+0000000274 00000 n 
+0000000371 00000 n 
+0000000473 00000 n 
+0000000609 00000 n 
+0000002762 00000 n 
+0000002898 00000 n 
+0000005655 00000 n 
+0000005792 00000 n 
+0000006573 00000 n 
+0000006711 00000 n 
+0000009086 00000 n 
+0000009224 00000 n 
+0000010012 00000 n 
+0000010150 00000 n 
+0000012656 00000 n 
+0000012794 00000 n 
+0000013610 00000 n 
+0000013748 00000 n 
+0000016217 00000 n 
+0000016355 00000 n 
+0000017007 00000 n 
+0000017145 00000 n 
+0000019674 00000 n 
+0000019812 00000 n 
+0000020581 00000 n 
+0000020719 00000 n 
+0000023275 00000 n 
+0000023413 00000 n 
+0000024161 00000 n 
+0000024299 00000 n 
+0000026797 00000 n 
+0000026935 00000 n 
+0000027783 00000 n 
+0000027921 00000 n 
+0000030729 00000 n 
+0000030867 00000 n 
+0000031666 00000 n 
+0000031804 00000 n 
+0000034604 00000 n 
+0000034742 00000 n 
+0000035611 00000 n 
+0000035749 00000 n 
+0000038383 00000 n 
+0000038521 00000 n 
+0000039302 00000 n 
+0000039440 00000 n 
+0000042088 00000 n 
+0000042226 00000 n 
+trailer
+<< /Size 51 /Root 1 0 R >>
+startxref
+43005
+%%EOF

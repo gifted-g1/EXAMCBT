@@ -1,78 +1,165 @@
-version: "3.9"
+# Exam Shield — distributed deployment for one exam LAN.
+#
+#   cp .env.example .env    # then set LAN_IP, LAN_CIDRS and every secret
+#   ./scripts/gen-lan-cert.sh "$LAN_IP"      # HTTPS is required for webcams
+#   ./scripts/download-models.sh             # optional: ONNX models
+#   docker compose up -d --build
+#   docker compose run --rm seed             # optional: mock staff + students
+#
+# Network model: only Nginx is reachable from the LAN. It runs with
+# network_mode: host so it sees each student's real IP, and binds only to
+# ${LAN_IP}. Every other service is either unpublished or published on
+# 127.0.0.1. The API trusts X-Real-IP only from the Docker gateway that
+# host-mode Nginx connects through (172.28.0.1).
+
+x-app-env: &app-env
+  APP_ENV: production
+  MODE: distributed
+  DB_DSN: "examshield:${MYSQL_PASSWORD:?set MYSQL_PASSWORD}@tcp(mysql:3306)/exam_shield?parseTime=true&loc=UTC&charset=utf8mb4"
+  REDIS_ADDR: redis:6379
+  REDIS_PASSWORD: ${REDIS_PASSWORD:?set REDIS_PASSWORD}
+  MINIO_ENDPOINT: minio:9000
+  MINIO_ACCESS_KEY: ${MINIO_ROOT_USER:?set MINIO_ROOT_USER}
+  MINIO_SECRET_KEY: ${MINIO_ROOT_PASSWORD:?set MINIO_ROOT_PASSWORD}
+  MINIO_BUCKET: exam-shield
+  JWT_SECRET: ${JWT_SECRET:?set JWT_SECRET (openssl rand -hex 32)}
+  BCRYPT_COST: "12"
+  LAN_CIDRS: ${LAN_CIDRS:?set LAN_CIDRS}
+  LAN_DENY_CIDRS: ${LAN_DENY_CIDRS:-}
+  LAN_ADVERTISE_IP: ${LAN_IP:?set LAN_IP}
+  PUBLIC_SCHEME: https
+  PUBLIC_PORT: "443"
+  COOKIE_SECURE: "true"
+  TRUSTED_PROXIES: 172.28.0.1
+  ALLOW_LOOPBACK_STAFF: "false"
+  FACE_MATCH_THRESHOLD: ${FACE_MATCH_THRESHOLD:-0.75}
+  FACE_MATCH_ENFORCE: ${FACE_MATCH_ENFORCE:-auto}
+  RETENTION_DAYS: ${RETENTION_DAYS:-30}
+  AI_BACKEND: auto
+  MODEL_DIR: /app/models
+  LOG_LEVEL: info
 
 services:
   mysql:
-    image: mysql:8.0
+    image: mysql:8.0.39
     restart: unless-stopped
+    command:
+      - --max-connections=300
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --default-time-zone=+00:00
     environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: examshield
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?set MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: exam_shield
       MYSQL_USER: examshield
-      MYSQL_PASSWORD: examshield
-    ports:
-      - "3306:3306"
-    volumes:
-      - examshield_mysqldata:/var/lib/mysql
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes: [mysql-data:/var/lib/mysql]
+    networks: [esnet]
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "examshield", "-pexamshield"]
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uexamshield -p$$MYSQL_PASSWORD --silent"]
       interval: 5s
-      timeout: 5s
-      retries: 15
+      retries: 30
 
-  # phpMyAdmin — a browser-based MySQL admin UI, handy for inspecting
-  # or manually editing the database (e.g. creating the first Super
-  # Admin account) without needing the mysql CLI installed locally.
-  phpmyadmin:
-    image: phpmyadmin:5-apache
+  redis:
+    image: redis:7.2.5-alpine
     restart: unless-stopped
+    command: ["redis-server", "--requirepass", "${REDIS_PASSWORD}", "--appendonly", "yes", "--maxmemory-policy", "noeviction"]
+    volumes: [redis-data:/data]
+    networks: [esnet]
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli -a \"$$REDIS_PASSWORD\" --no-auth-warning ping | grep PONG"]
+      interval: 5s
+      retries: 20
     environment:
-      PMA_HOST: mysql
-      PMA_USER: examshield
-      PMA_PASSWORD: examshield
-      UPLOAD_LIMIT: 64M
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+
+  minio:
+    image: minio/minio:RELEASE.2024-10-02T17-50-41Z
+    restart: unless-stopped
+    command: ["server", "/data", "--console-address", ":9001"]
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+    volumes: [minio-data:/data]
+    networks: [esnet]
+    # Console only on the server itself; the bucket is private (no policy).
+    ports: ["127.0.0.1:9001:9001"]
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:9000/minio/health/live"]
+      interval: 5s
+      retries: 20
+
+  migrate:
+    build: .
+    image: exam-shield:latest
+    command: ["/app/migrate", "up"]
+    environment: *app-env
+    networks: [esnet]
     depends_on:
-      mysql:
-        condition: service_healthy
-    ports:
-      - "8081:80"
+      mysql: { condition: service_healthy }
+    restart: "no"
 
-  ai-service:
-    build: ./ai-service
-    restart: unless-stopped
-    environment:
-      AI_SERVICE_PORT: 9000
-      AI_SERVICE_HOST: 0.0.0.0
-    ports:
-      - "9000:9000"
-
-  # The backend image is built from the REPOSITORY ROOT as its
-  # context (not ./backend), because its Dockerfile builds the React
-  # frontend first and embeds it into the Go binary via go:embed —
-  # see backend/Dockerfile. This is what makes the same server able to
-  # serve the UI, the REST/WebSocket API, and — crucially — a genuine
-  # offline LAN exam, all from one process on one port.
-  backend:
-    build:
-      context: .
-      dockerfile: backend/Dockerfile
-    restart: unless-stopped
+  seed:
+    image: exam-shield:latest
+    command: ["/app/seed", "-force"]   # demo/training only: change every password after seeding
+    environment: *app-env
+    networks: [esnet]
     depends_on:
-      mysql:
-        condition: service_healthy
-      ai-service:
-        condition: service_started
+      migrate: { condition: service_completed_successfully }
+    profiles: [seed]
+    restart: "no"
+
+  api:
+    image: exam-shield:latest
+    restart: unless-stopped
     environment:
-      APP_ENV: production
-      HTTP_PORT: 8080
-      DATABASE_URL: "examshield:examshield@tcp(mysql:3306)/examshield?charset=utf8mb4&parseTime=True&loc=Local"
-      JWT_SECRET: "change-me-in-production"
-      JWT_ACCESS_TTL_MINUTES: "15"
-      JWT_REFRESH_TTL_MINUTES: "10080"
-      AI_SERVICE_URL: "http://ai-service:9000"
-      CORS_ALLOWED_ORIGIN: "http://localhost:8080"
-      LOG_LEVEL: "info"
-    ports:
-      - "8080:8080"
+      <<: *app-env
+      HTTP_ADDR: ":8080"
+      AI_IN_PROCESS: "false"
+    volumes: ["./models:/app/models:ro"]
+    networks: [esnet]
+    ports: ["127.0.0.1:8080:8080"]
+    depends_on:
+      migrate: { condition: service_completed_successfully }
+      redis: { condition: service_healthy }
+      minio: { condition: service_healthy }
+
+  ai-worker:
+    image: exam-shield:latest
+    restart: unless-stopped
+    command: ["/app/ai-worker"]
+    environment:
+      <<: *app-env
+      AI_WORKERS: ${AI_WORKERS:-4}
+    volumes: ["./models:/app/models:ro"]
+    networks: [esnet]
+    deploy:
+      replicas: ${AI_WORKER_REPLICAS:-1}
+    depends_on:
+      redis: { condition: service_healthy }
+      minio: { condition: service_healthy }
+
+  nginx:
+    image: nginx:1.27.2-alpine
+    restart: unless-stopped
+    network_mode: host
+    environment:
+      LAN_IP: ${LAN_IP}
+      LAN_CIDRS_NGINX: ${LAN_CIDRS_NGINX:?set LAN_CIDRS_NGINX (e.g. "allow 192.168.1.0/24;")}
+    volumes:
+      - ./deploy/nginx/templates:/etc/nginx/templates:ro
+      - ./deploy/certs:/etc/nginx/certs:ro
+    depends_on: [api]
+
+networks:
+  esnet:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.28.0.0/16
+          gateway: 172.28.0.1
 
 volumes:
-  examshield_mysqldata:
+  mysql-data:
+  redis-data:
+  minio-data:

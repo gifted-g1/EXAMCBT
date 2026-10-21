@@ -1,0 +1,15 @@
+# Normalise text to LF in the repository.
+* text=auto eol=lf
+
+# Binary formats: never touch line endings (PDFs store exact byte offsets).
+*.pdf  binary
+*.jpg  binary
+*.jpeg binary
+*.png  binary
+*.y4m  binary
+*.onnx binary
+models/facefinder binary
+
+# Windows-only scripts keep CRLF.
+*.bat  text eol=crlf
+*.ps1  text eol=crlf

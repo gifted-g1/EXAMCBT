@@ -43,3 +43,27 @@ func TestCIDRParsingAndDistributedRequirements(t *testing.T) {
 	_, err = Load()
 	assert.Error(t, err)
 }
+
+func TestHostingPlatformSettings(t *testing.T) {
+	t.Setenv("MODE", "standalone")
+	t.Setenv("PORT", "10000")
+	c, err := Load()
+	require.NoError(t, err)
+	assert.Equal(t, ":10000", c.HTTPAddr, "PORT is honoured when HTTP_ADDR is unset")
+	assert.False(t, c.OpenAccess(), "LAN lock is the default")
+	assert.Empty(t, c.TrustedProxies)
+
+	t.Setenv("HTTP_ADDR", ":9999")
+	t.Setenv("ACCESS_MODE", "OPEN")
+	t.Setenv("PUBLIC_URL", "https://examcbt.onrender.com/")
+	c, err = Load()
+	require.NoError(t, err)
+	assert.Equal(t, ":9999", c.HTTPAddr, "explicit HTTP_ADDR wins over PORT")
+	assert.True(t, c.OpenAccess())
+	assert.Equal(t, "https://examcbt.onrender.com", c.PublicURL)
+	assert.Contains(t, c.TrustedProxies, "10.0.0.0/8", "open mode trusts the platform load balancer")
+
+	t.Setenv("ACCESS_MODE", "everyone")
+	_, err = Load()
+	assert.ErrorContains(t, err, "ACCESS_MODE")
+}

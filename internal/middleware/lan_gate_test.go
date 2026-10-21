@@ -171,3 +171,19 @@ func TestPINBruteForceIsRateLimited(t *testing.T) {
 	}
 	assert.Equal(t, http.StatusTooManyRequests, last)
 }
+
+func TestOpenAccessMode(t *testing.T) {
+	cfg := &config.Config{AccessMode: "open"}
+	exam := models.Exam{ID: 9, LANCIDR: "0.0.0.0/0"}
+	g := newGate(t, cfg, []string{"192.168.1.0/24"}, []models.Exam{exam})
+	assert.True(t, g.Allowed(netutil.ParseClientIP("203.0.113.9"), "/api/student/gate"))
+	assert.False(t, g.Allowed(nil, "/"), "unparseable addresses are still refused")
+
+	w := serve(t, g, nil, "203.0.113.9:1000", nil, "/api/student/gate")
+	assert.Equal(t, 200, w.Code, w.Body.String())
+	assert.Contains(t, w.Body.String(), `"exam_id":9`)
+
+	// LAN mode with the same request is refused.
+	lan := newGate(t, &config.Config{}, []string{"192.168.1.0/24"}, []models.Exam{exam})
+	assert.Equal(t, http.StatusForbidden, serve(t, lan, nil, "203.0.113.9:1000", nil, "/api/student/gate").Code)
+}

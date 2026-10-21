@@ -428,7 +428,7 @@ func (s *StudentService) activeSession(ctx context.Context, c *auth.StudentClaim
 	if e.Status == models.ExamClosed || time.Now().After(e.EndsAt.Add(s.cfg.SubmitGrace)) {
 		return nil, nil, ErrSessionEnded
 	}
-	if ip := httpx.ClientIPFrom(ctx); ip != nil && !(ip.IsLoopback() && s.cfg.AllowLoopbackExam) {
+	if ip := httpx.ClientIPFrom(ctx); ip != nil && !s.cfg.OpenAccess() && !(ip.IsLoopback() && s.cfg.AllowLoopbackExam) {
 		if n, err := config.ParseCIDR(e.LANCIDR); err != nil || !n.Contains(ip) {
 			return nil, nil, ErrOutsideExamNetwork
 		}

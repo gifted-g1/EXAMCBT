@@ -77,12 +77,16 @@ func Build(ctx context.Context, cfg *config.Config, log *slog.Logger) (*App, err
 	if len(a.LANNets) == 0 {
 		nets, err := netutil.DetectLANNets()
 		if err != nil {
-			if cfg.IsProduction() {
+			if cfg.IsProduction() && !cfg.OpenAccess() {
 				return nil, err
 			}
 			log.Warn("no LAN detected; only loopback clients will be admitted", "err", err)
 		}
 		a.LANNets = nets
+	}
+	if cfg.OpenAccess() {
+		log.Warn("ACCESS_MODE=open: the exam-hall network lock is DISABLED - anyone who can reach this server can open exams (PIN, identity and proctoring checks still apply). Use ACCESS_MODE=lan in exam halls.",
+			"trusted_proxies", cfg.TrustedProxies, "public_url", cfg.PublicURL)
 	}
 	log.Info("LAN gate", "allow", cidrStrings(a.LANNets), "deny", cidrStrings(cfg.LANDenyCIDRs),
 		"trusted_proxies", cfg.TrustedProxies)

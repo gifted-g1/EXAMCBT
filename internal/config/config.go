@@ -72,6 +72,13 @@ type Config struct {
 	TrustedProxies     []string
 	AllowLoopbackStaff bool
 	AllowLoopbackExam  bool
+	// AccessMode "lan" (default) enforces the exam-hall subnet lock; "open"
+	// disables it for cloud/demo hosting where visitors arrive from the
+	// internet through a load balancer.
+	AccessMode string
+	// PublicURL, if set, is printed on access cards instead of the LAN IP
+	// (e.g. https://examcbt.onrender.com).
+	PublicURL string
 
 	// Sessions / exam behaviour
 	SessionLockTTL     time.Duration
@@ -143,6 +150,8 @@ func Load() (*Config, error) {
 		TrustedProxies:     list("TRUSTED_PROXIES"),
 		AllowLoopbackStaff: boolean("ALLOW_LOOPBACK_STAFF", true),
 		AllowLoopbackExam:  boolean("ALLOW_LOOPBACK_EXAM", false),
+		AccessMode:         strings.ToLower(str("ACCESS_MODE", "lan")),
+		PublicURL:          strings.TrimRight(str("PUBLIC_URL", ""), "/"),
 
 		SessionLockTTL:     duration("SESSION_LOCK_TTL", 2*time.Minute),
 		SubmitGrace:        duration("SUBMIT_GRACE", 2*time.Minute),
@@ -160,6 +169,19 @@ func Load() (*Config, error) {
 		ConsentVersion: str("CONSENT_VERSION", "2026-10"),
 	}
 	c.InProcessAI = boolean("AI_IN_PROCESS", c.Mode == ModeStandalone)
+	// Hosting platforms (Render, Heroku, Fly, Railway...) give the port in PORT.
+	if _, set := os.LookupEnv("HTTP_ADDR"); !set {
+		if p := str("PORT", ""); p != "" {
+			c.HTTPAddr = ":" + p
+		}
+	}
+	// In open mode, visitors reach the app through the platform's load
+	// balancer, which connects from a private address and appends the real
+	// client IP to X-Forwarded-For. Trust private ranges by default so rate
+	// limits and logs see real visitors (not one shared proxy IP).
+	if c.AccessMode == "open" && len(c.TrustedProxies) == 0 {
+		c.TrustedProxies = []string{"10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16", "100.64.0.0/10", "127.0.0.0/8", "fc00::/7", "::1/128"}
+	}
 	if c.TLS() && str("COOKIE_SECURE", "") == "" {
 		c.CookieSecure = true
 	}
@@ -181,6 +203,9 @@ func Load() (*Config, error) {
 
 func (c *Config) validate() error {
 	var errs []error
+	if c.AccessMode != "lan" && c.AccessMode != "open" {
+		errs = append(errs, fmt.Errorf("ACCESS_MODE must be lan or open, got %q", c.AccessMode))
+	}
 	switch c.Mode {
 	case ModeStandalone:
 	case ModeDistributed:
@@ -339,3 +364,6 @@ func loadDotEnv(path string) {
 		}
 	}
 }
+
+// OpenAccess reports whether the exam-hall subnet lock is disabled.
+func (c *Config) OpenAccess() bool { return c.AccessMode == "open" }

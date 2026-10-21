@@ -144,7 +144,11 @@ func (h *Handlers) AccessCard(c *gin.Context) {
 	if !ok {
 		return
 	}
-	card, err := h.Exams.AccessCard(e, c.Request.Host)
+	scheme := "http"
+	if c.Request.TLS != nil || c.GetHeader("X-Forwarded-Proto") == "https" {
+		scheme = "https"
+	}
+	card, err := h.Exams.AccessCard(e, c.Request.Host, scheme)
 	if err != nil {
 		fail(c, err)
 		return

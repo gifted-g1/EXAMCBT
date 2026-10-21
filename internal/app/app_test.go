@@ -583,3 +583,41 @@ func TestSessionKeySurvivesRestart(t *testing.T) {
 	assert.Len(t, a, 64)
 	assert.Equal(t, a, b)
 }
+
+// Cloud/demo hosting: visitors arrive from public IPs through a load
+// balancer. With ACCESS_MODE=open they can sit an exam; PIN still applies.
+func TestOpenAccessModeBehindLoadBalancer(t *testing.T) {
+	h := newHarness(t, func(c *config.Config) {
+		c.AccessMode = "open"
+		c.AllowLoopbackExam = false
+		c.TrustedProxies = []string{"127.0.0.0/8"} // the "load balancer"
+		c.PublicURL = "https://examcbt.onrender.com"
+	})
+	h.login("20010078", "MUSTAPHA")
+	now := time.Now().UTC()
+	r := h.do(http.MethodPost, "/api/staff/exams", map[string]any{"title": "Online demo",
+		"starts_at": now.Add(-time.Minute), "ends_at": now.Add(time.Hour), "require_pin": true,
+		"proctoring": map[string]bool{"face_verification": false}}, nil)
+	require.Equal(t, http.StatusCreated, r.Code, r.Raw)
+	assert.Equal(t, "0.0.0.0/0", r.Body["lan_cidr"], "no hall network in open mode")
+	examID := num(r.Body["id"])
+	pin := r.Body["pin_code"].(string)
+	h.do(http.MethodPost, fmt.Sprintf("/api/staff/exams/%d/questions", examID), map[string]any{"prompt": "Q", "options": []string{"a", "b"}, "correct_option": 0}, nil)
+	require.Equal(t, 200, h.do(http.MethodPost, fmt.Sprintf("/api/staff/exams/%d/status", examID), map[string]string{"action": "open"}, nil).Code)
+
+	r = h.do(http.MethodGet, fmt.Sprintf("/api/staff/exams/%d/access-card", examID), nil, nil)
+	require.Equal(t, 200, r.Code, r.Raw)
+	assert.Equal(t, "https://examcbt.onrender.com", r.Body["url"])
+	assert.Equal(t, "https://examcbt.onrender.com/exam?pin="+pin, r.Body["qr_url"])
+
+	public := map[string]string{"X-Forwarded-For": "203.0.113.9", "X-Device-FP": devA}
+	r = h.do(http.MethodGet, "/api/student/gate", nil, public)
+	assert.Equal(t, http.StatusUnauthorized, r.Code, "PIN still required")
+	public["X-Exam-PIN"] = pin
+	r = h.do(http.MethodGet, "/api/student/gate", nil, public)
+	require.Equal(t, 200, r.Code, r.Raw)
+	r = h.multipart("/api/student/verify", map[string]string{"matric_no": "IFT/22/9101", "consent": "true"}, nil, public)
+	require.Equal(t, 200, r.Code, r.Raw)
+	r = h.do(http.MethodPost, "/api/student/heartbeat", nil, public)
+	assert.Equal(t, 200, r.Code, r.Raw)
+}

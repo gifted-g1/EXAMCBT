@@ -30,6 +30,25 @@ cp .env.example .env            # set LAN_IP, LAN_CIDRS and every secret
 docker compose up -d --build
 ```
 
+## Online demo (Render, Railway, Fly…)
+
+Exam Shield is designed for an exam hall LAN. To host a public demo, deploy
+the Docker image and set `ACCESS_MODE=open`: this switches **off** the
+hall-network lock (PINs, identity checks and proctoring still apply) and
+trusts the platform's load balancer for the real visitor IP. `render.yaml`
+is a ready Render Blueprint.
+
+| Variable | Value |
+|---|---|
+| `ACCESS_MODE` | `open` (use `lan`, the default, in real exam halls) |
+| `SEED_ON_START` | `true` for demo accounts |
+| `JWT_SECRET` | 32+ random characters |
+| `PUBLIC_URL` | your service URL, shown on access cards and QR codes |
+| `PORT` | set by the platform automatically |
+
+On plans without a persistent disk the SQLite database resets on every
+restart; mount a disk at `/app/data` to keep data.
+
 ## Mock data (development / training only)
 
 Seeding is refused when `APP_ENV=production`.

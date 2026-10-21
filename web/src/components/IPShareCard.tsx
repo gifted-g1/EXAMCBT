@@ -22,7 +22,10 @@ export function IPShareCard({
           {shownUrl}
         </p>
         <p className="mt-1 text-xs text-slate-400">
-          Only devices on {card.lan_cidr} can open it{card.url.startsWith('https') ? ' · secure connection' : ''}
+          {card.lan_cidr === '0.0.0.0/0'
+            ? 'Open access mode: reachable from any network (the PIN still protects the exam)'
+            : `Only devices on ${card.lan_cidr} can open it`}
+          {card.url.startsWith('https') ? ' · secure connection' : ''}
         </p>
 
         <div className="mt-6">

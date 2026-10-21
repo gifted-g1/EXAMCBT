@@ -42,6 +42,7 @@ type LANGate struct {
 	deny          []*net.IPNet
 	loopbackStaff bool
 	loopbackExam  bool
+	open          bool // ACCESS_MODE=open: no subnet lock (cloud/demo hosting)
 	exams         OpenExamSource
 	limiter       Limiter
 	log           *slog.Logger
@@ -58,6 +59,7 @@ func NewLANGate(cfg *config.Config, lanNets []*net.IPNet, exams OpenExamSource, 
 		deny:          cfg.LANDenyCIDRs,
 		loopbackStaff: cfg.AllowLoopbackStaff,
 		loopbackExam:  cfg.AllowLoopbackExam,
+		open:          cfg.OpenAccess(),
 		exams:         exams,
 		limiter:       limiter,
 		log:           log,
@@ -80,6 +82,9 @@ func isStudentAPI(path string) bool { return strings.HasPrefix(path, "/api/stude
 func (g *LANGate) Allowed(ip net.IP, path string) bool {
 	if ip == nil {
 		return false
+	}
+	if g.open {
+		return true
 	}
 	if ip.IsLoopback() {
 		if isStudentAPI(path) {
@@ -136,7 +141,7 @@ func (g *LANGate) ExamEntry() gin.HandlerFunc {
 				g.log.Error("lan gate: exam has invalid lan_cidr", "exam_id", e.ID, "err", err)
 				continue
 			}
-			if n.Contains(ip) || (ip.IsLoopback() && g.loopbackExam) {
+			if g.open || n.Contains(ip) || (ip.IsLoopback() && g.loopbackExam) {
 				candidates = append(candidates, e)
 			}
 		}

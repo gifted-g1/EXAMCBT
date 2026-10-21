@@ -1,0 +1,38 @@
+# Render Blueprint for an online demo of Exam Shield (standalone mode:
+# SQLite + in-process Redis + local file storage, one container).
+#
+# Render serves the app on the public internet, so ACCESS_MODE=open turns
+# off the exam-hall network lock (PINs, face checks and proctoring still
+# apply). For a real exam hall, run on the hall's LAN with ACCESS_MODE=lan.
+#
+# Data: the free plan has no persistent disk, so the database resets on
+# every deploy/restart (SEED_ON_START recreates the demo accounts). Add the
+# commented disk below on a paid plan to keep data.
+services:
+  - type: web
+    name: examcbt
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    healthCheckPath: /healthz
+    envVars:
+      - key: ACCESS_MODE
+        value: open
+      - key: MODE
+        value: standalone
+      - key: SEED_ON_START
+        value: "true"            # demo staff/students; remove for real use
+      - key: JWT_SECRET
+        generateValue: true      # stable across restarts
+      - key: COOKIE_SECURE
+        value: "true"            # Render serves HTTPS
+      - key: PUBLIC_SCHEME
+        value: https
+      - key: PUBLIC_URL
+        sync: false              # set to your service URL, e.g. https://examcbt.onrender.com
+      - key: AI_WORKERS
+        value: "2"
+    # disk:
+    #   name: exam-data
+    #   mountPath: /app/data
+    #   sizeGB: 1

@@ -118,6 +118,11 @@ func (s *ExamService) validateInput(in *ExamInput) error {
 	if err != nil {
 		return invalid("lan_cidr is not a valid CIDR")
 	}
+	if s.cfg.OpenAccess() {
+		// No hall network in open (cloud/demo) mode: any address may sit the exam.
+		in.LANCIDR = n.String()
+		return nil
+	}
 	ones, bits := n.Mask.Size()
 	if (bits == 32 && ones < 8) || (bits == 128 && ones < 32) {
 		return invalid("lan_cidr is too broad")
@@ -133,6 +138,9 @@ func (s *ExamService) validateInput(in *ExamInput) error {
 }
 
 func (s *ExamService) defaultCIDR() string {
+	if s.cfg.OpenAccess() {
+		return "0.0.0.0/0"
+	}
 	if len(s.lanNets) > 0 {
 		return s.lanNets[0].String()
 	}
@@ -365,8 +373,16 @@ type AccessCard struct {
 }
 
 // AccessCard builds the card. requestHost (the Host the staff member used)
-// is the fallback when no LAN address is configured or detectable.
-func (s *ExamService) AccessCard(e *models.Exam, requestHost string) (*AccessCard, error) {
+// is the fallback when no LAN address is configured or detectable; in open
+// mode the public URL (PUBLIC_URL, else scheme://requestHost) is shown.
+func (s *ExamService) AccessCard(e *models.Exam, requestHost, requestScheme string) (*AccessCard, error) {
+	if s.cfg.PublicURL != "" || s.cfg.OpenAccess() {
+		base := s.cfg.PublicURL
+		if base == "" {
+			base = requestScheme + "://" + requestHost
+		}
+		return s.card(e, base, hostOnly(base))
+	}
 	ip, err := netutil.AdvertiseIP(s.cfg.LANAdvertiseIP)
 	if err != nil {
 		h, _, splitErr := net.SplitHostPort(requestHost)
@@ -388,8 +404,11 @@ func (s *ExamService) AccessCard(e *models.Exam, requestHost string) (*AccessCar
 	if s.cfg.TLS() || s.cfg.PublicScheme == "https" {
 		scheme = "https"
 	}
-	url := netutil.HostURL(scheme, ip, port)
-	card := &AccessCard{IP: ip, URL: url, QRURL: url, LANCIDR: e.LANCIDR, Status: string(e.Status)}
+	return s.card(e, netutil.HostURL(scheme, ip, port), ip)
+}
+
+func (s *ExamService) card(e *models.Exam, url, host string) (*AccessCard, error) {
+	card := &AccessCard{IP: host, URL: url, QRURL: url, LANCIDR: e.LANCIDR, Status: string(e.Status)}
 	if e.PinRequired() {
 		card.PIN = *e.PinCode
 		card.QRURL = url + "/exam?pin=" + card.PIN
@@ -400,6 +419,15 @@ func (s *ExamService) AccessCard(e *models.Exam, requestHost string) (*AccessCar
 	}
 	card.QRPNGBase64 = base64.StdEncoding.EncodeToString(png)
 	return card, nil
+}
+
+// hostOnly returns the host part of a URL like https://exam.example.com.
+func hostOnly(u string) string {
+	u = strings.TrimPrefix(strings.TrimPrefix(u, "https://"), "http://")
+	if i := strings.IndexByte(u, '/'); i >= 0 {
+		u = u[:i]
+	}
+	return u
 }
 
 // --- Questions ----------------------------------------------------------------

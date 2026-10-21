@@ -46,11 +46,18 @@ COPY --from=build /opt/onnxruntime/lib/libonnxruntime.so.${ORT_VERSION} /usr/lib
 COPY --from=build /out/ /app/
 # pigo cascade for the Go fallback (tiny); ONNX models are mounted at runtime.
 COPY models/facefinder /app/models/facefinder
+# Standalone mode keeps SQLite, uploaded photos and the session key here.
+# It must be writable by the non-root user; mount a persistent disk at
+# /app/data to keep data across restarts and redeploys.
+RUN mkdir -p /app/data && chown -R examshield:examshield /app/data
 WORKDIR /app
 USER examshield
 ENV MODEL_DIR=/app/models \
     ONNXRUNTIME_LIB=/usr/lib/libonnxruntime.so \
-    AI_BACKEND=auto
+    AI_BACKEND=auto \
+    SQLITE_PATH=/app/data/examshield.db \
+    BLOB_DIR=/app/data/blobs
 EXPOSE 8080
-HEALTHCHECK --interval=15s --timeout=3s --retries=5 CMD curl -fsS http://127.0.0.1:8080/healthz || exit 1
+# Uses $PORT when a platform (e.g. Render) sets it, else 8080.
+HEALTHCHECK --interval=15s --timeout=3s --retries=5 CMD curl -fsS "http://127.0.0.1:${PORT:-8080}/healthz" || exit 1
 CMD ["/app/api"]

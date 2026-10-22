@@ -22,11 +22,13 @@ type Subject struct {
 	Slug    string
 	Blurb   string
 	MCQs    []MCQ
+	Gaps    []Gap
 	Written []Written
 }
 
-// Subjects is the full bank: 8 multiple-choice + 2 written questions each.
-var Subjects = []Subject{
+// coreSubjects are the original subjects (8 multiple-choice + 2 written
+// each); their gap questions are in bank_more.go.
+var coreSubjects = []Subject{
 	{
 		Name: "Golang", Slug: "golang",
 		Blurb: "Concurrency, error handling, types and tooling in Go.",

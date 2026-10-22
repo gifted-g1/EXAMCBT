@@ -1,0 +1,141 @@
+%PDF-1.4
+%‚„œ”
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [5 0 R 7 0 R 9 0 R] /Count 3 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 6 0 R >>
+endobj
+6 0 obj
+<< /Length 1428 >>
+stream
+BT /F2 12.0 Tf 56.0 644.6 Td (EXAM SHIELD) Tj ET
+BT /F2 26.0 Tf 56.0 600.9 Td (Computer Networks Question Bank) Tj ET
+BT /F1 13.0 Tf 56.0 578.0 Td (Layers, addressing, routing and core Internet protocols.) Tj ET
+BT /F1 11.0 Tf 56.0 544.1 Td (13 questions: 8 multiple choice, 3 fill in the gap and 2 written. Total 22 marks.) Tj ET
+BT /F1 11.0 Tf 56.0 528.1 Td (Edition: with answers \(staff copy, ready to import into Exam Shield\).) Tj ET
+BT /F2 14.0 Tf 56.0 479.8 Td (How this paper is laid out) Tj ET
+BT /F1 10.5 Tf 68.0 462.6 Td (Questions are numbered in one sequence. Multiple-choice options are lettered with a full stop;) Tj ET
+BT /F1 10.5 Tf 68.0 447.4 Td (each multiple-choice question is worth one mark unless stated.) Tj ET
+BT /F1 10.5 Tf 68.0 430.2 Td (Fill-in-the-gap questions show each blank as a line; they earn one mark per blank, shown in square) Tj ET
+BT /F1 10.5 Tf 68.0 414.9 Td (brackets, and are marked automatically.) Tj ET
+BT /F1 10.5 Tf 68.0 397.7 Td (Written questions show their marks in square brackets and are marked by an examiner.) Tj ET
+BT /F1 10.5 Tf 68.0 380.5 Td (To use this paper in Exam Shield, open an exam, choose Questions and then Import from PDF, and) Tj ET
+BT /F1 10.5 Tf 68.0 365.3 Td (upload this file. Review the preview and import.) Tj ET
+0.6 g
+BT /F1 8.0 Tf 56.0 34.0 Td (Exam Shield - Computer Networks Question Bank) Tj ET
+BT /F1 8.0 Tf 479.0 34.0 Td (Page 1 of 3) Tj ET
+0 g
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 8 0 R >>
+endobj
+8 0 obj
+<< /Length 2334 >>
+stream
+BT /F2 17.0 Tf 56.0 757.4 Td (Section 1: Computer Networks) Tj ET
+BT /F1 10.5 Tf 56.0 740.1 Td (Layers, addressing, routing and core Internet protocols.) Tj ET
+BT /F2 11.0 Tf 56.0 714.2 Td (1. Which OSI layer is responsible for routing packets between networks?) Tj ET
+BT /F1 11.0 Tf 74.0 698.2 Td (A. Data link) Tj ET
+BT /F1 11.0 Tf 74.0 682.3 Td (B. Session) Tj ET
+BT /F1 11.0 Tf 74.0 666.3 Td (C. Transport) Tj ET
+BT /F1 11.0 Tf 74.0 650.4 Td (D. Network) Tj ET
+BT /F1 10.0 Tf 74.0 633.9 Td (Answer: D) Tj ET
+BT /F2 11.0 Tf 56.0 607.9 Td (2. Which protocol finds the MAC address that belongs to an IPv4 address on a local) Tj ET
+BT /F2 11.0 Tf 56.0 592.0 Td (network?) Tj ET
+BT /F1 11.0 Tf 74.0 576.0 Td (A. ICMP) Tj ET
+BT /F1 11.0 Tf 74.0 560.1 Td (B. DNS) Tj ET
+BT /F1 11.0 Tf 74.0 544.1 Td (C. ARP) Tj ET
+BT /F1 11.0 Tf 74.0 528.2 Td (D. NAT) Tj ET
+BT /F1 10.0 Tf 74.0 511.7 Td (Answer: C) Tj ET
+BT /F2 11.0 Tf 56.0 485.7 Td (3. How many usable host addresses does a /24 IPv4 subnet provide?) Tj ET
+BT /F1 11.0 Tf 74.0 469.8 Td (A. 254) Tj ET
+BT /F1 11.0 Tf 74.0 453.8 Td (B. 255) Tj ET
+BT /F1 11.0 Tf 74.0 437.9 Td (C. 256) Tj ET
+BT /F1 11.0 Tf 74.0 421.9 Td (D. 252) Tj ET
+BT /F1 10.0 Tf 74.0 405.4 Td (Answer: A) Tj ET
+BT /F2 11.0 Tf 56.0 379.5 Td (4. Which transport protocol provides reliable, ordered delivery of data?) Tj ET
+BT /F1 11.0 Tf 74.0 363.5 Td (A. UDP) Tj ET
+BT /F1 11.0 Tf 74.0 347.6 Td (B. IP) Tj ET
+BT /F1 11.0 Tf 74.0 331.6 Td (C. ICMP) Tj ET
+BT /F1 11.0 Tf 74.0 315.7 Td (D. TCP) Tj ET
+BT /F1 10.0 Tf 74.0 299.2 Td (Answer: D) Tj ET
+BT /F2 11.0 Tf 56.0 273.2 Td (5. Which protocol transfers email between mail servers?) Tj ET
+BT /F1 11.0 Tf 74.0 257.3 Td (A. SMTP) Tj ET
+BT /F1 11.0 Tf 74.0 241.3 Td (B. POP3) Tj ET
+BT /F1 11.0 Tf 74.0 225.4 Td (C. SNMP) Tj ET
+BT /F1 11.0 Tf 74.0 209.4 Td (D. IMAP) Tj ET
+BT /F1 10.0 Tf 74.0 192.9 Td (Answer: A) Tj ET
+BT /F2 11.0 Tf 56.0 167.0 Td (6. Which of these is a link-state routing protocol?) Tj ET
+BT /F1 11.0 Tf 74.0 151.0 Td (A. RIPng) Tj ET
+BT /F1 11.0 Tf 74.0 135.1 Td (B. RIP) Tj ET
+BT /F1 11.0 Tf 74.0 119.1 Td (C. OSPF) Tj ET
+BT /F1 11.0 Tf 74.0 103.2 Td (D. BGP) Tj ET
+BT /F1 10.0 Tf 74.0 86.7 Td (Answer: C) Tj ET
+0.6 g
+BT /F1 8.0 Tf 56.0 34.0 Td (Exam Shield - Computer Networks Question Bank) Tj ET
+BT /F1 8.0 Tf 479.0 34.0 Td (Page 2 of 3) Tj ET
+0 g
+endstream
+endobj
+9 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 10 0 R >>
+endobj
+10 0 obj
+<< /Length 1657 >>
+stream
+BT /F2 11.0 Tf 56.0 766.0 Td (7. Which device forwards frames inside a LAN using MAC addresses?) Tj ET
+BT /F1 11.0 Tf 74.0 750.1 Td (A. Router) Tj ET
+BT /F1 11.0 Tf 74.0 734.1 Td (B. Repeater) Tj ET
+BT /F1 11.0 Tf 74.0 718.2 Td (C. Hub) Tj ET
+BT /F1 11.0 Tf 74.0 702.2 Td (D. Switch) Tj ET
+BT /F1 10.0 Tf 74.0 685.7 Td (Answer: D) Tj ET
+BT /F2 11.0 Tf 56.0 659.8 Td (8. What does NAT mainly allow?) Tj ET
+BT /F1 11.0 Tf 74.0 643.8 Td (A. Encryption of all traffic) Tj ET
+BT /F1 11.0 Tf 74.0 627.9 Td (B. Automatic IP address assignment) Tj ET
+BT /F1 11.0 Tf 74.0 611.9 Td (C. Translation of names into addresses) Tj ET
+BT /F1 11.0 Tf 74.0 596.0 Td (D. Many private hosts to share one public IP address) Tj ET
+BT /F1 10.0 Tf 74.0 579.5 Td (Answer: D) Tj ET
+BT /F2 11.0 Tf 56.0 553.5 Td (9. The ping utility sends messages using the ______ protocol. [1 mark]) Tj ET
+BT /F1 10.0 Tf 74.0 537.0 Td (Answer: ICMP) Tj ET
+BT /F2 11.0 Tf 56.0 511.1 Td (10. DNS queries normally use port ______. [1 mark]) Tj ET
+BT /F1 10.0 Tf 74.0 494.6 Td (Answer: 53) Tj ET
+BT /F2 11.0 Tf 56.0 468.6 Td (11. An IPv6 address is ______ bits long, compared with ______ bits for IPv4. [2 marks]) Tj ET
+BT /F1 10.0 Tf 74.0 452.1 Td (Answer: 128 | 32) Tj ET
+BT /F2 11.0 Tf 56.0 426.2 Td (12. Explain the TCP three-way handshake and why a connection needs it. [5 marks]) Tj ET
+BT /F2 11.0 Tf 56.0 400.2 Td (13. Compare IPv4 and IPv6 in terms of address size, header design and the need for NAT.) Tj ET
+BT /F2 11.0 Tf 56.0 384.3 Td ([5 marks]) Tj ET
+0.6 g
+BT /F1 8.0 Tf 56.0 34.0 Td (Exam Shield - Computer Networks Question Bank) Tj ET
+BT /F1 8.0 Tf 479.0 34.0 Td (Page 3 of 3) Tj ET
+0 g
+endstream
+endobj
+xref
+0 11
+0000000000 65535 f 
+0000000015 00000 n 
+0000000064 00000 n 
+0000000133 00000 n 
+0000000230 00000 n 
+0000000332 00000 n 
+0000000468 00000 n 
+0000001947 00000 n 
+0000002083 00000 n 
+0000004468 00000 n 
+0000004605 00000 n 
+trailer
+<< /Size 11 /Root 1 0 R >>
+startxref
+6314
+%%EOF

@@ -1,0 +1,145 @@
+%PDF-1.4
+%‚„œ”
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [5 0 R 7 0 R 9 0 R] /Count 3 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 6 0 R >>
+endobj
+6 0 obj
+<< /Length 1512 >>
+stream
+BT /F2 12.0 Tf 56.0 644.6 Td (EXAM SHIELD) Tj ET
+BT /F2 26.0 Tf 56.0 600.9 Td (Distributed Systems and Blockchain) Tj ET
+BT /F2 26.0 Tf 56.0 563.2 Td (Question Bank) Tj ET
+BT /F1 13.0 Tf 56.0 540.3 Td (Consistency, consensus, replication, fault tolerance and blockchains.) Tj ET
+BT /F1 11.0 Tf 56.0 506.4 Td (13 questions: 8 multiple choice, 3 fill in the gap and 2 written. Total 21 marks.) Tj ET
+BT /F1 11.0 Tf 56.0 490.4 Td (Edition: with answers \(staff copy, ready to import into Exam Shield\).) Tj ET
+BT /F2 14.0 Tf 56.0 442.1 Td (How this paper is laid out) Tj ET
+BT /F1 10.5 Tf 68.0 424.9 Td (Questions are numbered in one sequence. Multiple-choice options are lettered with a full stop;) Tj ET
+BT /F1 10.5 Tf 68.0 409.7 Td (each multiple-choice question is worth one mark unless stated.) Tj ET
+BT /F1 10.5 Tf 68.0 392.5 Td (Fill-in-the-gap questions show each blank as a line; they earn one mark per blank, shown in square) Tj ET
+BT /F1 10.5 Tf 68.0 377.2 Td (brackets, and are marked automatically.) Tj ET
+BT /F1 10.5 Tf 68.0 360.0 Td (Written questions show their marks in square brackets and are marked by an examiner.) Tj ET
+BT /F1 10.5 Tf 68.0 342.8 Td (To use this paper in Exam Shield, open an exam, choose Questions and then Import from PDF, and) Tj ET
+BT /F1 10.5 Tf 68.0 327.6 Td (upload this file. Review the preview and import.) Tj ET
+0.6 g
+BT /F1 8.0 Tf 56.0 34.0 Td (Exam Shield - Distributed Systems and Blockchain Question Bank) Tj ET
+BT /F1 8.0 Tf 479.0 34.0 Td (Page 1 of 3) Tj ET
+0 g
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 8 0 R >>
+endobj
+8 0 obj
+<< /Length 2673 >>
+stream
+BT /F2 17.0 Tf 56.0 757.4 Td (Section 1: Distributed Systems and Blockchain) Tj ET
+BT /F1 10.5 Tf 56.0 740.1 Td (Consistency, consensus, replication, fault tolerance and blockchains.) Tj ET
+BT /F2 11.0 Tf 56.0 714.2 Td (1. By the CAP theorem, during a network partition a distributed system must choose) Tj ET
+BT /F2 11.0 Tf 56.0 698.2 Td (between:) Tj ET
+BT /F1 11.0 Tf 74.0 682.3 Td (A. Latency and storage) Tj ET
+BT /F1 11.0 Tf 74.0 666.3 Td (B. Consistency and availability) Tj ET
+BT /F1 11.0 Tf 74.0 650.4 Td (C. Security and usability) Tj ET
+BT /F1 11.0 Tf 74.0 634.4 Td (D. Speed and cost) Tj ET
+BT /F1 10.0 Tf 74.0 617.9 Td (Answer: B) Tj ET
+BT /F2 11.0 Tf 56.0 592.0 Td (2. Which algorithm lets replicated servers agree on a shared log?) Tj ET
+BT /F1 11.0 Tf 74.0 576.0 Td (A. Dijkstra's algorithm) Tj ET
+BT /F1 11.0 Tf 74.0 560.1 Td (B. Huffman coding) Tj ET
+BT /F1 11.0 Tf 74.0 544.1 Td (C. RSA) Tj ET
+BT /F1 11.0 Tf 74.0 528.2 Td (D. Raft) Tj ET
+BT /F1 10.0 Tf 74.0 511.7 Td (Answer: D) Tj ET
+BT /F2 11.0 Tf 56.0 485.7 Td (3. Bitcoin miners compete to add blocks using:) Tj ET
+BT /F1 11.0 Tf 74.0 469.8 Td (A. Proof of stake) Tj ET
+BT /F1 11.0 Tf 74.0 453.8 Td (B. Proof of work) Tj ET
+BT /F1 11.0 Tf 74.0 437.9 Td (C. Round-robin turns) Tj ET
+BT /F1 11.0 Tf 74.0 421.9 Td (D. Two-phase commit) Tj ET
+BT /F1 10.0 Tf 74.0 405.4 Td (Answer: B) Tj ET
+BT /F2 11.0 Tf 56.0 379.5 Td (4. A smart contract is:) Tj ET
+BT /F1 11.0 Tf 74.0 363.5 Td (A. An encrypted email) Tj ET
+BT /F1 11.0 Tf 74.0 347.6 Td (B. A legal document signed online) Tj ET
+BT /F1 11.0 Tf 74.0 331.6 Td (C. Code stored and executed on a blockchain) Tj ET
+BT /F1 11.0 Tf 74.0 315.7 Td (D. A cloud service-level agreement) Tj ET
+BT /F1 10.0 Tf 74.0 299.2 Td (Answer: C) Tj ET
+BT /F2 11.0 Tf 56.0 273.2 Td (5. Replicating data across several nodes mainly improves:) Tj ET
+BT /F1 11.0 Tf 74.0 257.3 Td (A. Compile speed) Tj ET
+BT /F1 11.0 Tf 74.0 241.3 Td (B. Availability and fault tolerance) Tj ET
+BT /F1 11.0 Tf 74.0 225.4 Td (C. Screen resolution) Tj ET
+BT /F1 11.0 Tf 74.0 209.4 Td (D. Code readability) Tj ET
+BT /F1 10.0 Tf 74.0 192.9 Td (Answer: B) Tj ET
+BT /F2 11.0 Tf 56.0 167.0 Td (6. Two-phase commit is used to:) Tj ET
+BT /F1 11.0 Tf 74.0 151.0 Td (A. Make a transaction atomic across several nodes) Tj ET
+BT /F1 11.0 Tf 74.0 135.1 Td (B. Collect garbage memory) Tj ET
+BT /F1 11.0 Tf 74.0 119.1 Td (C. Hash passwords) Tj ET
+BT /F1 11.0 Tf 74.0 103.2 Td (D. Route network packets) Tj ET
+BT /F1 10.0 Tf 74.0 86.7 Td (Answer: A) Tj ET
+0.6 g
+BT /F1 8.0 Tf 56.0 34.0 Td (Exam Shield - Distributed Systems and Blockchain Question Bank) Tj ET
+BT /F1 8.0 Tf 479.0 34.0 Td (Page 2 of 3) Tj ET
+0 g
+endstream
+endobj
+9 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 10 0 R >>
+endobj
+10 0 obj
+<< /Length 2068 >>
+stream
+BT /F2 11.0 Tf 56.0 766.0 Td (7. Eventual consistency means that:) Tj ET
+BT /F1 11.0 Tf 74.0 750.1 Td (A. Concurrent writes are rejected) Tj ET
+BT /F1 11.0 Tf 74.0 734.1 Td (B. Data is never replicated) Tj ET
+BT /F1 11.0 Tf 74.0 718.2 Td (C. All replicas converge if no new updates arrive) Tj ET
+BT /F1 11.0 Tf 74.0 702.2 Td (D. Every read returns the latest write) Tj ET
+BT /F1 10.0 Tf 74.0 685.7 Td (Answer: C) Tj ET
+BT /F2 11.0 Tf 56.0 659.8 Td (8. What makes past blocks in a blockchain tamper-evident?) Tj ET
+BT /F1 11.0 Tf 74.0 643.8 Td (A. Each block contains the hash of the previous block) Tj ET
+BT /F1 11.0 Tf 74.0 627.9 Td (B. Blocks are compressed) Tj ET
+BT /F1 11.0 Tf 74.0 611.9 Td (C. Blocks are numbered in order) Tj ET
+BT /F1 11.0 Tf 74.0 596.0 Td (D. Blocks are kept in RAM) Tj ET
+BT /F1 10.0 Tf 74.0 579.5 Td (Answer: A) Tj ET
+BT /F2 11.0 Tf 56.0 553.5 Td (9. A system that keeps working correctly when some of its components fail is fault ______.) Tj ET
+BT /F2 11.0 Tf 56.0 537.6 Td ([1 mark]) Tj ET
+BT /F1 10.0 Tf 74.0 521.1 Td (Answer: tolerant) Tj ET
+BT /F2 11.0 Tf 56.0 495.1 Td (10. In Raft, one server is elected ______ and the others act as followers. [1 mark]) Tj ET
+BT /F1 10.0 Tf 74.0 478.6 Td (Answer: leader) Tj ET
+BT /F2 11.0 Tf 56.0 452.7 Td (11. Splitting a large database across machines by key ranges or hashes is called ______.) Tj ET
+BT /F2 11.0 Tf 56.0 436.7 Td ([1 mark]) Tj ET
+BT /F1 10.0 Tf 74.0 420.2 Td (Answer: sharding / partitioning / horizontal partitioning) Tj ET
+BT /F2 11.0 Tf 56.0 394.3 Td (12. Explain why clocks cannot be perfectly synchronised in a distributed system, and how) Tj ET
+BT /F2 11.0 Tf 56.0 378.3 Td (logical clocks order events. [5 marks]) Tj ET
+BT /F2 11.0 Tf 56.0 352.4 Td (13. Evaluate whether a blockchain suits storing university certificates, compared with a) Tj ET
+BT /F2 11.0 Tf 56.0 336.4 Td (conventional database. [5 marks]) Tj ET
+0.6 g
+BT /F1 8.0 Tf 56.0 34.0 Td (Exam Shield - Distributed Systems and Blockchain Question Bank) Tj ET
+BT /F1 8.0 Tf 479.0 34.0 Td (Page 3 of 3) Tj ET
+0 g
+endstream
+endobj
+xref
+0 11
+0000000000 65535 f 
+0000000015 00000 n 
+0000000064 00000 n 
+0000000133 00000 n 
+0000000230 00000 n 
+0000000332 00000 n 
+0000000468 00000 n 
+0000002031 00000 n 
+0000002167 00000 n 
+0000004891 00000 n 
+0000005028 00000 n 
+trailer
+<< /Size 11 /Root 1 0 R >>
+startxref
+7148
+%%EOF

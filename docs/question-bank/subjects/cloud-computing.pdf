@@ -1,0 +1,143 @@
+%PDF-1.4
+%‚„œ”
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [5 0 R 7 0 R 9 0 R] /Count 3 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 6 0 R >>
+endobj
+6 0 obj
+<< /Length 1442 >>
+stream
+BT /F2 12.0 Tf 56.0 644.6 Td (EXAM SHIELD) Tj ET
+BT /F2 26.0 Tf 56.0 600.9 Td (Cloud Computing Question Bank) Tj ET
+BT /F1 13.0 Tf 56.0 578.0 Td (Service and deployment models, scaling, storage and shared responsibility.) Tj ET
+BT /F1 11.0 Tf 56.0 544.1 Td (13 questions: 8 multiple choice, 3 fill in the gap and 2 written. Total 21 marks.) Tj ET
+BT /F1 11.0 Tf 56.0 528.1 Td (Edition: with answers \(staff copy, ready to import into Exam Shield\).) Tj ET
+BT /F2 14.0 Tf 56.0 479.8 Td (How this paper is laid out) Tj ET
+BT /F1 10.5 Tf 68.0 462.6 Td (Questions are numbered in one sequence. Multiple-choice options are lettered with a full stop;) Tj ET
+BT /F1 10.5 Tf 68.0 447.4 Td (each multiple-choice question is worth one mark unless stated.) Tj ET
+BT /F1 10.5 Tf 68.0 430.2 Td (Fill-in-the-gap questions show each blank as a line; they earn one mark per blank, shown in square) Tj ET
+BT /F1 10.5 Tf 68.0 414.9 Td (brackets, and are marked automatically.) Tj ET
+BT /F1 10.5 Tf 68.0 397.7 Td (Written questions show their marks in square brackets and are marked by an examiner.) Tj ET
+BT /F1 10.5 Tf 68.0 380.5 Td (To use this paper in Exam Shield, open an exam, choose Questions and then Import from PDF, and) Tj ET
+BT /F1 10.5 Tf 68.0 365.3 Td (upload this file. Review the preview and import.) Tj ET
+0.6 g
+BT /F1 8.0 Tf 56.0 34.0 Td (Exam Shield - Cloud Computing Question Bank) Tj ET
+BT /F1 8.0 Tf 479.0 34.0 Td (Page 1 of 3) Tj ET
+0 g
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 8 0 R >>
+endobj
+8 0 obj
+<< /Length 2531 >>
+stream
+BT /F2 17.0 Tf 56.0 757.4 Td (Section 1: Cloud Computing) Tj ET
+BT /F1 10.5 Tf 56.0 740.1 Td (Service and deployment models, scaling, storage and shared responsibility.) Tj ET
+BT /F2 11.0 Tf 56.0 714.2 Td (1. Which cloud service model gives customers virtual machines, storage and networks to) Tj ET
+BT /F2 11.0 Tf 56.0 698.2 Td (manage themselves?) Tj ET
+BT /F1 11.0 Tf 74.0 682.3 Td (A. IaaS) Tj ET
+BT /F1 11.0 Tf 74.0 666.3 Td (B. PaaS) Tj ET
+BT /F1 11.0 Tf 74.0 650.4 Td (C. FaaS) Tj ET
+BT /F1 11.0 Tf 74.0 634.4 Td (D. SaaS) Tj ET
+BT /F1 10.0 Tf 74.0 617.9 Td (Answer: A) Tj ET
+BT /F2 11.0 Tf 56.0 592.0 Td (2. Gmail and Microsoft 365 are examples of which service model?) Tj ET
+BT /F1 11.0 Tf 74.0 576.0 Td (A. PaaS) Tj ET
+BT /F1 11.0 Tf 74.0 560.1 Td (B. IaaS) Tj ET
+BT /F1 11.0 Tf 74.0 544.1 Td (C. On-premises software) Tj ET
+BT /F1 11.0 Tf 74.0 528.2 Td (D. SaaS) Tj ET
+BT /F1 10.0 Tf 74.0 511.7 Td (Answer: D) Tj ET
+BT /F2 11.0 Tf 56.0 485.7 Td (3. Serverless functions are mainly billed by:) Tj ET
+BT /F1 11.0 Tf 74.0 469.8 Td (A. Servers rented per month) Tj ET
+BT /F1 11.0 Tf 74.0 453.8 Td (B. A fixed annual licence) Tj ET
+BT /F1 11.0 Tf 74.0 437.9 Td (C. Disk size only) Tj ET
+BT /F1 11.0 Tf 74.0 421.9 Td (D. Invocations and execution time) Tj ET
+BT /F1 10.0 Tf 74.0 405.4 Td (Answer: D) Tj ET
+BT /F2 11.0 Tf 56.0 379.5 Td (4. Automatically adding instances when load rises is called:) Tj ET
+BT /F1 11.0 Tf 74.0 363.5 Td (A. Auto-scaling) Tj ET
+BT /F1 11.0 Tf 74.0 347.6 Td (B. Vertical scaling) Tj ET
+BT /F1 11.0 Tf 74.0 331.6 Td (C. Load shedding) Tj ET
+BT /F1 11.0 Tf 74.0 315.7 Td (D. Caching) Tj ET
+BT /F1 10.0 Tf 74.0 299.2 Td (Answer: A) Tj ET
+BT /F2 11.0 Tf 56.0 273.2 Td (5. In IaaS, who secures the physical data centre under the shared responsibility model?) Tj ET
+BT /F1 11.0 Tf 74.0 257.3 Td (A. Both equally) Tj ET
+BT /F1 11.0 Tf 74.0 241.3 Td (B. Nobody) Tj ET
+BT /F1 11.0 Tf 74.0 225.4 Td (C. The customer) Tj ET
+BT /F1 11.0 Tf 74.0 209.4 Td (D. The cloud provider) Tj ET
+BT /F1 10.0 Tf 74.0 192.9 Td (Answer: D) Tj ET
+BT /F2 11.0 Tf 56.0 167.0 Td (6. Which tool orchestrates containers across a cluster of machines?) Tj ET
+BT /F1 11.0 Tf 74.0 151.0 Td (A. Jenkins) Tj ET
+BT /F1 11.0 Tf 74.0 135.1 Td (B. Kubernetes) Tj ET
+BT /F1 11.0 Tf 74.0 119.1 Td (C. Grafana) Tj ET
+BT /F1 11.0 Tf 74.0 103.2 Td (D. Git) Tj ET
+BT /F1 10.0 Tf 74.0 86.7 Td (Answer: B) Tj ET
+0.6 g
+BT /F1 8.0 Tf 56.0 34.0 Td (Exam Shield - Cloud Computing Question Bank) Tj ET
+BT /F1 8.0 Tf 479.0 34.0 Td (Page 2 of 3) Tj ET
+0 g
+endstream
+endobj
+9 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 10 0 R >>
+endobj
+10 0 obj
+<< /Length 1861 >>
+stream
+BT /F2 11.0 Tf 56.0 766.0 Td (7. A deployment combining a private data centre with a public cloud is a:) Tj ET
+BT /F1 11.0 Tf 74.0 750.1 Td (A. Community cloud) Tj ET
+BT /F1 11.0 Tf 74.0 734.1 Td (B. Single-tenant cloud) Tj ET
+BT /F1 11.0 Tf 74.0 718.2 Td (C. Edge cloud) Tj ET
+BT /F1 11.0 Tf 74.0 702.2 Td (D. Hybrid cloud) Tj ET
+BT /F1 10.0 Tf 74.0 685.7 Td (Answer: D) Tj ET
+BT /F2 11.0 Tf 56.0 659.8 Td (8. Object storage services such as Amazon S3 store data as:) Tj ET
+BT /F1 11.0 Tf 74.0 643.8 Td (A. Objects in buckets) Tj ET
+BT /F1 11.0 Tf 74.0 627.9 Td (B. Files on tape) Tj ET
+BT /F1 11.0 Tf 74.0 611.9 Td (C. Blocks on a mounted disk) Tj ET
+BT /F1 11.0 Tf 74.0 596.0 Td (D. Rows in tables) Tj ET
+BT /F1 10.0 Tf 74.0 579.5 Td (Answer: A) Tj ET
+BT /F2 11.0 Tf 56.0 553.5 Td (9. Paying only for the resources actually consumed is called ______-as-you-go pricing. [1 mark]) Tj ET
+BT /F1 10.0 Tf 74.0 537.0 Td (Answer: pay) Tj ET
+BT /F2 11.0 Tf 56.0 511.1 Td (10. Incoming traffic is spread across several servers by a load ______. [1 mark]) Tj ET
+BT /F1 10.0 Tf 74.0 494.6 Td (Answer: balancer) Tj ET
+BT /F2 11.0 Tf 56.0 468.6 Td (11. Running code without provisioning or managing servers is known as ______ computing.) Tj ET
+BT /F2 11.0 Tf 56.0 452.7 Td ([1 mark]) Tj ET
+BT /F1 10.0 Tf 74.0 436.2 Td (Answer: serverless) Tj ET
+BT /F2 11.0 Tf 56.0 410.2 Td (12. Compare IaaS, PaaS and SaaS, giving an example of each and the customer's) Tj ET
+BT /F2 11.0 Tf 56.0 394.3 Td (responsibilities in each. [5 marks]) Tj ET
+BT /F2 11.0 Tf 56.0 368.3 Td (13. Discuss vendor lock-in and data sovereignty risks when a university moves to the) Tj ET
+BT /F2 11.0 Tf 56.0 352.4 Td (cloud, and how to reduce them. [5 marks]) Tj ET
+0.6 g
+BT /F1 8.0 Tf 56.0 34.0 Td (Exam Shield - Cloud Computing Question Bank) Tj ET
+BT /F1 8.0 Tf 479.0 34.0 Td (Page 3 of 3) Tj ET
+0 g
+endstream
+endobj
+xref
+0 11
+0000000000 65535 f 
+0000000015 00000 n 
+0000000064 00000 n 
+0000000133 00000 n 
+0000000230 00000 n 
+0000000332 00000 n 
+0000000468 00000 n 
+0000001961 00000 n 
+0000002097 00000 n 
+0000004679 00000 n 
+0000004816 00000 n 
+trailer
+<< /Size 11 /Root 1 0 R >>
+startxref
+6729
+%%EOF

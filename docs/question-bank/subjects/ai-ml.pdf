@@ -1,0 +1,145 @@
+%PDF-1.4
+%‚„œ”
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [5 0 R 7 0 R 9 0 R] /Count 3 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 6 0 R >>
+endobj
+6 0 obj
+<< /Length 1536 >>
+stream
+BT /F2 12.0 Tf 56.0 644.6 Td (EXAM SHIELD) Tj ET
+BT /F2 26.0 Tf 56.0 600.9 Td (Artificial Intelligence and Machine) Tj ET
+BT /F2 26.0 Tf 56.0 563.2 Td (Learning Question Bank) Tj ET
+BT /F1 13.0 Tf 56.0 540.3 Td (Learning paradigms, model evaluation, neural networks and responsible AI.) Tj ET
+BT /F1 11.0 Tf 56.0 506.4 Td (13 questions: 8 multiple choice, 3 fill in the gap and 2 written. Total 22 marks.) Tj ET
+BT /F1 11.0 Tf 56.0 490.4 Td (Edition: with answers \(staff copy, ready to import into Exam Shield\).) Tj ET
+BT /F2 14.0 Tf 56.0 442.1 Td (How this paper is laid out) Tj ET
+BT /F1 10.5 Tf 68.0 424.9 Td (Questions are numbered in one sequence. Multiple-choice options are lettered with a full stop;) Tj ET
+BT /F1 10.5 Tf 68.0 409.7 Td (each multiple-choice question is worth one mark unless stated.) Tj ET
+BT /F1 10.5 Tf 68.0 392.5 Td (Fill-in-the-gap questions show each blank as a line; they earn one mark per blank, shown in square) Tj ET
+BT /F1 10.5 Tf 68.0 377.2 Td (brackets, and are marked automatically.) Tj ET
+BT /F1 10.5 Tf 68.0 360.0 Td (Written questions show their marks in square brackets and are marked by an examiner.) Tj ET
+BT /F1 10.5 Tf 68.0 342.8 Td (To use this paper in Exam Shield, open an exam, choose Questions and then Import from PDF, and) Tj ET
+BT /F1 10.5 Tf 68.0 327.6 Td (upload this file. Review the preview and import.) Tj ET
+0.6 g
+BT /F1 8.0 Tf 56.0 34.0 Td (Exam Shield - Artificial Intelligence and Machine Learning Question Bank) Tj ET
+BT /F1 8.0 Tf 479.0 34.0 Td (Page 1 of 3) Tj ET
+0 g
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 8 0 R >>
+endobj
+8 0 obj
+<< /Length 2604 >>
+stream
+BT /F2 17.0 Tf 56.0 757.4 Td (Section 1: Artificial Intelligence and Machine Learning) Tj ET
+BT /F1 10.5 Tf 56.0 740.1 Td (Learning paradigms, model evaluation, neural networks and responsible AI.) Tj ET
+BT /F2 11.0 Tf 56.0 714.2 Td (1. Training a model on labelled input-output examples is called:) Tj ET
+BT /F1 11.0 Tf 74.0 698.2 Td (A. Clustering) Tj ET
+BT /F1 11.0 Tf 74.0 682.3 Td (B. Unsupervised learning) Tj ET
+BT /F1 11.0 Tf 74.0 666.3 Td (C. Supervised learning) Tj ET
+BT /F1 11.0 Tf 74.0 650.4 Td (D. Reinforcement learning) Tj ET
+BT /F1 10.0 Tf 74.0 633.9 Td (Answer: C) Tj ET
+BT /F2 11.0 Tf 56.0 607.9 Td (2. Which of these is an unsupervised clustering algorithm?) Tj ET
+BT /F1 11.0 Tf 74.0 592.0 Td (A. Logistic regression) Tj ET
+BT /F1 11.0 Tf 74.0 576.0 Td (B. Linear regression) Tj ET
+BT /F1 11.0 Tf 74.0 560.1 Td (C. k-means) Tj ET
+BT /F1 11.0 Tf 74.0 544.1 Td (D. Naive Bayes) Tj ET
+BT /F1 10.0 Tf 74.0 527.6 Td (Answer: C) Tj ET
+BT /F2 11.0 Tf 56.0 501.7 Td (3. Which metric is the harmonic mean of precision and recall?) Tj ET
+BT /F1 11.0 Tf 74.0 485.7 Td (A. Accuracy) Tj ET
+BT /F1 11.0 Tf 74.0 469.8 Td (B. Mean squared error) Tj ET
+BT /F1 11.0 Tf 74.0 453.8 Td (C. ROC AUC) Tj ET
+BT /F1 11.0 Tf 74.0 437.9 Td (D. F1 score) Tj ET
+BT /F1 10.0 Tf 74.0 421.4 Td (Answer: D) Tj ET
+BT /F2 11.0 Tf 56.0 395.4 Td (4. Which technique reduces overfitting by randomly switching off neurons during training?) Tj ET
+BT /F1 11.0 Tf 74.0 379.5 Td (A. Padding) Tj ET
+BT /F1 11.0 Tf 74.0 363.5 Td (B. Momentum) Tj ET
+BT /F1 11.0 Tf 74.0 347.6 Td (C. Pooling) Tj ET
+BT /F1 11.0 Tf 74.0 331.6 Td (D. Dropout) Tj ET
+BT /F1 10.0 Tf 74.0 315.1 Td (Answer: D) Tj ET
+BT /F2 11.0 Tf 56.0 289.2 Td (5. Which neural network architecture underlies modern large language models?) Tj ET
+BT /F1 11.0 Tf 74.0 273.2 Td (A. Transformer) Tj ET
+BT /F1 11.0 Tf 74.0 257.3 Td (B. Single perceptron) Tj ET
+BT /F1 11.0 Tf 74.0 241.3 Td (C. Convolutional neural network) Tj ET
+BT /F1 11.0 Tf 74.0 225.4 Td (D. Hopfield network) Tj ET
+BT /F1 10.0 Tf 74.0 208.9 Td (Answer: A) Tj ET
+BT /F2 11.0 Tf 56.0 182.9 Td (6. In reinforcement learning, what does an agent try to maximise?) Tj ET
+BT /F1 11.0 Tf 74.0 167.0 Td (A. Number of labels) Tj ET
+BT /F1 11.0 Tf 74.0 151.0 Td (B. Training loss) Tj ET
+BT /F1 11.0 Tf 74.0 135.1 Td (C. Learning rate) Tj ET
+BT /F1 11.0 Tf 74.0 119.1 Td (D. Cumulative reward) Tj ET
+BT /F1 10.0 Tf 74.0 102.6 Td (Answer: D) Tj ET
+0.6 g
+BT /F1 8.0 Tf 56.0 34.0 Td (Exam Shield - Artificial Intelligence and Machine Learning Question Bank) Tj ET
+BT /F1 8.0 Tf 479.0 34.0 Td (Page 2 of 3) Tj ET
+0 g
+endstream
+endobj
+9 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 10 0 R >>
+endobj
+10 0 obj
+<< /Length 2087 >>
+stream
+BT /F2 11.0 Tf 56.0 766.0 Td (7. Splitting data into k parts and training k times, holding out a different part each time, is) Tj ET
+BT /F2 11.0 Tf 56.0 750.1 Td (called:) Tj ET
+BT /F1 11.0 Tf 74.0 734.1 Td (A. k-fold cross-validation) Tj ET
+BT /F1 11.0 Tf 74.0 718.2 Td (B. Grid search) Tj ET
+BT /F1 11.0 Tf 74.0 702.2 Td (C. Bagging) Tj ET
+BT /F1 11.0 Tf 74.0 686.3 Td (D. Bootstrapping) Tj ET
+BT /F1 10.0 Tf 74.0 669.8 Td (Answer: A) Tj ET
+BT /F2 11.0 Tf 56.0 643.8 Td (8. Which activation function outputs max\(0, x\)?) Tj ET
+BT /F1 11.0 Tf 74.0 627.9 Td (A. Tanh) Tj ET
+BT /F1 11.0 Tf 74.0 611.9 Td (B. Softmax) Tj ET
+BT /F1 11.0 Tf 74.0 596.0 Td (C. ReLU) Tj ET
+BT /F1 11.0 Tf 74.0 580.0 Td (D. Sigmoid) Tj ET
+BT /F1 10.0 Tf 74.0 563.5 Td (Answer: C) Tj ET
+BT /F2 11.0 Tf 56.0 537.6 Td (9. Neural networks compute gradients by applying the chain rule backwards through the) Tj ET
+BT /F2 11.0 Tf 56.0 521.6 Td (layers, an algorithm called ______. [1 mark]) Tj ET
+BT /F1 10.0 Tf 74.0 505.1 Td (Answer: backpropagation / back propagation / back-propagation) Tj ET
+BT /F2 11.0 Tf 56.0 479.2 Td (10. Data used to tune hyperparameters is the ______ set, and data kept aside for the final) Tj ET
+BT /F2 11.0 Tf 56.0 463.2 Td (estimate of performance is the ______ set. [2 marks]) Tj ET
+BT /F1 10.0 Tf 74.0 446.7 Td (Answer: validation | test) Tj ET
+BT /F2 11.0 Tf 56.0 420.8 Td (11. A ______ matrix tabulates true positives, false positives, true negatives and false) Tj ET
+BT /F2 11.0 Tf 56.0 404.8 Td (negatives. [1 mark]) Tj ET
+BT /F1 10.0 Tf 74.0 388.3 Td (Answer: confusion) Tj ET
+BT /F2 11.0 Tf 56.0 362.4 Td (12. Explain the bias-variance trade-off and how it relates to underfitting and overfitting. [5 marks]) Tj ET
+BT /F2 11.0 Tf 56.0 336.4 Td (13. Discuss two sources of unfair bias in machine-learning systems and how) Tj ET
+BT /F2 11.0 Tf 56.0 320.5 Td (responsible-AI practice reduces them. [5 marks]) Tj ET
+0.6 g
+BT /F1 8.0 Tf 56.0 34.0 Td (Exam Shield - Artificial Intelligence and Machine Learning Question Bank) Tj ET
+BT /F1 8.0 Tf 479.0 34.0 Td (Page 3 of 3) Tj ET
+0 g
+endstream
+endobj
+xref
+0 11
+0000000000 65535 f 
+0000000015 00000 n 
+0000000064 00000 n 
+0000000133 00000 n 
+0000000230 00000 n 
+0000000332 00000 n 
+0000000468 00000 n 
+0000002055 00000 n 
+0000002191 00000 n 
+0000004846 00000 n 
+0000004983 00000 n 
+trailer
+<< /Size 11 /Root 1 0 R >>
+startxref
+7122
+%%EOF

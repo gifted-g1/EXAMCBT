@@ -1,0 +1,147 @@
+%PDF-1.4
+%‚„œ”
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [5 0 R 7 0 R 9 0 R] /Count 3 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 6 0 R >>
+endobj
+6 0 obj
+<< /Length 1513 >>
+stream
+BT /F2 12.0 Tf 56.0 644.6 Td (EXAM SHIELD) Tj ET
+BT /F2 26.0 Tf 56.0 600.9 Td (Internet of Things and Embedded) Tj ET
+BT /F2 26.0 Tf 56.0 563.2 Td (Systems Question Bank) Tj ET
+BT /F1 13.0 Tf 56.0 540.3 Td (Sensors, microcontrollers, IoT protocols and edge computing.) Tj ET
+BT /F1 11.0 Tf 56.0 506.4 Td (13 questions: 8 multiple choice, 3 fill in the gap and 2 written. Total 22 marks.) Tj ET
+BT /F1 11.0 Tf 56.0 490.4 Td (Edition: with answers \(staff copy, ready to import into Exam Shield\).) Tj ET
+BT /F2 14.0 Tf 56.0 442.1 Td (How this paper is laid out) Tj ET
+BT /F1 10.5 Tf 68.0 424.9 Td (Questions are numbered in one sequence. Multiple-choice options are lettered with a full stop;) Tj ET
+BT /F1 10.5 Tf 68.0 409.7 Td (each multiple-choice question is worth one mark unless stated.) Tj ET
+BT /F1 10.5 Tf 68.0 392.5 Td (Fill-in-the-gap questions show each blank as a line; they earn one mark per blank, shown in square) Tj ET
+BT /F1 10.5 Tf 68.0 377.2 Td (brackets, and are marked automatically.) Tj ET
+BT /F1 10.5 Tf 68.0 360.0 Td (Written questions show their marks in square brackets and are marked by an examiner.) Tj ET
+BT /F1 10.5 Tf 68.0 342.8 Td (To use this paper in Exam Shield, open an exam, choose Questions and then Import from PDF, and) Tj ET
+BT /F1 10.5 Tf 68.0 327.6 Td (upload this file. Review the preview and import.) Tj ET
+0.6 g
+BT /F1 8.0 Tf 56.0 34.0 Td (Exam Shield - Internet of Things and Embedded Systems Question Bank) Tj ET
+BT /F1 8.0 Tf 479.0 34.0 Td (Page 1 of 3) Tj ET
+0 g
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 8 0 R >>
+endobj
+8 0 obj
+<< /Length 2541 >>
+stream
+BT /F2 17.0 Tf 56.0 757.4 Td (Section 1: Internet of Things and Embedded Systems) Tj ET
+BT /F1 10.5 Tf 56.0 740.1 Td (Sensors, microcontrollers, IoT protocols and edge computing.) Tj ET
+BT /F2 11.0 Tf 56.0 714.2 Td (1. Which lightweight publish/subscribe protocol is widely used in IoT?) Tj ET
+BT /F1 11.0 Tf 74.0 698.2 Td (A. SNMP) Tj ET
+BT /F1 11.0 Tf 74.0 682.3 Td (B. FTP) Tj ET
+BT /F1 11.0 Tf 74.0 666.3 Td (C. SMTP) Tj ET
+BT /F1 11.0 Tf 74.0 650.4 Td (D. MQTT) Tj ET
+BT /F1 10.0 Tf 74.0 633.9 Td (Answer: D) Tj ET
+BT /F2 11.0 Tf 56.0 607.9 Td (2. In MQTT, which component receives messages from publishers and passes them to) Tj ET
+BT /F2 11.0 Tf 56.0 592.0 Td (subscribers?) Tj ET
+BT /F1 11.0 Tf 74.0 576.0 Td (A. Client) Tj ET
+BT /F1 11.0 Tf 74.0 560.1 Td (B. Gateway) Tj ET
+BT /F1 11.0 Tf 74.0 544.1 Td (C. Router) Tj ET
+BT /F1 11.0 Tf 74.0 528.2 Td (D. Broker) Tj ET
+BT /F1 10.0 Tf 74.0 511.7 Td (Answer: D) Tj ET
+BT /F2 11.0 Tf 56.0 485.7 Td (3. Which wireless technology is designed for low-power IoT links over several kilometres?) Tj ET
+BT /F1 11.0 Tf 74.0 469.8 Td (A. Bluetooth Classic) Tj ET
+BT /F1 11.0 Tf 74.0 453.8 Td (B. Wi-Fi 6) Tj ET
+BT /F1 11.0 Tf 74.0 437.9 Td (C. NFC) Tj ET
+BT /F1 11.0 Tf 74.0 421.9 Td (D. LoRaWAN) Tj ET
+BT /F1 10.0 Tf 74.0 405.4 Td (Answer: D) Tj ET
+BT /F2 11.0 Tf 56.0 379.5 Td (4. A microcontroller turns an analog sensor voltage into a number using a\(n\):) Tj ET
+BT /F1 11.0 Tf 74.0 363.5 Td (A. UART) Tj ET
+BT /F1 11.0 Tf 74.0 347.6 Td (B. DAC) Tj ET
+BT /F1 11.0 Tf 74.0 331.6 Td (C. ADC) Tj ET
+BT /F1 11.0 Tf 74.0 315.7 Td (D. PWM output) Tj ET
+BT /F1 10.0 Tf 74.0 299.2 Td (Answer: C) Tj ET
+BT /F2 11.0 Tf 56.0 273.2 Td (5. Which technique varies the duty cycle of a signal to control motor speed or LED) Tj ET
+BT /F2 11.0 Tf 56.0 257.3 Td (brightness?) Tj ET
+BT /F1 11.0 Tf 74.0 241.3 Td (A. I2C) Tj ET
+BT /F1 11.0 Tf 74.0 225.4 Td (B. SPI) Tj ET
+BT /F1 11.0 Tf 74.0 209.4 Td (C. ADC) Tj ET
+BT /F1 11.0 Tf 74.0 193.5 Td (D. PWM) Tj ET
+BT /F1 10.0 Tf 74.0 177.0 Td (Answer: D) Tj ET
+BT /F2 11.0 Tf 56.0 151.0 Td (6. Which two-wire serial bus uses SDA and SCL lines to connect several devices?) Tj ET
+BT /F1 11.0 Tf 74.0 135.1 Td (A. I2C) Tj ET
+BT /F1 11.0 Tf 74.0 119.1 Td (B. UART) Tj ET
+BT /F1 11.0 Tf 74.0 103.2 Td (C. SPI) Tj ET
+BT /F1 11.0 Tf 74.0 87.2 Td (D. Ethernet) Tj ET
+BT /F1 10.0 Tf 74.0 70.7 Td (Answer: A) Tj ET
+0.6 g
+BT /F1 8.0 Tf 56.0 34.0 Td (Exam Shield - Internet of Things and Embedded Systems Question Bank) Tj ET
+BT /F1 8.0 Tf 479.0 34.0 Td (Page 2 of 3) Tj ET
+0 g
+endstream
+endobj
+9 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 10 0 R >>
+endobj
+10 0 obj
+<< /Length 2159 >>
+stream
+BT /F2 11.0 Tf 56.0 766.0 Td (7. An embedded designer chooses a real-time operating system \(RTOS\) mainly for:) Tj ET
+BT /F1 11.0 Tf 74.0 750.1 Td (A. A graphical desktop) Tj ET
+BT /F1 11.0 Tf 74.0 734.1 Td (B. Built-in cloud storage) Tj ET
+BT /F1 11.0 Tf 74.0 718.2 Td (C. Deterministic task scheduling and timing) Tj ET
+BT /F1 11.0 Tf 74.0 702.2 Td (D. Unlimited memory) Tj ET
+BT /F1 10.0 Tf 74.0 685.7 Td (Answer: C) Tj ET
+BT /F2 11.0 Tf 56.0 659.8 Td (8. Why is CoAP suited to constrained IoT devices?) Tj ET
+BT /F1 11.0 Tf 74.0 643.8 Td (A. It only uses XML messages) Tj ET
+BT /F1 11.0 Tf 74.0 627.9 Td (B. It needs a persistent TCP connection) Tj ET
+BT /F1 11.0 Tf 74.0 611.9 Td (C. It runs over UDP with a compact binary header) Tj ET
+BT /F1 11.0 Tf 74.0 596.0 Td (D. It requires a web browser) Tj ET
+BT /F1 10.0 Tf 74.0 579.5 Td (Answer: C) Tj ET
+BT /F2 11.0 Tf 56.0 553.5 Td (9. Processing data close to where it is produced, instead of in a distant data centre, is) Tj ET
+BT /F2 11.0 Tf 56.0 537.6 Td (called ______ computing. [1 mark]) Tj ET
+BT /F1 10.0 Tf 74.0 521.1 Td (Answer: edge) Tj ET
+BT /F2 11.0 Tf 56.0 495.1 Td (10. MQTT messages are published to named ______, and the highest MQTT QoS level is) Tj ET
+BT /F2 11.0 Tf 56.0 479.2 Td (______. [2 marks]) Tj ET
+BT /F1 10.0 Tf 74.0 462.7 Td (Answer: topics / topic | 2 / two) Tj ET
+BT /F2 11.0 Tf 56.0 436.7 Td (11. A ______ timer automatically resets a microcontroller if its software stops responding.) Tj ET
+BT /F2 11.0 Tf 56.0 420.8 Td ([1 mark]) Tj ET
+BT /F1 10.0 Tf 74.0 404.3 Td (Answer: watchdog) Tj ET
+BT /F2 11.0 Tf 56.0 378.3 Td (12. Describe a layered IoT architecture \(devices, gateway, cloud, application\) for a) Tj ET
+BT /F2 11.0 Tf 56.0 362.4 Td (smart-farming system, and explain where data should be processed and why. [5 marks]) Tj ET
+BT /F2 11.0 Tf 56.0 336.4 Td (13. Discuss three security challenges specific to IoT devices and one mitigation for each.) Tj ET
+BT /F2 11.0 Tf 56.0 320.5 Td ([5 marks]) Tj ET
+0.6 g
+BT /F1 8.0 Tf 56.0 34.0 Td (Exam Shield - Internet of Things and Embedded Systems Question Bank) Tj ET
+BT /F1 8.0 Tf 479.0 34.0 Td (Page 3 of 3) Tj ET
+0 g
+endstream
+endobj
+xref
+0 11
+0000000000 65535 f 
+0000000015 00000 n 
+0000000064 00000 n 
+0000000133 00000 n 
+0000000230 00000 n 
+0000000332 00000 n 
+0000000468 00000 n 
+0000002032 00000 n 
+0000002168 00000 n 
+0000004760 00000 n 
+0000004897 00000 n 
+trailer
+<< /Size 11 /Root 1 0 R >>
+startxref
+7108
+%%EOF

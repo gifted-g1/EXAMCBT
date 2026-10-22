@@ -1,0 +1,143 @@
+%PDF-1.4
+%‚„œ”
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [5 0 R 7 0 R 9 0 R] /Count 3 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 6 0 R >>
+endobj
+6 0 obj
+<< /Length 1543 >>
+stream
+BT /F2 12.0 Tf 56.0 644.6 Td (EXAM SHIELD) Tj ET
+BT /F2 26.0 Tf 56.0 600.9 Td (Human-Computer Interaction and) Tj ET
+BT /F2 26.0 Tf 56.0 563.2 Td (Mobile Development Question Bank) Tj ET
+BT /F1 13.0 Tf 56.0 540.3 Td (Usability, accessibility, interaction design and mobile app platforms.) Tj ET
+BT /F1 11.0 Tf 56.0 506.4 Td (13 questions: 8 multiple choice, 3 fill in the gap and 2 written. Total 21 marks.) Tj ET
+BT /F1 11.0 Tf 56.0 490.4 Td (Edition: with answers \(staff copy, ready to import into Exam Shield\).) Tj ET
+BT /F2 14.0 Tf 56.0 442.1 Td (How this paper is laid out) Tj ET
+BT /F1 10.5 Tf 68.0 424.9 Td (Questions are numbered in one sequence. Multiple-choice options are lettered with a full stop;) Tj ET
+BT /F1 10.5 Tf 68.0 409.7 Td (each multiple-choice question is worth one mark unless stated.) Tj ET
+BT /F1 10.5 Tf 68.0 392.5 Td (Fill-in-the-gap questions show each blank as a line; they earn one mark per blank, shown in square) Tj ET
+BT /F1 10.5 Tf 68.0 377.2 Td (brackets, and are marked automatically.) Tj ET
+BT /F1 10.5 Tf 68.0 360.0 Td (Written questions show their marks in square brackets and are marked by an examiner.) Tj ET
+BT /F1 10.5 Tf 68.0 342.8 Td (To use this paper in Exam Shield, open an exam, choose Questions and then Import from PDF, and) Tj ET
+BT /F1 10.5 Tf 68.0 327.6 Td (upload this file. Review the preview and import.) Tj ET
+0.6 g
+BT /F1 8.0 Tf 56.0 34.0 Td (Exam Shield - Human-Computer Interaction and Mobile Development Question Bank) Tj ET
+BT /F1 8.0 Tf 479.0 34.0 Td (Page 1 of 3) Tj ET
+0 g
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 8 0 R >>
+endobj
+8 0 obj
+<< /Length 2593 >>
+stream
+BT /F2 17.0 Tf 56.0 757.4 Td (Section 1: Human-Computer Interaction and Mobile) Tj ET
+BT /F2 17.0 Tf 56.0 732.7 Td (Development) Tj ET
+BT /F1 10.5 Tf 56.0 715.5 Td (Usability, accessibility, interaction design and mobile app platforms.) Tj ET
+BT /F2 11.0 Tf 56.0 689.5 Td (1. Which usability heuristic says users should always know what the system is doing?) Tj ET
+BT /F1 11.0 Tf 74.0 673.6 Td (A. Flexibility and efficiency of use) Tj ET
+BT /F1 11.0 Tf 74.0 657.6 Td (B. Visibility of system status) Tj ET
+BT /F1 11.0 Tf 74.0 641.7 Td (C. Error prevention) Tj ET
+BT /F1 11.0 Tf 74.0 625.7 Td (D. Aesthetic and minimalist design) Tj ET
+BT /F1 10.0 Tf 74.0 609.2 Td (Answer: B) Tj ET
+BT /F2 11.0 Tf 56.0 583.3 Td (2. The WCAG guidelines are concerned with:) Tj ET
+BT /F1 11.0 Tf 74.0 567.3 Td (A. Encryption strength) Tj ET
+BT /F1 11.0 Tf 74.0 551.4 Td (B. Web accessibility) Tj ET
+BT /F1 11.0 Tf 74.0 535.4 Td (C. Network routing) Tj ET
+BT /F1 11.0 Tf 74.0 519.5 Td (D. Database tuning) Tj ET
+BT /F1 10.0 Tf 74.0 503.0 Td (Answer: B) Tj ET
+BT /F2 11.0 Tf 56.0 477.0 Td (3. A low-fidelity sketch of a screen's layout is called a:) Tj ET
+BT /F1 11.0 Tf 74.0 461.1 Td (A. Sprint) Tj ET
+BT /F1 11.0 Tf 74.0 445.1 Td (B. Compiler) Tj ET
+BT /F1 11.0 Tf 74.0 429.2 Td (C. Wireframe) Tj ET
+BT /F1 11.0 Tf 74.0 413.2 Td (D. Schema) Tj ET
+BT /F1 10.0 Tf 74.0 396.7 Td (Answer: C) Tj ET
+BT /F2 11.0 Tf 56.0 370.8 Td (4. Which language does Google recommend for modern Android apps?) Tj ET
+BT /F1 11.0 Tf 74.0 354.8 Td (A. Objective-C) Tj ET
+BT /F1 11.0 Tf 74.0 338.9 Td (B. Swift) Tj ET
+BT /F1 11.0 Tf 74.0 322.9 Td (C. Kotlin) Tj ET
+BT /F1 11.0 Tf 74.0 307.0 Td (D. Perl) Tj ET
+BT /F1 10.0 Tf 74.0 290.5 Td (Answer: C) Tj ET
+BT /F2 11.0 Tf 56.0 264.5 Td (5. Which framework builds iOS and Android apps from one Dart codebase?) Tj ET
+BT /F1 11.0 Tf 74.0 248.6 Td (A. Laravel) Tj ET
+BT /F1 11.0 Tf 74.0 232.6 Td (B. Django) Tj ET
+BT /F1 11.0 Tf 74.0 216.7 Td (C. React) Tj ET
+BT /F1 11.0 Tf 74.0 200.7 Td (D. Flutter) Tj ET
+BT /F1 10.0 Tf 74.0 184.2 Td (Answer: D) Tj ET
+BT /F2 11.0 Tf 56.0 158.3 Td (6. Usability testing mainly measures:) Tj ET
+BT /F1 11.0 Tf 74.0 142.3 Td (A. Battery chemistry) Tj ET
+BT /F1 11.0 Tf 74.0 126.4 Td (B. Server uptime) Tj ET
+BT /F1 11.0 Tf 74.0 110.4 Td (C. How easily real users complete tasks) Tj ET
+BT /F1 11.0 Tf 74.0 94.5 Td (D. Code coverage) Tj ET
+BT /F1 10.0 Tf 74.0 78.0 Td (Answer: C) Tj ET
+0.6 g
+BT /F1 8.0 Tf 56.0 34.0 Td (Exam Shield - Human-Computer Interaction and Mobile Development Question Bank) Tj ET
+BT /F1 8.0 Tf 479.0 34.0 Td (Page 2 of 3) Tj ET
+0 g
+endstream
+endobj
+9 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 10 0 R >>
+endobj
+10 0 obj
+<< /Length 1823 >>
+stream
+BT /F2 11.0 Tf 56.0 766.0 Td (7. Responsive web design adapts a page's layout using:) Tj ET
+BT /F1 11.0 Tf 74.0 750.1 Td (A. CSS media queries) Tj ET
+BT /F1 11.0 Tf 74.0 734.1 Td (B. Firewall rules) Tj ET
+BT /F1 11.0 Tf 74.0 718.2 Td (C. Cron jobs) Tj ET
+BT /F1 11.0 Tf 74.0 702.2 Td (D. Database triggers) Tj ET
+BT /F1 10.0 Tf 74.0 685.7 Td (Answer: A) Tj ET
+BT /F2 11.0 Tf 56.0 659.8 Td (8. Fitts's law says the time to reach a target depends on:) Tj ET
+BT /F1 11.0 Tf 74.0 643.8 Td (A. Its distance and size) Tj ET
+BT /F1 11.0 Tf 74.0 627.9 Td (B. Network speed) Tj ET
+BT /F1 11.0 Tf 74.0 611.9 Td (C. Screen brightness) Tj ET
+BT /F1 11.0 Tf 74.0 596.0 Td (D. Its colour) Tj ET
+BT /F1 10.0 Tf 74.0 579.5 Td (Answer: A) Tj ET
+BT /F2 11.0 Tf 56.0 553.5 Td (9. Screen readers announce images using the text in the HTML ______ attribute. [1 mark]) Tj ET
+BT /F1 10.0 Tf 74.0 537.0 Td (Answer: alt) Tj ET
+BT /F2 11.0 Tf 56.0 511.1 Td (10. A clickable mock-up used to test a design with users before it is built is a ______. [1 mark]) Tj ET
+BT /F1 10.0 Tf 74.0 494.6 Td (Answer: prototype) Tj ET
+BT /F2 11.0 Tf 56.0 468.6 Td (11. Apple's main programming language for iOS apps is ______. [1 mark]) Tj ET
+BT /F1 10.0 Tf 74.0 452.1 Td (Answer: Swift) Tj ET
+BT /F2 11.0 Tf 56.0 426.2 Td (12. Describe a user-centred design process for a student exam app, including how users) Tj ET
+BT /F2 11.0 Tf 56.0 410.2 Td (are involved at each stage. [5 marks]) Tj ET
+BT /F2 11.0 Tf 56.0 384.3 Td (13. Compare native and cross-platform mobile development in terms of performance, cost) Tj ET
+BT /F2 11.0 Tf 56.0 368.3 Td (and access to device features. [5 marks]) Tj ET
+0.6 g
+BT /F1 8.0 Tf 56.0 34.0 Td (Exam Shield - Human-Computer Interaction and Mobile Development Question Bank) Tj ET
+BT /F1 8.0 Tf 479.0 34.0 Td (Page 3 of 3) Tj ET
+0 g
+endstream
+endobj
+xref
+0 11
+0000000000 65535 f 
+0000000015 00000 n 
+0000000064 00000 n 
+0000000133 00000 n 
+0000000230 00000 n 
+0000000332 00000 n 
+0000000468 00000 n 
+0000002062 00000 n 
+0000002198 00000 n 
+0000004842 00000 n 
+0000004979 00000 n 
+trailer
+<< /Size 11 /Root 1 0 R >>
+startxref
+6854
+%%EOF

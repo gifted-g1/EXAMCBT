@@ -29,7 +29,7 @@ dashboard. Staff run everything from a proctor dashboard.
 | Layer | Technology |
 |---|---|
 | Frontend | React 18, Vite, TypeScript, Tailwind CSS (served by the Go binary via `go:embed`) |
-| API | Go 1.22, Gin, GORM, golang-jwt (HS256), bcrypt |
+| API | Go 1.24, Gin, GORM, golang-jwt (HS256), bcrypt |
 | Realtime | Native WebSocket hub (gorilla/websocket) |
 | AI | Go workers: ONNX Runtime (`onnxruntime_go`, build tag `onnx`) with a pure-Go fallback (pigo + LBP + energy VAD) |
 | Database | MySQL 8 (distributed) or SQLite (standalone) |
@@ -127,7 +127,7 @@ real student IPs. The API trusts only the Docker gateway `172.28.0.1`.
 
 ### Standalone (one machine, no Docker)
 
-Requirements: Go 1.22+ and Node 20+.
+Requirements: Go 1.24+ and Node 20+.
 
 ```bash
 cd web && npm ci && npm run build && cd ..     # builds web/dist, embedded at compile time
@@ -162,7 +162,7 @@ docker compose up -d --build
 docker compose run --rm seed  # optional: mock staff/students (demo/training only)
 ```
 
-Versions used: Go 1.22, Node 20, MySQL 8.0, Redis 7.2, MinIO 2024-10, Nginx 1.27, ONNX Runtime 1.19.0.
+Versions used: Go 1.24, Node 20, MySQL 8.0, Redis 7.2, MinIO 2024-10, Nginx 1.27, ONNX Runtime 1.19.0.
 
 ---
 

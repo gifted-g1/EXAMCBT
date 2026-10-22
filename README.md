@@ -8,7 +8,7 @@ fullscreen exam: no student accounts, no dashboard. Staff run everything from
 a proctor dashboard with a live webcam grid and AI alerts. Every alert is a
 prompt for a human to review; nothing is decided automatically.
 
-**Stack:** React 18 + Vite + TypeScript · Go 1.22 (Gin, GORM, ONNX Runtime) · MySQL 8 · Redis 7 · MinIO · Nginx
+**Stack:** React 18 + Vite + TypeScript · Go 1.24 (Gin, GORM, ONNX Runtime) · MySQL 8 · Redis 7 · MinIO · Nginx
 
 ## Quick start (one laptop, no Docker)
 
@@ -77,6 +77,7 @@ passwords. A DRAFT demo exam is created when `SEED_ON_START=true` or
 - **Questions from a PDF:** Dashboard → exam → Questions → *Import from PDF*. Review the preview, then import. See the format in [docs/sample-questions.pdf](docs/sample-questions.pdf).
 - **Fill-in-the-gap questions:** choose *Fill in the gap*, type `_____` for each blank and enter the accepted answers (alternatives separated by `/`). Marked automatically, with part marks.
 - **Time limit:** set *Time limit (minutes)* when creating an exam (e.g. 25), or *Time limit → Change* on the exam page. Each student gets that long from when they start; they are submitted automatically when it runs out.
+- **Question bank (one PDF, everything):** [docs/question-bank/exam-shield-question-bank.pdf](docs/question-bank/exam-shield-question-bank.pdf) has all 247 questions across 19 computing fields (multiple choice, fill in the gap and written, with answers); import it directly. A student copy without answers and one PDF per subject are alongside it.
 - **Example exam paper:** [docs/exam-paper/computing-comprehensive-exam.pdf](docs/exam-paper/computing-comprehensive-exam.pdf) (30 questions, 100 marks, print-ready). To run it in the app, import [the staff copy](docs/exam-paper/computing-comprehensive-exam-import.pdf).
 - **Marking theory answers:** Dashboard → exam → Marking. Write a marking guide (key points, marks, keywords) to get suggested marks; you confirm every mark. Optional AI suggestions: set `AI_MARKING=true` and `ANTHROPIC_API_KEY` (answers are sent to Anthropic; needs internet). See DOCUMENTATION §7.
 

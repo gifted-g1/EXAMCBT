@@ -36,6 +36,10 @@ func TestBankRoundTripsThroughImporter(t *testing.T) {
 				assert.Equal(t, w.Kind, got.Kind, "%s Q%d", name, w.Number)
 				assert.Equal(t, w.Prompt, got.Prompt, "%s Q%d", name, w.Number)
 				assert.Equal(t, w.Marks, got.Marks, "%s Q%d", name, w.Number)
+				if w.Kind == "GAP" && answers {
+					assert.Equal(t, w.Blanks, got.Blanks, "%s Q%d", name, w.Number)
+					assert.Empty(t, got.Warnings, "%s Q%d", name, w.Number)
+				}
 				if w.Kind == "MCQ" {
 					assert.Equal(t, w.Options, got.Options, "%s Q%d", name, w.Number)
 					if answers {
@@ -52,11 +56,21 @@ func TestBankRoundTripsThroughImporter(t *testing.T) {
 }
 
 func TestBankShape(t *testing.T) {
-	require.Len(t, Subjects, 11)
+	require.Len(t, Subjects, 19)
+	slugs := map[string]bool{}
 	letters := map[int]int{}
 	for _, s := range Subjects {
 		assert.Len(t, s.MCQs, 8, s.Name)
 		assert.Len(t, s.Written, 2, s.Name)
+		assert.Len(t, s.Gaps, 3, s.Name)
+		assert.False(t, slugs[s.Slug], "duplicate slug %s", s.Slug)
+		slugs[s.Slug] = true
+		for _, g := range s.Gaps {
+			assert.Equal(t, len(g.Blanks), strings.Count(g.Q, "______"), g.Q)
+			for _, alts := range g.Blanks {
+				assert.NotEmpty(t, alts, g.Q)
+			}
+		}
 		for _, q := range s.MCQs {
 			assert.Len(t, q.Options, 4, q.Q)
 			for _, o := range q.Options {
@@ -84,7 +98,14 @@ func TestNoQuestionSplitAcrossPages(t *testing.T) {
 		pdf := Render(Subjects, Options{Title: "Question Bank", Answers: answers})
 		lines, _, err := examimport.ExtractLines(pdf)
 		require.NoError(t, err)
+		inQuestions := false // the title and contents pages come first
 		for i, l := range lines {
+			if strings.HasPrefix(l, "Section 1:") {
+				inQuestions = true
+			}
+			if !inQuestions {
+				continue
+			}
 			if !strings.Contains(l, " Page ") || i+1 >= len(lines) {
 				continue
 			}

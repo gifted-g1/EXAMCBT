@@ -16,19 +16,21 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 6 0 R >>
 endobj
 6 0 obj
-<< /Length 1189 >>
+<< /Length 1421 >>
 stream
 BT /F2 12.0 Tf 56.0 644.6 Td (EXAM SHIELD) Tj ET
 BT /F2 26.0 Tf 56.0 600.9 Td (Cyber Security Question Bank) Tj ET
 BT /F1 13.0 Tf 56.0 578.0 Td (Security principles, threats, cryptography and defence.) Tj ET
-BT /F1 11.0 Tf 56.0 544.1 Td (10 questions: 8 multiple choice and 2 written. Total 17 marks.) Tj ET
+BT /F1 11.0 Tf 56.0 544.1 Td (13 questions: 8 multiple choice, 3 fill in the gap and 2 written. Total 20 marks.) Tj ET
 BT /F1 11.0 Tf 56.0 528.1 Td (Edition: with answers \(staff copy, ready to import into Exam Shield\).) Tj ET
 BT /F2 14.0 Tf 56.0 479.8 Td (How this paper is laid out) Tj ET
 BT /F1 10.5 Tf 68.0 462.6 Td (Questions are numbered in one sequence. Multiple-choice options are lettered with a full stop;) Tj ET
 BT /F1 10.5 Tf 68.0 447.4 Td (each multiple-choice question is worth one mark unless stated.) Tj ET
-BT /F1 10.5 Tf 68.0 430.2 Td (Written questions show their marks in square brackets and are marked by an examiner.) Tj ET
-BT /F1 10.5 Tf 68.0 412.9 Td (To use this paper in Exam Shield, open an exam, choose Questions and then Import from PDF, and) Tj ET
-BT /F1 10.5 Tf 68.0 397.7 Td (upload this file. Review the preview and import.) Tj ET
+BT /F1 10.5 Tf 68.0 430.2 Td (Fill-in-the-gap questions show each blank as a line; they earn one mark per blank, shown in square) Tj ET
+BT /F1 10.5 Tf 68.0 414.9 Td (brackets, and are marked automatically.) Tj ET
+BT /F1 10.5 Tf 68.0 397.7 Td (Written questions show their marks in square brackets and are marked by an examiner.) Tj ET
+BT /F1 10.5 Tf 68.0 380.5 Td (To use this paper in Exam Shield, open an exam, choose Questions and then Import from PDF, and) Tj ET
+BT /F1 10.5 Tf 68.0 365.3 Td (upload this file. Review the preview and import.) Tj ET
 0.6 g
 BT /F1 8.0 Tf 56.0 34.0 Td (Exam Shield - Cyber Security Question Bank) Tj ET
 BT /F1 8.0 Tf 479.0 34.0 Td (Page 1 of 3) Tj ET
@@ -89,7 +91,7 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 10 0 R >>
 endobj
 10 0 obj
-<< /Length 1229 >>
+<< /Length 1892 >>
 stream
 BT /F2 11.0 Tf 56.0 766.0 Td (7. A DDoS attack mainly threatens which security goal?) Tj ET
 BT /F1 11.0 Tf 74.0 750.1 Td (A. Confidentiality) Tj ET
@@ -103,9 +105,17 @@ BT /F1 11.0 Tf 74.0 627.9 Td (B. All users have read-only access to everything) 
 BT /F1 11.0 Tf 74.0 611.9 Td (C. Passwords are not required) Tj ET
 BT /F1 11.0 Tf 74.0 596.0 Td (D. Users get only the access they need to do their work) Tj ET
 BT /F1 10.0 Tf 74.0 579.5 Td (Answer: D) Tj ET
-BT /F2 11.0 Tf 56.0 553.5 Td (9. Explain the difference between symmetric and asymmetric encryption, with an example) Tj ET
-BT /F2 11.0 Tf 56.0 537.6 Td (of each. [4 marks]) Tj ET
-BT /F2 11.0 Tf 56.0 511.6 Td (10. Describe the main phases of an incident response plan. [5 marks]) Tj ET
+BT /F2 11.0 Tf 56.0 553.5 Td (9. A ______ filters network traffic according to a set of security rules. [1 mark]) Tj ET
+BT /F1 10.0 Tf 74.0 537.0 Td (Answer: firewall) Tj ET
+BT /F2 11.0 Tf 56.0 511.1 Td (10. Malware that encrypts a victim's files and demands payment for the key is called) Tj ET
+BT /F2 11.0 Tf 56.0 495.1 Td (______. [1 mark]) Tj ET
+BT /F1 10.0 Tf 74.0 478.6 Td (Answer: ransomware) Tj ET
+BT /F2 11.0 Tf 56.0 452.7 Td (11. Simulating a real attack on a system, with the owner's permission, to find weaknesses) Tj ET
+BT /F2 11.0 Tf 56.0 436.7 Td (is called penetration ______. [1 mark]) Tj ET
+BT /F1 10.0 Tf 74.0 420.2 Td (Answer: testing) Tj ET
+BT /F2 11.0 Tf 56.0 394.3 Td (12. Explain the difference between symmetric and asymmetric encryption, with an example) Tj ET
+BT /F2 11.0 Tf 56.0 378.3 Td (of each. [4 marks]) Tj ET
+BT /F2 11.0 Tf 56.0 352.4 Td (13. Describe the main phases of an incident response plan. [5 marks]) Tj ET
 0.6 g
 BT /F1 8.0 Tf 56.0 34.0 Td (Exam Shield - Cyber Security Question Bank) Tj ET
 BT /F1 8.0 Tf 479.0 34.0 Td (Page 3 of 3) Tj ET
@@ -121,12 +131,12 @@ xref
 0000000230 00000 n 
 0000000332 00000 n 
 0000000468 00000 n 
-0000001708 00000 n 
-0000001844 00000 n 
-0000004623 00000 n 
-0000004760 00000 n 
+0000001940 00000 n 
+0000002076 00000 n 
+0000004855 00000 n 
+0000004992 00000 n 
 trailer
 << /Size 11 /Root 1 0 R >>
 startxref
-6041
+6936
 %%EOF

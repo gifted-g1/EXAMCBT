@@ -12,10 +12,11 @@ import (
 // Item is one question in its final, numbered, shuffled form.
 type Item struct {
 	Number  int
-	Kind    string // MCQ | TEXT
+	Kind    string // MCQ | GAP | TEXT
 	Prompt  string
 	Options []string
-	Answer  int // index into Options (MCQ only)
+	Answer  int        // index into Options (MCQ only)
+	Blanks  [][]string // accepted answers per blank (GAP only)
 	Marks   float64
 }
 
@@ -30,6 +31,10 @@ func Items(subjects []Subject) [][]Item {
 			n++
 			opts, ans := shuffle(s.Slug+"|"+q.Q, q.Options, q.Answer)
 			out[si] = append(out[si], Item{Number: n, Kind: "MCQ", Prompt: q.Q, Options: opts, Answer: ans, Marks: 1})
+		}
+		for _, g := range s.Gaps {
+			n++
+			out[si] = append(out[si], Item{Number: n, Kind: "GAP", Prompt: g.Q, Blanks: g.Blanks, Marks: float64(len(g.Blanks))})
 		}
 		for _, w := range s.Written {
 			n++
@@ -65,14 +70,17 @@ type Options struct {
 // Render lays out subjects as a PDF the importer can read back exactly.
 func Render(subjects []Subject, opt Options) []byte {
 	items := Items(subjects)
-	total, mcq, written, marks := 0, 0, 0, 0.0
+	total, mcq, gaps, written, marks := 0, 0, 0, 0, 0.0
 	for _, its := range items {
 		for _, it := range its {
 			total++
 			marks += it.Marks
-			if it.Kind == "MCQ" {
+			switch it.Kind {
+			case "MCQ":
 				mcq++
-			} else {
+			case "GAP":
+				gaps++
+			default:
 				written++
 			}
 		}
@@ -87,14 +95,14 @@ func Render(subjects []Subject, opt Options) []byte {
 	if opt.Subtitle != "" {
 		add(examimport.Line{Text: opt.Subtitle, Size: 13, Gap: 4})
 	}
-	add(examimport.Line{Text: fmt.Sprintf("%d questions: %d multiple choice and %d written. Total %s marks.", total, mcq, written, fmtMarks(marks)), Size: 11, Gap: 18})
+	add(examimport.Line{Text: fmt.Sprintf("%d questions: %d multiple choice, %d fill in the gap and %d written. Total %s marks.", total, mcq, gaps, written, fmtMarks(marks)), Size: 11, Gap: 18})
 	if opt.Answers {
 		add(examimport.Line{Text: "Edition: with answers (staff copy, ready to import into Exam Shield).", Size: 11})
 	} else {
 		add(examimport.Line{Text: "Edition: question paper (no answers shown).", Size: 11})
 	}
 	if len(subjects) > 1 {
-		add(examimport.Line{Text: "Contents", Size: 14, Bold: true, Gap: 28})
+		add(examimport.Line{Text: "Contents", Size: 14, Bold: true, Gap: 28, PageBreak: len(subjects) > 12})
 		for si, s := range subjects {
 			first, last := items[si][0].Number, items[si][len(items[si])-1].Number
 			add(examimport.Line{Text: fmt.Sprintf("Section %d: %s  -  questions %d to %d", si+1, s.Name, first, last), Size: 11, Indent: 12})
@@ -103,6 +111,7 @@ func Render(subjects []Subject, opt Options) []byte {
 	add(examimport.Line{Text: "How this paper is laid out", Size: 14, Bold: true, Gap: 28})
 	for _, p := range []string{
 		"Questions are numbered in one sequence. Multiple-choice options are lettered with a full stop; each multiple-choice question is worth one mark unless stated.",
+		"Fill-in-the-gap questions show each blank as a line; they earn one mark per blank, shown in square brackets, and are marked automatically.",
 		"Written questions show their marks in square brackets and are marked by an examiner.",
 		"To use this paper in Exam Shield, open an exam, choose Questions and then Import from PDF, and upload this file. Review the preview and import.",
 	} {
@@ -114,8 +123,8 @@ func Render(subjects []Subject, opt Options) []byte {
 		add(examimport.Line{Text: s.Blurb, Size: 10.5, Gap: 2})
 		for _, it := range items[si] {
 			prompt := it.Prompt
-			if it.Kind == "TEXT" {
-				prompt += fmt.Sprintf(" [%s marks]", fmtMarks(it.Marks))
+			if it.Kind != "MCQ" {
+				prompt += " " + marksTag(it.Marks)
 			}
 			keep := 0
 			if it.Kind == "MCQ" {
@@ -123,6 +132,8 @@ func Render(subjects []Subject, opt Options) []byte {
 				if opt.Answers {
 					keep++
 				}
+			} else if it.Kind == "GAP" && opt.Answers {
+				keep = 1
 			}
 			add(examimport.Line{Text: fmt.Sprintf("%d. %s", it.Number, prompt), Size: 11, Bold: true, Gap: 10, KeepNext: keep})
 			if it.Kind == "MCQ" {
@@ -133,10 +144,25 @@ func Render(subjects []Subject, opt Options) []byte {
 					add(examimport.Line{Text: fmt.Sprintf("Answer: %c", 'A'+it.Answer), Size: 10, Indent: 18, Gap: 2})
 				}
 			}
+			if it.Kind == "GAP" && opt.Answers {
+				alts := make([]string, len(it.Blanks))
+				for i, a := range it.Blanks {
+					alts[i] = strings.Join(a, " / ")
+				}
+				add(examimport.Line{Text: "Answer: " + strings.Join(alts, " | "), Size: 10, Indent: 18, Gap: 2})
+			}
 		}
 	}
 	footer := "Exam Shield - " + opt.Title
 	return examimport.RenderPDF(L, examimport.RenderOptions{Footer: footer})
+}
+
+// marksTag renders "[1 mark]" or "[4 marks]".
+func marksTag(m float64) string {
+	if m == 1 {
+		return "[1 mark]"
+	}
+	return "[" + fmtMarks(m) + " marks]"
 }
 
 func fmtMarks(m float64) string {

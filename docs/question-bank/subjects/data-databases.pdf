@@ -1,0 +1,144 @@
+%PDF-1.4
+%‚„œ”
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [5 0 R 7 0 R 9 0 R] /Count 3 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 6 0 R >>
+endobj
+6 0 obj
+<< /Length 1489 >>
+stream
+BT /F2 12.0 Tf 56.0 644.6 Td (EXAM SHIELD) Tj ET
+BT /F2 26.0 Tf 56.0 600.9 Td (Data Science and Databases) Tj ET
+BT /F2 26.0 Tf 56.0 563.2 Td (Question Bank) Tj ET
+BT /F1 13.0 Tf 56.0 540.3 Td (SQL, database design, transactions, warehousing and analytics.) Tj ET
+BT /F1 11.0 Tf 56.0 506.4 Td (13 questions: 8 multiple choice, 3 fill in the gap and 2 written. Total 22 marks.) Tj ET
+BT /F1 11.0 Tf 56.0 490.4 Td (Edition: with answers \(staff copy, ready to import into Exam Shield\).) Tj ET
+BT /F2 14.0 Tf 56.0 442.1 Td (How this paper is laid out) Tj ET
+BT /F1 10.5 Tf 68.0 424.9 Td (Questions are numbered in one sequence. Multiple-choice options are lettered with a full stop;) Tj ET
+BT /F1 10.5 Tf 68.0 409.7 Td (each multiple-choice question is worth one mark unless stated.) Tj ET
+BT /F1 10.5 Tf 68.0 392.5 Td (Fill-in-the-gap questions show each blank as a line; they earn one mark per blank, shown in square) Tj ET
+BT /F1 10.5 Tf 68.0 377.2 Td (brackets, and are marked automatically.) Tj ET
+BT /F1 10.5 Tf 68.0 360.0 Td (Written questions show their marks in square brackets and are marked by an examiner.) Tj ET
+BT /F1 10.5 Tf 68.0 342.8 Td (To use this paper in Exam Shield, open an exam, choose Questions and then Import from PDF, and) Tj ET
+BT /F1 10.5 Tf 68.0 327.6 Td (upload this file. Review the preview and import.) Tj ET
+0.6 g
+BT /F1 8.0 Tf 56.0 34.0 Td (Exam Shield - Data Science and Databases Question Bank) Tj ET
+BT /F1 8.0 Tf 479.0 34.0 Td (Page 1 of 3) Tj ET
+0 g
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 8 0 R >>
+endobj
+8 0 obj
+<< /Length 2484 >>
+stream
+BT /F2 17.0 Tf 56.0 757.4 Td (Section 1: Data Science and Databases) Tj ET
+BT /F1 10.5 Tf 56.0 740.1 Td (SQL, database design, transactions, warehousing and analytics.) Tj ET
+BT /F2 11.0 Tf 56.0 714.2 Td (1. Which SQL command removes rows from a table?) Tj ET
+BT /F1 11.0 Tf 74.0 698.2 Td (A. ERASE) Tj ET
+BT /F1 11.0 Tf 74.0 682.3 Td (B. REMOVE) Tj ET
+BT /F1 11.0 Tf 74.0 666.3 Td (C. DROP) Tj ET
+BT /F1 11.0 Tf 74.0 650.4 Td (D. DELETE) Tj ET
+BT /F1 10.0 Tf 74.0 633.9 Td (Answer: D) Tj ET
+BT /F2 11.0 Tf 56.0 607.9 Td (2. Which SQL keyword removes duplicate rows from a query result?) Tj ET
+BT /F1 11.0 Tf 74.0 592.0 Td (A. UNIQUE ROWS) Tj ET
+BT /F1 11.0 Tf 74.0 576.0 Td (B. SINGLE) Tj ET
+BT /F1 11.0 Tf 74.0 560.1 Td (C. ONLY) Tj ET
+BT /F1 11.0 Tf 74.0 544.1 Td (D. DISTINCT) Tj ET
+BT /F1 10.0 Tf 74.0 527.6 Td (Answer: D) Tj ET
+BT /F2 11.0 Tf 56.0 501.7 Td (3. Which normal form removes transitive dependencies?) Tj ET
+BT /F1 11.0 Tf 74.0 485.7 Td (A. Second normal form) Tj ET
+BT /F1 11.0 Tf 74.0 469.8 Td (B. First normal form) Tj ET
+BT /F1 11.0 Tf 74.0 453.8 Td (C. Third normal form) Tj ET
+BT /F1 11.0 Tf 74.0 437.9 Td (D. Unnormalised form) Tj ET
+BT /F1 10.0 Tf 74.0 421.4 Td (Answer: C) Tj ET
+BT /F2 11.0 Tf 56.0 395.4 Td (4. Which join returns every row of the left table plus matching rows from the right table?) Tj ET
+BT /F1 11.0 Tf 74.0 379.5 Td (A. CROSS JOIN) Tj ET
+BT /F1 11.0 Tf 74.0 363.5 Td (B. INNER JOIN) Tj ET
+BT /F1 11.0 Tf 74.0 347.6 Td (C. SELF JOIN) Tj ET
+BT /F1 11.0 Tf 74.0 331.6 Td (D. LEFT JOIN) Tj ET
+BT /F1 10.0 Tf 74.0 315.1 Td (Answer: D) Tj ET
+BT /F2 11.0 Tf 56.0 289.2 Td (5. Which kind of database stores records as flexible JSON-like documents?) Tj ET
+BT /F1 11.0 Tf 74.0 273.2 Td (A. Spreadsheet) Tj ET
+BT /F1 11.0 Tf 74.0 257.3 Td (B. Document database) Tj ET
+BT /F1 11.0 Tf 74.0 241.3 Td (C. Relational database) Tj ET
+BT /F1 11.0 Tf 74.0 225.4 Td (D. Flat file) Tj ET
+BT /F1 10.0 Tf 74.0 208.9 Td (Answer: B) Tj ET
+BT /F2 11.0 Tf 56.0 182.9 Td (6. In data engineering, ETL stands for:) Tj ET
+BT /F1 11.0 Tf 74.0 167.0 Td (A. Evaluate, Test, Launch) Tj ET
+BT /F1 11.0 Tf 74.0 151.0 Td (B. Encrypt, Transfer, Log) Tj ET
+BT /F1 11.0 Tf 74.0 135.1 Td (C. Export, Train, Learn) Tj ET
+BT /F1 11.0 Tf 74.0 119.1 Td (D. Extract, Transform, Load) Tj ET
+BT /F1 10.0 Tf 74.0 102.6 Td (Answer: D) Tj ET
+0.6 g
+BT /F1 8.0 Tf 56.0 34.0 Td (Exam Shield - Data Science and Databases Question Bank) Tj ET
+BT /F1 8.0 Tf 479.0 34.0 Td (Page 2 of 3) Tj ET
+0 g
+endstream
+endobj
+9 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 10 0 R >>
+endobj
+10 0 obj
+<< /Length 1907 >>
+stream
+BT /F2 11.0 Tf 56.0 766.0 Td (7. Which measure of central tendency is least affected by outliers?) Tj ET
+BT /F1 11.0 Tf 74.0 750.1 Td (A. Median) Tj ET
+BT /F1 11.0 Tf 74.0 734.1 Td (B. Range) Tj ET
+BT /F1 11.0 Tf 74.0 718.2 Td (C. Mean) Tj ET
+BT /F1 11.0 Tf 74.0 702.2 Td (D. Variance) Tj ET
+BT /F1 10.0 Tf 74.0 685.7 Td (Answer: A) Tj ET
+BT /F2 11.0 Tf 56.0 659.8 Td (8. An index on a column mainly speeds up:) Tj ET
+BT /F1 11.0 Tf 74.0 643.8 Td (A. Searching and filtering on that column) Tj ET
+BT /F1 11.0 Tf 74.0 627.9 Td (B. Taking backups) Tj ET
+BT /F1 11.0 Tf 74.0 611.9 Td (C. Changing the schema) Tj ET
+BT /F1 11.0 Tf 74.0 596.0 Td (D. Inserting new rows) Tj ET
+BT /F1 10.0 Tf 74.0 579.5 Td (Answer: A) Tj ET
+BT /F2 11.0 Tf 56.0 553.5 Td (9. In SQL, rows that share a value are combined with GROUP ______, and the resulting) Tj ET
+BT /F2 11.0 Tf 56.0 537.6 Td (groups are filtered with ______. [2 marks]) Tj ET
+BT /F1 10.0 Tf 74.0 521.1 Td (Answer: BY | HAVING) Tj ET
+BT /F2 11.0 Tf 56.0 495.1 Td (10. A foreign key enforces ______ integrity between two tables. [1 mark]) Tj ET
+BT /F1 10.0 Tf 74.0 478.6 Td (Answer: referential) Tj ET
+BT /F2 11.0 Tf 56.0 452.7 Td (11. In a data-warehouse star schema, a central ______ table is surrounded by dimension) Tj ET
+BT /F2 11.0 Tf 56.0 436.7 Td (tables. [1 mark]) Tj ET
+BT /F1 10.0 Tf 74.0 420.2 Td (Answer: fact) Tj ET
+BT /F2 11.0 Tf 56.0 394.3 Td (12. Explain the ACID properties of a transaction, with an example of what goes wrong) Tj ET
+BT /F2 11.0 Tf 56.0 378.3 Td (without each. [5 marks]) Tj ET
+BT /F2 11.0 Tf 56.0 352.4 Td (13. Describe the stages of a data-science project from problem definition to deployment,) Tj ET
+BT /F2 11.0 Tf 56.0 336.4 Td (and the role of data cleaning. [5 marks]) Tj ET
+0.6 g
+BT /F1 8.0 Tf 56.0 34.0 Td (Exam Shield - Data Science and Databases Question Bank) Tj ET
+BT /F1 8.0 Tf 479.0 34.0 Td (Page 3 of 3) Tj ET
+0 g
+endstream
+endobj
+xref
+0 11
+0000000000 65535 f 
+0000000015 00000 n 
+0000000064 00000 n 
+0000000133 00000 n 
+0000000230 00000 n 
+0000000332 00000 n 
+0000000468 00000 n 
+0000002008 00000 n 
+0000002144 00000 n 
+0000004679 00000 n 
+0000004816 00000 n 
+trailer
+<< /Size 11 /Root 1 0 R >>
+startxref
+6775
+%%EOF

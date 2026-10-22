@@ -3,9 +3,10 @@
 //	go run ./scripts/questionbank [outdir]      (default docs/question-bank)
 //
 // Output:
-//   exam-shield-question-bank.pdf   all 11 subjects, with answers (import this)
-//   exam-shield-question-paper.pdf  all 11 subjects, no answers (to print/present)
-//   subjects/<subject>.pdf          one subject each, with answers
+//
+//	exam-shield-question-bank.pdf   all 19 subjects, with answers (import this)
+//	exam-shield-question-paper.pdf  all 19 subjects, no answers (to print/present)
+//	subjects/<subject>.pdf          one subject each, with answers
 package main
 
 import (
@@ -26,7 +27,7 @@ func main() {
 		must(os.WriteFile(path, data, 0o644))
 		fmt.Printf("wrote %-60s %6.1f KB\n", path, float64(len(data))/1024)
 	}
-	sub := "Computing question bank: 11 subjects for proctored exams"
+	sub := "Computing question bank: 19 subjects across computing, with multiple-choice, fill-in-the-gap and written questions"
 	write(filepath.Join(dir, "exam-shield-question-bank.pdf"),
 		questionbank.Render(questionbank.Subjects, questionbank.Options{Title: "Question Bank", Subtitle: sub, Answers: true}))
 	write(filepath.Join(dir, "exam-shield-question-paper.pdf"),

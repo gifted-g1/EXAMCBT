@@ -17,7 +17,7 @@ COPY web/ ./
 RUN npm run build
 
 # ---- 2. Go binaries + ONNX Runtime ------------------------------------------
-FROM golang:1.22.8-bookworm AS build
+FROM golang:1.24-bookworm AS build
 ARG ORT_VERSION
 ARG TARGETARCH
 WORKDIR /src

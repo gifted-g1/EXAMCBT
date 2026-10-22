@@ -16,19 +16,21 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 6 0 R >>
 endobj
 6 0 obj
-<< /Length 1171 >>
+<< /Length 1403 >>
 stream
 BT /F2 12.0 Tf 56.0 644.6 Td (EXAM SHIELD) Tj ET
 BT /F2 26.0 Tf 56.0 600.9 Td (Golang Question Bank) Tj ET
 BT /F1 13.0 Tf 56.0 578.0 Td (Concurrency, error handling, types and tooling in Go.) Tj ET
-BT /F1 11.0 Tf 56.0 544.1 Td (10 questions: 8 multiple choice and 2 written. Total 16 marks.) Tj ET
+BT /F1 11.0 Tf 56.0 544.1 Td (13 questions: 8 multiple choice, 3 fill in the gap and 2 written. Total 20 marks.) Tj ET
 BT /F1 11.0 Tf 56.0 528.1 Td (Edition: with answers \(staff copy, ready to import into Exam Shield\).) Tj ET
 BT /F2 14.0 Tf 56.0 479.8 Td (How this paper is laid out) Tj ET
 BT /F1 10.5 Tf 68.0 462.6 Td (Questions are numbered in one sequence. Multiple-choice options are lettered with a full stop;) Tj ET
 BT /F1 10.5 Tf 68.0 447.4 Td (each multiple-choice question is worth one mark unless stated.) Tj ET
-BT /F1 10.5 Tf 68.0 430.2 Td (Written questions show their marks in square brackets and are marked by an examiner.) Tj ET
-BT /F1 10.5 Tf 68.0 412.9 Td (To use this paper in Exam Shield, open an exam, choose Questions and then Import from PDF, and) Tj ET
-BT /F1 10.5 Tf 68.0 397.7 Td (upload this file. Review the preview and import.) Tj ET
+BT /F1 10.5 Tf 68.0 430.2 Td (Fill-in-the-gap questions show each blank as a line; they earn one mark per blank, shown in square) Tj ET
+BT /F1 10.5 Tf 68.0 414.9 Td (brackets, and are marked automatically.) Tj ET
+BT /F1 10.5 Tf 68.0 397.7 Td (Written questions show their marks in square brackets and are marked by an examiner.) Tj ET
+BT /F1 10.5 Tf 68.0 380.5 Td (To use this paper in Exam Shield, open an exam, choose Questions and then Import from PDF, and) Tj ET
+BT /F1 10.5 Tf 68.0 365.3 Td (upload this file. Review the preview and import.) Tj ET
 0.6 g
 BT /F1 8.0 Tf 56.0 34.0 Td (Exam Shield - Golang Question Bank) Tj ET
 BT /F1 8.0 Tf 479.0 34.0 Td (Page 1 of 3) Tj ET
@@ -89,7 +91,7 @@ endobj
 << /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 10 0 R >>
 endobj
 10 0 obj
-<< /Length 1244 >>
+<< /Length 1867 >>
 stream
 BT /F2 11.0 Tf 56.0 766.0 Td (7. What does a select statement do in Go?) Tj ET
 BT /F1 11.0 Tf 74.0 750.1 Td (A. Waits on several channel operations and runs the one that is ready) Tj ET
@@ -103,9 +105,16 @@ BT /F1 11.0 Tf 74.0 627.9 Td (B. gopretty) Tj ET
 BT /F1 11.0 Tf 74.0 611.9 Td (C. gofmt) Tj ET
 BT /F1 11.0 Tf 74.0 596.0 Td (D. golint) Tj ET
 BT /F1 10.0 Tf 74.0 579.5 Td (Answer: C) Tj ET
-BT /F2 11.0 Tf 56.0 553.5 Td (9. Explain the difference between an array and a slice in Go, including how each is passed) Tj ET
-BT /F2 11.0 Tf 56.0 537.6 Td (to a function. [4 marks]) Tj ET
-BT /F2 11.0 Tf 56.0 511.6 Td (10. What is a data race? Describe how the Go race detector helps you find one. [4 marks]) Tj ET
+BT /F2 11.0 Tf 56.0 553.5 Td (9. A Go type satisfies an interface ______: it needs no implements declaration. [1 mark]) Tj ET
+BT /F1 10.0 Tf 74.0 537.0 Td (Answer: implicitly / automatically) Tj ET
+BT /F2 11.0 Tf 56.0 511.1 Td (10. In Go, the zero value of an int is ______ and the zero value of a string is the ______) Tj ET
+BT /F2 11.0 Tf 56.0 495.1 Td (string. [2 marks]) Tj ET
+BT /F1 10.0 Tf 74.0 478.6 Td (Answer: 0 / zero | empty) Tj ET
+BT /F2 11.0 Tf 56.0 452.7 Td (11. A Go module records its path and dependency versions in a file named ______. [1 mark]) Tj ET
+BT /F1 10.0 Tf 74.0 436.2 Td (Answer: go.mod) Tj ET
+BT /F2 11.0 Tf 56.0 410.2 Td (12. Explain the difference between an array and a slice in Go, including how each is) Tj ET
+BT /F2 11.0 Tf 56.0 394.3 Td (passed to a function. [4 marks]) Tj ET
+BT /F2 11.0 Tf 56.0 368.3 Td (13. What is a data race? Describe how the Go race detector helps you find one. [4 marks]) Tj ET
 0.6 g
 BT /F1 8.0 Tf 56.0 34.0 Td (Exam Shield - Golang Question Bank) Tj ET
 BT /F1 8.0 Tf 479.0 34.0 Td (Page 3 of 3) Tj ET
@@ -121,12 +130,12 @@ xref
 0000000230 00000 n 
 0000000332 00000 n 
 0000000468 00000 n 
-0000001690 00000 n 
-0000001826 00000 n 
-0000004455 00000 n 
-0000004592 00000 n 
+0000001922 00000 n 
+0000002058 00000 n 
+0000004687 00000 n 
+0000004824 00000 n 
 trailer
 << /Size 11 /Root 1 0 R >>
 startxref
-5888
+6743
 %%EOF

@@ -33,6 +33,7 @@ type Handlers struct {
 	Students  *services.StudentService
 	Roster    *services.RosterService
 	Proctor   *services.ProctorService
+	Marking   *services.MarkingService
 	Scheduler *services.Scheduler
 	Matcher   *services.FaceMatcher
 	Engine    ai.Engine
@@ -88,6 +89,8 @@ func fail(c *gin.Context, err error) {
 		httpx.Abort(c, http.StatusUnprocessableEntity, "MULTIPLE_FACES", "More than one face is visible. Only you should be in view.")
 	case errors.Is(err, services.ErrOutsideExamNetwork):
 		httpx.Abort(c, http.StatusForbidden, httpx.CodeLANRequired, "You are no longer on the exam network. Reconnect to the hall network.")
+	case errors.Is(err, services.ErrAIMarkingOff):
+		httpx.Abort(c, http.StatusConflict, "AI_MARKING_OFF", err.Error())
 	case errors.Is(err, services.ErrFeatureDisabled):
 		httpx.Abort(c, http.StatusConflict, "FEATURE_DISABLED", err.Error())
 	case errors.Is(err, services.ErrSessionEnded):

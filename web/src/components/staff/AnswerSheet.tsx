@@ -10,6 +10,7 @@ const STATUS: Record<AnswerStatus, { label: string; icon: string; chip: string; 
   incorrect: { label: 'Wrong', icon: '✗', chip: 'bg-rose-100 text-rose-800', ring: 'ring-rose-200' },
   unanswered: { label: 'Not answered', icon: '—', chip: 'bg-slate-100 text-slate-700', ring: 'ring-slate-200' },
   needs_marking: { label: 'Needs marking', icon: '✎', chip: 'bg-amber-100 text-amber-800', ring: 'ring-amber-200' },
+  marked: { label: 'Marked', icon: '✎', chip: 'bg-sky-100 text-sky-800', ring: 'ring-sky-200' },
 }
 
 type Filter = 'all' | 'missed' | AnswerStatus
@@ -62,25 +63,25 @@ export function AnswerSheet({ sessionId, onClose }: { sessionId: number; onClose
           !error && <Spinner />
         ) : (
           <>
-            <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-5">
+            <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-6">
               <div className="col-span-2 rounded-xl bg-slate-900 p-4 text-white sm:col-span-1">
                 <p className="text-xs text-slate-400">Score</p>
                 <p className="text-2xl font-bold tabular-nums">
                   {data.score}
                   <span className="text-base font-normal text-slate-400"> / {data.max_score}</span>
                 </p>
-                {pct != null && <p className="text-xs text-slate-400">{pct}% of auto-marked</p>}
+                {pct != null && <p className="text-xs text-slate-400">{pct}% of marked so far</p>}
               </div>
-              {(['correct', 'incorrect', 'unanswered', 'needs_marking'] as const).map((k) => (
+              {(['correct', 'incorrect', 'unanswered', 'needs_marking', 'marked'] as const).map((k) => (
                 <div key={k} className={`rounded-xl p-4 ring-1 ${STATUS[k].ring}`}>
                   <p className="text-xs text-slate-500">{STATUS[k].label}</p>
-                  <p className="text-2xl font-bold tabular-nums text-slate-900">{data.counts[k] ?? 0}</p>
+                  <p className="text-2xl font-bold tabular-nums text-slate-900">{data.counts?.[k] ?? 0}</p>
                 </div>
               ))}
             </div>
             <p className="mt-2 flex items-center gap-2 text-xs text-slate-500">
               Session <StatusBadge status={data.status} />
-              {data.counts.needs_marking > 0 && <span>· written answers are not included in the score until marked</span>}
+              {data.counts.needs_marking > 0 && <span>· written answers count once an examiner marks them (Marking tab)</span>}
             </p>
 
             <div role="group" aria-label="Filter questions" className="mt-5 flex flex-wrap gap-2 print:hidden">
@@ -90,6 +91,7 @@ export function AnswerSheet({ sessionId, onClose }: { sessionId: number; onClose
                   ['missed', `Missed (${data.counts.incorrect + data.counts.unanswered})`],
                   ['correct', `Correct (${data.counts.correct})`],
                   ['needs_marking', `Needs marking (${data.counts.needs_marking})`],
+                  ['marked', `Marked (${data.counts.marked ?? 0})`],
                 ] as [Filter, string][]
               ).map(([k, label]) => (
                 <button
@@ -161,6 +163,12 @@ function ScriptRow({ item }: { item: ScriptItem }) {
         <div className="mt-3 whitespace-pre-wrap rounded-lg bg-slate-50 p-3 text-sm text-slate-800">
           {item.response || <span className="italic text-slate-400">No answer written.</span>}
         </div>
+      )}
+      {item.comment && (
+        <p className="mt-2 rounded-lg bg-sky-50 px-3 py-2 text-sm text-sky-900">
+          <span className="font-semibold">Examiner: </span>
+          {item.comment}
+        </p>
       )}
     </li>
   )

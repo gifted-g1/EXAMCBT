@@ -7,12 +7,13 @@ import { AlertFeed } from '../AlertFeed'
 import { IPShareCard } from '../IPShareCard'
 import { StudentTile } from '../StudentTile'
 import { Button, Card, ErrorText, Spinner, StatusBadge, errorMessage } from '../ui'
+import { MarkingView } from './MarkingView'
 import { ProctoringSettings } from './ProctoringSettings'
 import { QuestionsEditor } from './QuestionsEditor'
 import { ReportView } from './ReportView'
 import { SessionDrawer } from './SessionDrawer'
 
-type Tab = 'live' | 'access' | 'proctoring' | 'questions' | 'report'
+type Tab = 'live' | 'access' | 'proctoring' | 'questions' | 'marking' | 'report'
 
 export function ExamDetail({ user }: { user: User }) {
   const { id } = useParams()
@@ -55,6 +56,7 @@ export function ExamDetail({ user }: { user: User }) {
     ['access', 'Student access'],
     ['proctoring', 'Proctoring'],
     ['questions', `Questions (${exam.questions_count})`],
+    ['marking', 'Marking'],
     ['report', 'Report'],
   ]
 
@@ -140,6 +142,7 @@ export function ExamDetail({ user }: { user: User }) {
       {tab === 'access' && <AccessTab exam={exam} canManage={canManage} onChanged={load} />}
       {tab === 'proctoring' && <ProctoringSettings exam={exam} canManage={canManage} onChanged={setExam} />}
       {tab === 'questions' && <QuestionsEditor exam={exam} canManage={canManage} onChanged={load} />}
+      {tab === 'marking' && <MarkingView exam={exam} canManage={canManage} />}
       {tab === 'report' && <ReportView exam={exam} />}
       <p className="sr-only">Signed in as {user.full_name}</p>
     </div>

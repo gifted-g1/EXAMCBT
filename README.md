@@ -75,6 +75,7 @@ passwords. A DRAFT demo exam is created when `SEED_ON_START=true` or
   `go run ./cmd/student -matric IFT/22/9203 -name "Awodele Kehinde Gabriel" -department "Information Technology" -photo photo.png`
 - **Whole roster:** Dashboard → Student roster → CSV (`matric_no,full_name[,department]`) + bulk photos named `IFT-22-9203.jpg`.
 - **Questions from a PDF:** Dashboard → exam → Questions → *Import from PDF*. Review the preview, then import. See the format in [docs/sample-questions.pdf](docs/sample-questions.pdf).
+- **Marking theory answers:** Dashboard → exam → Marking. Write a marking guide (key points, marks, keywords) to get suggested marks; you confirm every mark. Optional AI suggestions: set `AI_MARKING=true` and `ANTHROPIC_API_KEY` (answers are sent to Anthropic; needs internet). See DOCUMENTATION §7.
 
 ## Repository layout
 

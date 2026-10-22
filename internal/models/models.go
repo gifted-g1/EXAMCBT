@@ -86,7 +86,19 @@ type Question struct {
 	Options       datatypes.JSONSlice[string] `gorm:"type:json" json:"options"`
 	CorrectOption *int                        `json:"correct_option,omitempty"`
 	Marks         float64                     `gorm:"type:decimal(5,2);not null;default:1" json:"marks"`
-	Exam          *Exam                       `gorm:"constraint:OnDelete:CASCADE" json:"-"`
+	// Written (TEXT) questions only: the examiner's key points and an
+	// optional model answer. Never sent to students.
+	MarkingGuide datatypes.JSONSlice[MarkingPoint] `gorm:"type:json" json:"marking_guide,omitempty"`
+	ModelAnswer  string                            `gorm:"type:text" json:"model_answer,omitempty"`
+	Exam         *Exam                             `gorm:"constraint:OnDelete:CASCADE" json:"-"`
+}
+
+// MarkingPoint is one key point an examiner expects in a written answer,
+// worth Marks, recognised by any of its Keywords.
+type MarkingPoint struct {
+	Point    string   `json:"point"`
+	Marks    float64  `json:"marks"`
+	Keywords []string `json:"keywords"`
 }
 
 type SessionStatus string
@@ -179,13 +191,20 @@ type AIFinding struct {
 }
 
 type Answer struct {
-	ID         int64        `gorm:"primaryKey;autoIncrement" json:"id"`
-	SessionID  int64        `gorm:"not null;uniqueIndex:uq_session_q,priority:1" json:"session_id"`
-	QuestionID int64        `gorm:"not null;uniqueIndex:uq_session_q,priority:2;index" json:"question_id"`
-	Response   string       `gorm:"type:text" json:"response"`
-	SavedAt    time.Time    `gorm:"not null" json:"saved_at"`
-	Session    *ExamSession `gorm:"constraint:OnDelete:CASCADE" json:"-"`
-	Question   *Question    `gorm:"constraint:OnDelete:CASCADE" json:"-"`
+	ID         int64     `gorm:"primaryKey;autoIncrement" json:"id"`
+	SessionID  int64     `gorm:"not null;uniqueIndex:uq_session_q,priority:1" json:"session_id"`
+	QuestionID int64     `gorm:"not null;uniqueIndex:uq_session_q,priority:2;index" json:"question_id"`
+	Response   string    `gorm:"type:text" json:"response"`
+	SavedAt    time.Time `gorm:"not null" json:"saved_at"`
+	// Examiner marking of written answers. AwardedMarks stays nil until a
+	// human confirms a mark; Suggestion holds the last AI suggestion.
+	AwardedMarks  *float64          `gorm:"type:decimal(5,2)" json:"awarded_marks,omitempty"`
+	MarkedBy      *int64            `json:"marked_by,omitempty"`
+	MarkedAt      *time.Time        `json:"marked_at,omitempty"`
+	MarkerComment string            `gorm:"type:text" json:"marker_comment,omitempty"`
+	Suggestion    datatypes.JSONMap `gorm:"type:json" json:"suggestion,omitempty"`
+	Session       *ExamSession      `gorm:"constraint:OnDelete:CASCADE" json:"-"`
+	Question      *Question         `gorm:"constraint:OnDelete:CASCADE" json:"-"`
 }
 
 // RefreshToken stores the SHA-256 of an opaque refresh token. Tokens in the

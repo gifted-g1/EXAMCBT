@@ -100,6 +100,11 @@ func NewRouter(shutdown context.Context, a *App) *gin.Engine {
 	s.POST("/exams/:id/violations/:vid/review", h.ReviewViolation)
 	s.GET("/exams/:id/report", h.Report)
 	s.GET("/exams/:id/item-analysis", h.ItemAnalysis)
+	s.GET("/exams/:id/marking", h.MarkingOverview)
+	s.GET("/exams/:id/marking/:qid", h.MarkingScripts)
+	s.POST("/exams/:id/marking/:qid/ai-suggest", middleware.RateLimit(a.Redis, "ai-mark", 30, time.Hour, middleware.ByIP, log), h.AISuggest)
+	s.PUT("/exams/:id/questions/:qid/guide", h.SetMarkingGuide)
+	s.PUT("/exams/:id/answers/:aid/mark", h.MarkAnswer)
 	s.POST("/exams/:id/purge-media", admin, h.PurgeMedia)
 
 	s.GET("/sessions/:sid", h.SessionDetail)

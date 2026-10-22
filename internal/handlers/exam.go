@@ -279,7 +279,7 @@ func (h *Handlers) PurgeMedia(c *gin.Context) {
 func (h *Handlers) System(c *gin.Context) {
 	card := gin.H{"mode": h.Cfg.Mode, "ai_backends": h.Engine.Backends(),
 		"face_match_threshold": h.Cfg.FaceMatchThreshold, "face_match_assurance": h.Matcher.Assurance(),
-		"redis_embedded": h.Redis.Embedded(), "retention_days": h.Cfg.RetentionDays,
+		"redis_embedded": h.Redis.Embedded(), "retention_days": h.Cfg.RetentionDays, "ai_marking": h.Cfg.AIMarking,
 		"client_ip": middleware.ClientIP(c).String()}
 	c.JSON(http.StatusOK, card)
 }

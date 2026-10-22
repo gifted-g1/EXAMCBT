@@ -30,6 +30,10 @@ services:
         value: https
       - key: PUBLIC_URL
         sync: false              # set to your service URL, e.g. https://examcbt.onrender.com
+      - key: AI_MARKING
+        value: "false"           # set "true" (and ANTHROPIC_API_KEY) for AI-suggested theory marks
+      - key: ANTHROPIC_API_KEY
+        sync: false
       - key: AI_WORKERS
         value: "2"
     # disk:

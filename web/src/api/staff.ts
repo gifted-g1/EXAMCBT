@@ -1,7 +1,12 @@
 import { ApiError, request, type RequestOptions } from './client'
 import type {
   AccessCard,
+  AISuggestResult,
   AnswerScript,
+  MarkingOverview,
+  MarkingPoint,
+  MarkResult,
+  QuestionScripts,
   QuestionStat,
   Proctoring,
   Exam,
@@ -149,6 +154,14 @@ export const staffApi = {
   answerScript: (sid: number) => authed<AnswerScript>(`${s}/sessions/${sid}/answers`),
   itemAnalysis: (id: number) =>
     authed<{ candidates: number; questions: QuestionStat[] | null }>(`${s}/exams/${id}/item-analysis`),
+  marking: (id: number) => authed<MarkingOverview>(`${s}/exams/${id}/marking`),
+  markingScripts: (id: number, qid: number) => authed<QuestionScripts>(`${s}/exams/${id}/marking/${qid}`),
+  setMarkingGuide: (id: number, qid: number, points: MarkingPoint[], model_answer: string) =>
+    authed<Question>(`${s}/exams/${id}/questions/${qid}/guide`, { method: 'PUT', body: { points, model_answer } }),
+  aiSuggest: (id: number, qid: number, answer_ids?: number[]) =>
+    authed<AISuggestResult>(`${s}/exams/${id}/marking/${qid}/ai-suggest`, { method: 'POST', body: { answer_ids } }),
+  markAnswer: (id: number, aid: number, marks: number | null, comment: string, source: 'manual' | 'keyword' | 'ai') =>
+    authed<MarkResult>(`${s}/exams/${id}/answers/${aid}/mark`, { method: 'PUT', body: { marks, comment, source } }),
   reportCSV: async (id: number) => {
     const url = await authedBlob(`${s}/exams/${id}/report?format=csv`)
     return url

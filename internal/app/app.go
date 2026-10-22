@@ -162,11 +162,17 @@ func Build(ctx context.Context, cfg *config.Config, log *slog.Logger) (*App, err
 	}
 
 	a.Gate = middleware.NewLANGate(cfg, a.LANNets, exams, a.Redis, log)
+	var aiMarker services.AIMarker
+	if cfg.AIMarking {
+		aiMarker = services.NewClaudeMarker(cfg.AIMarkingModel)
+		log.Info("AI-suggested marks enabled; written answers are sent to the Anthropic API when an examiner asks", "model", cfg.AIMarkingModel)
+	}
 	a.Handlers = &handlers.Handlers{
 		Cfg: cfg, Repo: repo, Redis: a.Redis, Blobs: a.Blobs, Tokens: a.Tokens,
 		Auth:  services.NewAuthService(repo, a.Redis, a.Tokens, cfg.RefreshTTL, cfg.BcryptCost),
 		Exams: exams, Students: students, Roster: services.NewRosterService(repo, a.Blobs, log),
 		Proctor: services.NewProctorService(repo, recorder, a.Hub), Scheduler: a.scheduler,
+		Marking: services.NewMarkingService(repo, aiMarker),
 		Matcher: matcher, Engine: a.Engine, Hub: a.Hub, Log: log,
 	}
 	ok = true

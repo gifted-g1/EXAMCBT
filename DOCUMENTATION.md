@@ -202,6 +202,9 @@ Versions used: Go 1.22, Node 20, MySQL 8.0, Redis 7.2, MinIO 2024-10, Nginx 1.27
 | `AI_BACKEND` | `auto` | `auto`, `onnx`, or `go` |
 | `AI_WORKERS` | `4` | Inference goroutines per worker |
 | `AI_IN_PROCESS` | `true` in standalone | Run the worker inside the API |
+| `AI_MARKING` | `false` | Let examiners request AI-suggested marks for written answers. Also needs `ANTHROPIC_API_KEY`; ignored without it |
+| `ANTHROPIC_API_KEY` | — | Anthropic API key, used only for AI-suggested marks |
+| `AI_MARKING_MODEL` | `claude-opus-5-5` | Claude model used for suggestions |
 | `MODEL_DIR` / `ONNXRUNTIME_LIB` / `ONNX_USE_CUDA` | `models` / auto / `false` | ONNX settings |
 | `RETENTION_DAYS` | `30` | Media and AI findings purged this long after an exam closes |
 | `CONSENT_VERSION` | `2026-10` | Recorded with each student's consent |
@@ -314,6 +317,23 @@ curl -s -X POST $B/api/staff/students/import -H "Authorization: Bearer $TOKEN" -
 # What a non-LAN client gets
 curl -s $B/api/student/gate   # → 403 {"error":"LAN_REQUIRED",...}
 ```
+
+### Theory (written-answer) marking
+
+Multiple-choice questions are marked automatically. Written (`TEXT`) answers are **never** scored by the machine: an examiner confirms every mark. The exam's *Marking* tab offers two aids:
+
+1. **Marking guide + keyword suggestion (always available, works offline).** For each written question the examiner lists key points, the marks for each, and keywords that show the point was made. Each answer is matched case-insensitively on whole words, with light stemming so *encrypted* matches *encrypt*. Matched words are highlighted, and the suggestion is the total of the points found, capped at the question's marks. Keywords miss correct answers worded differently, so the examiner reads each answer and accepts or changes the mark.
+2. **AI-suggested marks (opt-in, needs internet).** With `AI_MARKING=true` and `ANTHROPIC_API_KEY` set, *Get AI suggestions* sends the question, guide, model answer and answer text to the Anthropic API. Names, matric numbers and photos are never sent. The model is `AI_MARKING_MODEL` (default `claude-opus-5-5`, with server-side fallback if it declines). Claude returns a mark, a short reason and the points made. The mark is clamped to the question's maximum and stored only as a suggestion. The prompt tells the model to ignore instructions written inside answers. This cannot run on an offline exam-hall LAN: mark there with keywords, or later on a connected server. Check your institution's data-protection rules before enabling it.
+
+While marking, candidates appear as *Candidate 1, 2, …*. Saving a mark recomputes the student's total, and the report, CSV and answer sheet use it immediately. Only the exam's owner or an admin can save marks or edit guides; each mark is audited with the suggestion that was accepted. Proctors can view marking but not change it.
+
+| Method & path | Purpose |
+|---|---|
+| `GET /api/staff/exams/{id}/marking` | Written questions, guides, marked/answered counts, `ai_enabled` |
+| `PUT /api/staff/exams/{id}/questions/{qid}/guide` | `{points:[{point,marks,keywords}], model_answer}`. Allowed after the exam has run |
+| `GET /api/staff/exams/{id}/marking/{qid}` | Anonymous answers with keyword and AI suggestions |
+| `POST /api/staff/exams/{id}/marking/{qid}/ai-suggest` | `{answer_ids?}`. Up to 40 unmarked answers per call; `409 AI_MARKING_OFF` when disabled |
+| `PUT /api/staff/exams/{id}/answers/{aid}/mark` | `{marks, comment, source}`. `marks: null` clears the mark |
 
 ---
 
@@ -569,6 +589,9 @@ Docker publishes MySQL, Redis and MinIO nowhere. The API is published on `127.0.
 ---
 
 ## 15. Changelog
+
+### 1.1.0 — 2026-10-22
+- Theory marking: marking guides with keyword-suggested marks, opt-in AI-suggested marks (Claude), an anonymous marking screen and examiner comments. Marked written answers count toward scores, reports and answer sheets. Migration `000004_theory_marking`.
 
 ### 1.0.0 — 2026-10-09
 - Complete rebuild on the v3 stack: Gin + GORM + MySQL/SQLite, Redis Streams, MinIO, React/TypeScript. The previous mux/JSX implementation was removed; it remains in git history at `92152b7`.

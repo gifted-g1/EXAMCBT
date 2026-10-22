@@ -4,6 +4,7 @@ import (
 	"context"
 	"time"
 
+	"gorm.io/datatypes"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 
@@ -246,4 +247,32 @@ func (r *Repo) AnswersForExam(ctx context.Context, examID int64) ([]models.Answe
 		Joins("JOIN exam_sessions s ON s.id = a.session_id").
 		Where("s.exam_id = ?", examID).Scan(&out).Error
 	return out, err
+}
+
+// --- Theory marking -------------------------------------------------------------
+
+func (r *Repo) AnswerByID(ctx context.Context, id int64) (*models.Answer, error) {
+	var a models.Answer
+	if err := r.q(ctx).First(&a, id).Error; err != nil {
+		return nil, notFound(err)
+	}
+	return &a, nil
+}
+
+// SetAnswerMark records (or, with nil marks, clears) an examiner's mark.
+func (r *Repo) SetAnswerMark(ctx context.Context, id int64, marks *float64, comment string, by int64) error {
+	now := time.Now().UTC()
+	upd := map[string]any{"awarded_marks": marks, "marker_comment": comment, "marked_by": by, "marked_at": now}
+	if marks == nil {
+		upd["marked_by"], upd["marked_at"] = nil, nil
+	}
+	return r.q(ctx).Model(&models.Answer{}).Where("id = ?", id).Updates(upd).Error
+}
+
+func (r *Repo) SetAnswerSuggestion(ctx context.Context, id int64, s datatypes.JSONMap) error {
+	return r.q(ctx).Model(&models.Answer{}).Where("id = ?", id).Update("suggestion", s).Error
+}
+
+func (r *Repo) SetScore(ctx context.Context, sessionID int64, score float64) error {
+	return r.q(ctx).Model(&models.ExamSession{}).Where("id = ?", sessionID).UpdateColumn("score", score).Error
 }

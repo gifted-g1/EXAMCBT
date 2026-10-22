@@ -18,16 +18,20 @@ const (
 
 // markAnswer is the single marking rule used by grading, answer sheets and
 // question analysis, so they can never disagree. Written answers are never
-// auto-marked (awarded is nil until an examiner marks them).
-func markAnswer(q models.Question, response string, answered bool) (status string, awarded *float64) {
+// auto-marked: awarded stays nil until an examiner confirms a mark.
+func markAnswer(q models.Question, a *models.Answer) (status string, awarded *float64) {
 	zero := 0.0
-	if !answered || strings.TrimSpace(response) == "" {
+	if a == nil || strings.TrimSpace(a.Response) == "" {
 		return StatusUnanswered, &zero
 	}
 	if q.Kind != models.QuestionMCQ || q.CorrectOption == nil {
+		if a.AwardedMarks != nil {
+			m := *a.AwardedMarks
+			return StatusMarked, &m
+		}
 		return StatusNeedsMarking, nil
 	}
-	if response == strconv.Itoa(*q.CorrectOption) {
+	if a.Response == strconv.Itoa(*q.CorrectOption) {
 		m := q.Marks
 		return StatusCorrect, &m
 	}
@@ -46,22 +50,24 @@ type ScriptItem struct {
 	Status        string              `json:"status"`
 	Marks         float64             `json:"marks"`
 	Awarded       *float64            `json:"awarded"`
+	Comment       string              `json:"comment,omitempty"` // examiner's note on a written answer
 }
 
 // AnswerScript is a student's marked answer sheet. Staff only: it contains
 // the correct answers.
 type AnswerScript struct {
-	SessionID     int64                `json:"session_id"`
-	ExamID        int64                `json:"exam_id"`
-	ExamTitle     string               `json:"exam_title"`
-	MatricNo      string               `json:"matric_no"`
-	FullName      string               `json:"full_name"`
-	Status        models.SessionStatus `json:"status"`
-	Score         float64              `json:"score"`
-	MaxScore      float64              `json:"max_score"`
-	AutoMarkedMax float64              `json:"auto_marked_max"`
-	Counts        map[string]int       `json:"counts"`
-	Items         []ScriptItem         `json:"items"`
+	SessionID int64                `json:"session_id"`
+	ExamID    int64                `json:"exam_id"`
+	ExamTitle string               `json:"exam_title"`
+	MatricNo  string               `json:"matric_no"`
+	FullName  string               `json:"full_name"`
+	Status    models.SessionStatus `json:"status"`
+	Score     float64              `json:"score"`
+	MaxScore  float64              `json:"max_score"`
+	// Marks available on questions marked so far (MCQ + marked written).
+	AutoMarkedMax float64        `json:"auto_marked_max"`
+	Counts        map[string]int `json:"counts"`
+	Items         []ScriptItem   `json:"items"`
 }
 
 func (s *ProctorService) AnswerScript(ctx context.Context, sessionID int64) (*AnswerScript, error) {
@@ -81,24 +87,25 @@ func (s *ProctorService) AnswerScript(ctx context.Context, sessionID int64) (*An
 	if err != nil {
 		return nil, err
 	}
-	byQ := make(map[int64]string, len(ans))
-	for _, a := range ans {
-		byQ[a.QuestionID] = a.Response
-	}
+	byQ := answersByQuestion(ans)
 	out := &AnswerScript{SessionID: sess.ID, ExamID: e.ID, ExamTitle: e.Title, Status: sess.Status,
-		Counts: map[string]int{StatusCorrect: 0, StatusIncorrect: 0, StatusUnanswered: 0, StatusNeedsMarking: 0},
+		Counts: map[string]int{StatusCorrect: 0, StatusIncorrect: 0, StatusUnanswered: 0, StatusNeedsMarking: 0, StatusMarked: 0},
 		Items:  []ScriptItem{}}
 	if sess.Student != nil {
 		out.MatricNo, out.FullName = sess.Student.MatricNo, sess.Student.FullName
 	}
 	for i, q := range qs {
-		resp, answered := byQ[q.ID]
-		st, awarded := markAnswer(q, resp, answered)
-		out.Items = append(out.Items, ScriptItem{QuestionID: q.ID, Number: i + 1, Kind: q.Kind, Prompt: q.Prompt,
-			Options: q.Options, CorrectOption: q.CorrectOption, Response: resp, Status: st, Marks: q.Marks, Awarded: awarded})
+		a := byQ[q.ID]
+		st, awarded := markAnswer(q, a)
+		it := ScriptItem{QuestionID: q.ID, Number: i + 1, Kind: q.Kind, Prompt: q.Prompt,
+			Options: q.Options, CorrectOption: q.CorrectOption, Status: st, Marks: q.Marks, Awarded: awarded}
+		if a != nil {
+			it.Response, it.Comment = a.Response, a.MarkerComment
+		}
+		out.Items = append(out.Items, it)
 		out.Counts[st]++
 		out.MaxScore += q.Marks
-		if q.Kind == models.QuestionMCQ {
+		if q.Kind == models.QuestionMCQ || st == StatusMarked {
 			out.AutoMarkedMax += q.Marks
 		}
 		if awarded != nil {
@@ -106,6 +113,14 @@ func (s *ProctorService) AnswerScript(ctx context.Context, sessionID int64) (*An
 		}
 	}
 	return out, nil
+}
+
+func answersByQuestion(ans []models.Answer) map[int64]*models.Answer {
+	m := make(map[int64]*models.Answer, len(ans))
+	for i := range ans {
+		m[ans[i].QuestionID] = &ans[i]
+	}
+	return m
 }
 
 // QuestionStat is the class-wide result for one question.
@@ -141,9 +156,9 @@ func (s *ProctorService) ItemAnalysis(ctx context.Context, e *models.Exam) ([]Qu
 		return nil, 0, err
 	}
 	type key struct{ s, q int64 }
-	resp := make(map[key]string, len(ans))
-	for _, a := range ans {
-		resp[key{a.SessionID, a.QuestionID}] = a.Response
+	resp := make(map[key]*models.Answer, len(ans))
+	for i := range ans {
+		resp[key{ans[i].SessionID, ans[i].QuestionID}] = &ans[i]
 	}
 	stats := make([]QuestionStat, len(qs))
 	for i, q := range qs {
@@ -152,8 +167,8 @@ func (s *ProctorService) ItemAnalysis(ctx context.Context, e *models.Exam) ([]Qu
 			st.OptionCounts = make([]int, len(q.Options))
 		}
 		for _, r := range rows {
-			v, answered := resp[key{r.ID, q.ID}]
-			status, _ := markAnswer(q, v, answered)
+			a := resp[key{r.ID, q.ID}]
+			status, _ := markAnswer(q, a)
 			switch status {
 			case StatusCorrect:
 				st.Correct++
@@ -164,7 +179,7 @@ func (s *ProctorService) ItemAnalysis(ctx context.Context, e *models.Exam) ([]Qu
 			}
 			if status != StatusUnanswered {
 				st.Answered++
-				if idx, err := strconv.Atoi(v); err == nil && idx >= 0 && idx < len(st.OptionCounts) {
+				if idx, err := strconv.Atoi(a.Response); err == nil && idx >= 0 && idx < len(st.OptionCounts) {
 					st.OptionCounts[idx]++
 				}
 			}

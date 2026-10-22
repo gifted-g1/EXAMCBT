@@ -652,14 +652,10 @@ func grade(ctx context.Context, tx *repositories.Repo, sess *models.ExamSession)
 	if err != nil {
 		return 0, err
 	}
-	byQ := make(map[int64]string, len(ans))
-	for _, a := range ans {
-		byQ[a.QuestionID] = a.Response
-	}
+	byQ := answersByQuestion(ans)
 	var score float64
 	for _, q := range qs {
-		r, ok := byQ[q.ID]
-		if _, awarded := markAnswer(q, r, ok); awarded != nil {
+		if _, awarded := markAnswer(q, byQ[q.ID]); awarded != nil {
 			score += *awarded
 		}
 	}

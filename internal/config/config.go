@@ -95,6 +95,11 @@ type Config struct {
 	ONNXUseCUDA bool
 	InProcessAI bool
 
+	// Optional AI-suggested marks for written answers (off by default).
+	// Needs AI_MARKING=true and ANTHROPIC_API_KEY; answers leave the server.
+	AIMarking      bool
+	AIMarkingModel string
+
 	// Compliance
 	RetentionDays  int
 	ConsentVersion string
@@ -164,6 +169,9 @@ func Load() (*Config, error) {
 		ModelDir:    str("MODEL_DIR", "models"),
 		ONNXLibPath: str("ONNXRUNTIME_LIB", ""),
 		ONNXUseCUDA: boolean("ONNX_USE_CUDA", false),
+
+		AIMarking:      boolean("AI_MARKING", false) && os.Getenv("ANTHROPIC_API_KEY") != "",
+		AIMarkingModel: str("AI_MARKING_MODEL", "claude-opus-5-5"),
 
 		RetentionDays:  integer("RETENTION_DAYS", 30),
 		ConsentVersion: str("CONSENT_VERSION", "2026-10"),

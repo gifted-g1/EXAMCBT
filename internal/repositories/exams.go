@@ -172,3 +172,9 @@ func (r *Repo) SetExamProctoring(ctx context.Context, id int64, p models.Proctor
 	}
 	return res.Error
 }
+
+// SetMarkingGuide saves a written question's marking guide and model answer.
+func (r *Repo) SetMarkingGuide(ctx context.Context, q *models.Question) error {
+	return r.q(ctx).Model(&models.Question{}).Where("id = ? AND exam_id = ?", q.ID, q.ExamID).
+		Select("marking_guide", "model_answer").Updates(q).Error
+}

@@ -37,6 +37,15 @@ export interface Question {
   options: string[] | null
   correct_option?: number | null
   marks: number
+  marking_guide?: MarkingPoint[] | null
+  model_answer?: string
+}
+
+/** One key point an examiner expects in a written answer. */
+export interface MarkingPoint {
+  point: string
+  marks: number
+  keywords: string[]
 }
 
 export interface Student {
@@ -168,7 +177,7 @@ export interface Proctoring {
 export const proctoringNeedsMedia = (p?: Proctoring) =>
   !p || p.face_verification || p.camera_monitoring || p.audio_monitoring
 
-export type AnswerStatus = 'correct' | 'incorrect' | 'unanswered' | 'needs_marking'
+export type AnswerStatus = 'correct' | 'incorrect' | 'unanswered' | 'needs_marking' | 'marked'
 
 export interface ScriptItem {
   question_id: number
@@ -181,6 +190,7 @@ export interface ScriptItem {
   status: AnswerStatus
   marks: number
   awarded: number | null
+  comment?: string
 }
 
 /** A student's marked answer sheet (staff only). */
@@ -213,4 +223,77 @@ export interface QuestionStat {
   option_counts?: number[]
   common_wrong?: number | null
   percent_right: number | null
+}
+
+// --- Theory marking ------------------------------------------------------------
+
+export interface MarkingQuestion {
+  question_id: number
+  number: number
+  prompt: string
+  marks: number
+  marking_guide: MarkingPoint[]
+  model_answer: string
+  answered: number
+  marked: number
+}
+
+export interface MarkingOverview {
+  ai_enabled: boolean
+  questions: MarkingQuestion[]
+}
+
+export interface PointMatch {
+  index: number
+  point: string
+  marks: number
+  met: boolean
+  matched: string[]
+}
+
+export interface KeywordSuggestion {
+  marks: number
+  max: number
+  points: PointMatch[]
+  highlights: string[]
+}
+
+export interface AISuggestion {
+  marks: number
+  reason: string
+  points_met: number[] | null
+  model: string
+  at: string
+}
+
+/** One anonymous candidate's answer to the question being marked. */
+export interface MarkingScript {
+  answer_id: number
+  candidate: string
+  response: string
+  awarded: number | null
+  comment: string
+  marked_at: string | null
+  keyword_suggestion: KeywordSuggestion | null
+  ai_suggestion: AISuggestion | null
+  submitted: boolean
+}
+
+export interface QuestionScripts {
+  question: MarkingQuestion
+  scripts: MarkingScript[]
+}
+
+export interface MarkResult {
+  answer_id: number
+  awarded: number | null
+  session_id: number
+  session_score: number | null
+}
+
+export interface AISuggestResult {
+  requested: number
+  suggested: number
+  failed: number
+  errors?: string[]
 }

@@ -24,6 +24,7 @@ import (
 
 	"examshield/internal/config"
 	"examshield/internal/models"
+	"examshield/internal/services"
 )
 
 type harness struct {
@@ -698,4 +699,130 @@ func TestAnswerScriptAndItemAnalysis(t *testing.T) {
 	assert.Equal(t, 200, h.do(http.MethodGet, fmt.Sprintf("/api/staff/sessions/%d/answers", sidA), nil, nil).Code)
 	h.token = ""
 	assert.Equal(t, http.StatusUnauthorized, h.do(http.MethodGet, fmt.Sprintf("/api/staff/sessions/%d/answers", sidA), nil, nil).Code)
+}
+
+type fakeMarker struct{ calls int }
+
+func (f *fakeMarker) Suggest(_ context.Context, req services.AIMarkRequest) (*services.AISuggestion, error) {
+	f.calls++
+	// Over the maximum on purpose: the service must clamp it.
+	return &services.AISuggestion{Marks: req.MaxMarks + 3, Reason: "Covers every point.", PointsMet: []int{0, 1}, Model: "fake", At: time.Now()}, nil
+}
+
+func TestTheoryMarking(t *testing.T) {
+	h := newHarness(t)
+	h.login("20010078", "MUSTAPHA")
+	now := time.Now().UTC()
+	r := h.do(http.MethodPost, "/api/staff/exams", map[string]any{"title": "Theory", "starts_at": now.Add(-time.Minute),
+		"ends_at": now.Add(time.Hour), "lan_cidr": "127.0.0.0/8", "proctoring": map[string]bool{"face_verification": false}}, nil)
+	examID := num(r.Body["id"])
+	r = h.do(http.MethodPost, fmt.Sprintf("/api/staff/exams/%d/questions", examID), map[string]any{"questions": []map[string]any{
+		{"prompt": "Pick", "options": []string{"a", "b"}, "correct_option": 0, "marks": 2},
+		{"kind": "TEXT", "prompt": "Explain encryption.", "marks": 10},
+	}}, nil)
+	qs := r.Body["questions"].([]any)
+	mcq, text := num(qs[0].(map[string]any)["id"]), num(qs[1].(map[string]any)["id"])
+	guidePath := fmt.Sprintf("/api/staff/exams/%d/questions/%d/guide", examID, text)
+
+	// Guide validation: points may not add up to more than the question.
+	r = h.do(http.MethodPut, guidePath, map[string]any{"points": []map[string]any{{"point": "x", "marks": 11}}}, nil)
+	assert.Equal(t, 400, r.Code, r.Raw)
+	r = h.do(http.MethodPut, fmt.Sprintf("/api/staff/exams/%d/questions/%d/guide", examID, mcq), map[string]any{"points": []map[string]any{{"point": "x", "marks": 1}}}, nil)
+	assert.Equal(t, 400, r.Code, "MCQ questions have no marking guide")
+	r = h.do(http.MethodPut, guidePath, map[string]any{"model_answer": "Encryption turns plaintext into ciphertext.", "points": []map[string]any{
+		{"point": "Defines encryption", "marks": 4, "keywords": []string{"ciphertext", "encrypt"}},
+		{"point": "Names an algorithm", "marks": 6, "keywords": []string{"AES", "RSA"}},
+	}}, nil)
+	require.Equal(t, 200, r.Code, r.Raw)
+	require.Equal(t, 200, h.do(http.MethodPost, fmt.Sprintf("/api/staff/exams/%d/status", examID), map[string]string{"action": "open"}, nil).Code)
+
+	sit := func(matric, device, answer string) {
+		r := h.multipart("/api/student/verify", map[string]string{"matric_no": matric, "consent": "true"}, nil, fp(device))
+		require.Equal(t, 200, r.Code, r.Raw)
+		st := h.do(http.MethodGet, "/api/student/session", nil, fp(device))
+		assert.NotContains(t, st.Raw, "ciphertext", "the marking guide never reaches students")
+		require.Equal(t, 200, h.do(http.MethodPut, "/api/student/answers", map[string]any{"question_id": mcq, "response": "0"}, fp(device)).Code)
+		require.Equal(t, 200, h.do(http.MethodPut, "/api/student/answers", map[string]any{"question_id": text, "response": answer}, fp(device)).Code)
+		require.Equal(t, 200, h.do(http.MethodPost, "/api/student/submit", nil, fp(device)).Code)
+	}
+	sit("IFT/22/9203", devA, "Encrypting data produces ciphertext, e.g. with AES.")
+	sit("IFT/22/9101", devB, "It hides data.")
+
+	r = h.do(http.MethodGet, fmt.Sprintf("/api/staff/exams/%d/marking", examID), nil, nil)
+	require.Equal(t, 200, r.Code, r.Raw)
+	assert.Equal(t, false, r.Body["ai_enabled"])
+	mq := r.Body["questions"].([]any)
+	require.Len(t, mq, 1, "only written questions are listed")
+	assert.EqualValues(t, 2, mq[0].(map[string]any)["answered"])
+	assert.EqualValues(t, 0, mq[0].(map[string]any)["marked"])
+
+	r = h.do(http.MethodGet, fmt.Sprintf("/api/staff/exams/%d/marking/%d", examID, text), nil, nil)
+	require.Equal(t, 200, r.Code, r.Raw)
+	assert.NotContains(t, r.Raw, "IFT/22/", "marking is anonymous")
+	scripts := r.Body["scripts"].([]any)
+	require.Len(t, scripts, 2)
+	first := scripts[0].(map[string]any)
+	assert.Equal(t, "Candidate 1", first["candidate"])
+	assert.Equal(t, 10.0, first["keyword_suggestion"].(map[string]any)["marks"])
+	assert.Equal(t, 0.0, scripts[1].(map[string]any)["keyword_suggestion"].(map[string]any)["marks"])
+	ansA, ansB := num(first["answer_id"]), num(scripts[1].(map[string]any)["answer_id"])
+
+	// AI is off unless the server enables it.
+	aiPath := fmt.Sprintf("/api/staff/exams/%d/marking/%d/ai-suggest", examID, text)
+	r = h.do(http.MethodPost, aiPath, nil, nil)
+	assert.Equal(t, http.StatusConflict, r.Code)
+	assert.Contains(t, r.Raw, "AI_MARKING_OFF")
+
+	fake := &fakeMarker{}
+	h.app.Handlers.Marking = services.NewMarkingService(h.app.Handlers.Repo, fake)
+	r = h.do(http.MethodPost, aiPath, nil, nil)
+	require.Equal(t, 200, r.Code, r.Raw)
+	assert.EqualValues(t, 2, r.Body["suggested"])
+	r = h.do(http.MethodGet, fmt.Sprintf("/api/staff/exams/%d/marking/%d", examID, text), nil, nil)
+	ai := r.Body["scripts"].([]any)[1].(map[string]any)["ai_suggestion"].(map[string]any)
+	assert.Equal(t, 10.0, ai["marks"], "AI suggestion clamped to the question's maximum: %s", r.Raw)
+	assert.Equal(t, "Covers every point.", ai["reason"])
+	assert.Nil(t, r.Body["scripts"].([]any)[1].(map[string]any)["awarded"], "a suggestion is not a mark")
+
+	// The examiner decides. Score = MCQ 2 + written mark.
+	markPath := func(id int64) string { return fmt.Sprintf("/api/staff/exams/%d/answers/%d/mark", examID, id) }
+	assert.Equal(t, 400, h.do(http.MethodPut, markPath(ansA), map[string]any{"marks": 10.5}, nil).Code)
+	r = h.do(http.MethodPut, markPath(ansA), map[string]any{"marks": 8, "comment": "Good, but explain keys.", "source": "keyword"}, nil)
+	require.Equal(t, 200, r.Code, r.Raw)
+	assert.Equal(t, 10.0, r.Body["session_score"])
+	r = h.do(http.MethodPut, markPath(ansB), map[string]any{"marks": 1.5}, nil)
+	require.Equal(t, 200, r.Code, r.Raw)
+	assert.Equal(t, 3.5, r.Body["session_score"])
+
+	// Already-marked answers are skipped by a new AI batch.
+	fake.calls = 0
+	r = h.do(http.MethodPost, aiPath, nil, nil)
+	require.Equal(t, 200, r.Code, r.Raw)
+	assert.Equal(t, 0, fake.calls)
+
+	r = h.do(http.MethodGet, fmt.Sprintf("/api/staff/exams/%d/report", examID), nil, nil)
+	var sidA int64
+	for _, row := range r.Body["rows"].([]any) {
+		m := row.(map[string]any)
+		if m["matric_no"] == "IFT/22/9203" {
+			sidA = num(m["session_id"])
+			assert.Equal(t, 10.0, m["score"], "report shows the marked total")
+		}
+	}
+	r = h.do(http.MethodGet, fmt.Sprintf("/api/staff/sessions/%d/answers", sidA), nil, nil)
+	item := r.Body["items"].([]any)[1].(map[string]any)
+	assert.Equal(t, "marked", item["status"])
+	assert.Equal(t, 8.0, item["awarded"])
+	assert.Equal(t, "Good, but explain keys.", item["comment"])
+
+	// Clearing a mark puts it back to "needs marking".
+	r = h.do(http.MethodPut, markPath(ansA), map[string]any{"marks": nil}, nil)
+	require.Equal(t, 200, r.Code, r.Raw)
+	assert.Equal(t, 2.0, r.Body["session_score"])
+
+	// A proctor can view but not mark.
+	h.login("19980012", "ADEGOKE")
+	assert.Equal(t, 200, h.do(http.MethodGet, fmt.Sprintf("/api/staff/exams/%d/marking/%d", examID, text), nil, nil).Code)
+	assert.Equal(t, http.StatusForbidden, h.do(http.MethodPut, markPath(ansA), map[string]any{"marks": 10}, nil).Code)
+	assert.Equal(t, http.StatusForbidden, h.do(http.MethodPut, guidePath, map[string]any{"points": []any{}}, nil).Code)
 }

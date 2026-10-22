@@ -826,3 +826,56 @@ func TestTheoryMarking(t *testing.T) {
 	assert.Equal(t, http.StatusForbidden, h.do(http.MethodPut, markPath(ansA), map[string]any{"marks": 10}, nil).Code)
 	assert.Equal(t, http.StatusForbidden, h.do(http.MethodPut, guidePath, map[string]any{"points": []any{}}, nil).Code)
 }
+
+func TestGapQuestionsAndTimeLimit(t *testing.T) {
+	h := newHarness(t)
+	h.login("20010078", "MUSTAPHA")
+	now := time.Now().UTC()
+	exam := map[string]any{"title": "Timed", "starts_at": now.Add(-time.Minute), "ends_at": now.Add(time.Hour),
+		"lan_cidr": "127.0.0.0/8", "proctoring": map[string]bool{"face_verification": false}, "duration_minutes": 90}
+	assert.Equal(t, 400, h.do(http.MethodPost, "/api/staff/exams", exam, nil).Code, "time limit longer than the window")
+	exam["duration_minutes"] = 25
+	r := h.do(http.MethodPost, "/api/staff/exams", exam, nil)
+	require.Equal(t, 201, r.Code, r.Raw)
+	examID := num(r.Body["id"])
+	assert.EqualValues(t, 25, r.Body["duration_minutes"])
+
+	qpath := fmt.Sprintf("/api/staff/exams/%d/questions", examID)
+	r = h.do(http.MethodPost, qpath, map[string]any{"questions": []map[string]any{
+		{"kind": "GAP", "prompt": "TCP opens with (i) _____ then (ii) _____.", "blanks": [][]string{{"SYN"}}},
+	}}, nil)
+	assert.Equal(t, 400, r.Code, "answers must match the number of blanks")
+	r = h.do(http.MethodPost, qpath, map[string]any{"questions": []map[string]any{
+		{"kind": "GAP", "prompt": "TCP opens with (i) _____ then (ii) _____.", "blanks": [][]string{{"SYN"}, {"SYN-ACK", "SYN ACK"}}, "marks": 2},
+	}}, nil)
+	require.Equal(t, 201, r.Code, r.Raw)
+	gap := num(r.Body["questions"].([]any)[0].(map[string]any)["id"])
+	require.Equal(t, 200, h.do(http.MethodPost, fmt.Sprintf("/api/staff/exams/%d/status", examID), map[string]string{"action": "open"}, nil).Code)
+
+	r = h.multipart("/api/student/verify", map[string]string{"matric_no": "IFT/22/9203", "consent": "true"}, nil, fp(devA))
+	require.Equal(t, 200, r.Code, r.Raw)
+	st := h.do(http.MethodGet, "/api/student/session", nil, fp(devA))
+	assert.NotContains(t, st.Raw, "SYN-ACK", "accepted answers never reach students")
+	q0 := st.Body["questions"].([]any)[0].(map[string]any)
+	assert.EqualValues(t, 2, q0["blanks"])
+	ends, err := time.Parse(time.RFC3339Nano, st.Body["ends_at"].(string))
+	require.NoError(t, err)
+	assert.WithinDuration(t, time.Now().Add(25*time.Minute), ends, 5*time.Second, "deadline is start + 25 min, not the window end")
+
+	assert.Equal(t, 400, h.do(http.MethodPut, "/api/student/answers", map[string]any{"question_id": gap, "response": "SYN"}, fp(devA)).Code)
+	require.Equal(t, 200, h.do(http.MethodPut, "/api/student/answers", map[string]any{"question_id": gap, "response": `["syn","FIN"]`}, fp(devA)).Code)
+
+	// Pretend the student started 30 minutes ago: the sweep submits them.
+	sid := num(st.Body["session_id"])
+	require.NoError(t, h.app.Handlers.Repo.UpdateSession(context.Background(), sid, map[string]any{"started_at": time.Now().Add(-30 * time.Minute)}))
+	assert.Equal(t, http.StatusGone, h.do(http.MethodPut, "/api/student/answers", map[string]any{"question_id": gap, "response": `["SYN","SYN-ACK"]`}, fp(devA)).Code, "time is up")
+	h.app.Handlers.Students.AutoSubmitOverdue(context.Background())
+
+	r = h.do(http.MethodGet, fmt.Sprintf("/api/staff/sessions/%d/answers", sid), nil, nil)
+	require.Equal(t, 200, r.Code, r.Raw)
+	assert.Equal(t, "SUBMITTED", r.Body["status"])
+	assert.Equal(t, 1.0, r.Body["score"], "one of two blanks right = half of 2 marks")
+	item := r.Body["items"].([]any)[0].(map[string]any)
+	assert.Equal(t, "partial", item["status"])
+	assert.Equal(t, []any{true, false}, item["blank_correct"])
+}

@@ -94,3 +94,25 @@ func TestMultiPage(t *testing.T) {
 }
 
 func itoa(i int) string { return strconv.Itoa(i) }
+
+func TestParseFillInTheGap(t *testing.T) {
+	res := Parse([]string{
+		"1. TCP's handshake uses (i) ______, (ii) ______ and ACK. [2 marks]",
+		"Answer: (i) SYN (ii) SYN-ACK / SYN ACK",
+		"2. HTTPS listens on port _____ by default.",
+		"Answer: 443",
+		"3. The ______ algorithm pivots and ______ around it.",
+		"Answer: quicksort | partitions / partitioning",
+		"4. Missing answer: _____ is a hash.",
+	})
+	require.Len(t, res.Questions, 4)
+	q := res.Questions[0]
+	assert.Equal(t, "GAP", q.Kind)
+	assert.Equal(t, 2.0, q.Marks)
+	assert.Equal(t, [][]string{{"SYN"}, {"SYN-ACK", "SYN ACK"}}, q.Blanks)
+	assert.Empty(t, q.Warnings)
+	assert.Equal(t, [][]string{{"443"}}, res.Questions[1].Blanks)
+	assert.Equal(t, [][]string{{"quicksort"}, {"partitions", "partitioning"}}, res.Questions[2].Blanks)
+	assert.Equal(t, "GAP", res.Questions[3].Kind)
+	assert.NotEmpty(t, res.Questions[3].Warnings, "blank without an answer is flagged")
+}

@@ -42,6 +42,15 @@ export function QuestionsEditor({ exam, canManage, onChanged }: { exam: Exam; ca
                       Q{i + 1} · {q.kind} · {q.marks} mark{q.marks === 1 ? '' : 's'}
                     </p>
                     <p className="mt-1 whitespace-pre-wrap font-medium">{q.prompt}</p>
+                    {q.kind === 'GAP' && q.blanks && (
+                      <ol className="mt-2 space-y-1 text-sm text-emerald-700">
+                        {q.blanks.map((b, bi) => (
+                          <li key={bi}>
+                            Blank {bi + 1}: <b>{b.join(' / ')}</b>
+                          </li>
+                        ))}
+                      </ol>
+                    )}
                     {q.options && (
                       <ol className="mt-2 space-y-1 text-sm">
                         {q.options.map((o, oi) => (
@@ -86,8 +95,10 @@ export function QuestionsEditor({ exam, canManage, onChanged }: { exam: Exam; ca
 }
 
 function AddQuestion({ onAdd }: { onAdd: (q: QuestionInput) => Promise<void> }) {
-  const [kind, setKind] = useState<'MCQ' | 'TEXT'>('MCQ')
+  const [kind, setKind] = useState<'MCQ' | 'TEXT' | 'GAP'>('MCQ')
+  const [gapAnswers, setGapAnswers] = useState<string[]>([])
   const [prompt, setPrompt] = useState('')
+  const blankCount = (prompt.match(/_{3,}/g) ?? []).length
   const [options, setOptions] = useState(['', '', '', ''])
   const [correct, setCorrect] = useState(0)
   const [marks, setMarks] = useState(1)
@@ -101,11 +112,21 @@ function AddQuestion({ onAdd }: { onAdd: (q: QuestionInput) => Promise<void> }) 
       await onAdd(
         kind === 'MCQ'
           ? { kind, prompt, options: opts.filter(Boolean), correct_option: opts.slice(0, correct).filter(Boolean).length, marks }
-          : { kind, prompt, marks },
+          : kind === 'GAP'
+            ? {
+                kind,
+                prompt,
+                marks,
+                blanks: Array.from({ length: blankCount }, (_, i) =>
+                  (gapAnswers[i] ?? '').split('/').map((s) => s.trim()).filter(Boolean),
+                ),
+              }
+            : { kind, prompt, marks },
       )
       setPrompt('')
       setOptions(['', '', '', ''])
       setCorrect(0)
+      setGapAnswers([])
     } catch (err) {
       setError(errorMessage(err))
     }
@@ -116,16 +137,34 @@ function AddQuestion({ onAdd }: { onAdd: (q: QuestionInput) => Promise<void> }) 
       <form onSubmit={submit} className="space-y-4">
         <h3 className="font-semibold">Add a question</h3>
         <div className="flex gap-4 text-sm">
-          {(['MCQ', 'TEXT'] as const).map((k) => (
+          {(['MCQ', 'GAP', 'TEXT'] as const).map((k) => (
             <label key={k} className="flex items-center gap-1.5">
               <input type="radio" checked={kind === k} onChange={() => setKind(k)} />
-              {k === 'MCQ' ? 'Multiple choice' : 'Written answer'}
+              {k === 'MCQ' ? 'Multiple choice' : k === 'GAP' ? 'Fill in the gap' : 'Written answer'}
             </label>
           ))}
         </div>
-        <Field label="Question">
+        <Field label="Question" hint={kind === 'GAP' ? 'Type five underscores _____ for each blank, e.g. "HTTPS uses port _____."' : undefined}>
           <textarea className={inputClass} rows={3} value={prompt} onChange={(e) => setPrompt(e.target.value)} required />
         </Field>
+        {kind === 'GAP' && (
+          <fieldset className="space-y-2">
+            <legend className="mb-1 text-sm font-medium text-slate-700">
+              Correct answer for each blank ({blankCount} found). Separate alternatives with / — marking ignores capital letters and extra spaces.
+            </legend>
+            {blankCount === 0 && <p className="text-sm text-amber-700">Add at least one _____ to the question.</p>}
+            {Array.from({ length: blankCount }, (_, i) => (
+              <input
+                key={i}
+                aria-label={`Answer for blank ${i + 1}`}
+                className={inputClass}
+                placeholder={`Blank ${i + 1}, e.g. 443`}
+                value={gapAnswers[i] ?? ''}
+                onChange={(e) => setGapAnswers((g) => { const n = [...g]; n[i] = e.target.value; return n })}
+              />
+            ))}
+          </fieldset>
+        )}
         {kind === 'MCQ' && (
           <fieldset className="space-y-2">
             <legend className="mb-1 text-sm font-medium text-slate-700">Options (select the correct one)</legend>

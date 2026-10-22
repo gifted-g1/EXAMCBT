@@ -95,19 +95,19 @@ func (h *Handlers) SaveAnswer(c *gin.Context) {
 // Heartbeat: POST /api/student/heartbeat
 func (h *Handlers) Heartbeat(c *gin.Context) {
 	claims := middleware.Student(c)
-	exam, err := h.Students.Heartbeat(c.Request.Context(), claims)
+	exam, deadline, err := h.Students.Heartbeat(c.Request.Context(), claims)
 	if err != nil {
 		fail(c, err)
 		return
 	}
-	// The token expires with the exam window. If staff extended the exam,
-	// re-issue it so the student isn't logged out at the original end time.
-	if want := exam.EndsAt.Add(h.Cfg.SubmitGrace); claims.ExpiresAt != nil && claims.ExpiresAt.Time.Before(want.Add(-time.Second)) {
+	// The token expires at the student's deadline. If staff extended the
+	// exam, re-issue it so the student isn't logged out at the original end.
+	if want := deadline.Add(h.Cfg.SubmitGrace); claims.ExpiresAt != nil && claims.ExpiresAt.Time.Before(want.Add(-time.Second)) {
 		if tok, err := h.Tokens.IssueStudent(claims.SessionID(), claims.ExamID, claims.StudentID, claims.DeviceFP, want); err == nil {
 			h.setStudentCookie(c, tok, want)
 		}
 	}
-	c.JSON(http.StatusOK, gin.H{"server_time": time.Now().UTC(), "ends_at": exam.EndsAt, "proctoring": exam.Proctoring.Resolve()})
+	c.JSON(http.StatusOK, gin.H{"server_time": time.Now().UTC(), "ends_at": deadline, "proctoring": exam.Proctoring.Resolve()})
 }
 
 // ClientEvent: POST /api/student/events {"type":"TAB_SWITCH","metadata":{...}}

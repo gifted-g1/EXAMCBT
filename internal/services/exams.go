@@ -92,6 +92,8 @@ type ExamInput struct {
 	EndsAt      time.Time `json:"ends_at"`
 	LANCIDR     string    `json:"lan_cidr"`
 	RequirePIN  bool      `json:"require_pin"`
+	// DurationMinutes is each student's time limit (0 = until ends_at).
+	DurationMinutes int `json:"duration_minutes"`
 	// Proctoring is optional on create; omitted switches default to on.
 	Proctoring *models.ProctoringSettings `json:"proctoring,omitempty"`
 }
@@ -109,6 +111,12 @@ func (s *ExamService) validateInput(in *ExamInput) error {
 	}
 	if in.EndsAt.Sub(in.StartsAt) > 12*time.Hour {
 		return invalid("exam window cannot exceed 12 hours")
+	}
+	if in.DurationMinutes < 0 || in.DurationMinutes > 720 {
+		return invalid("time limit must be between 0 and 720 minutes (0 = no limit)")
+	}
+	if w := in.EndsAt.Sub(in.StartsAt); in.DurationMinutes > 0 && time.Duration(in.DurationMinutes)*time.Minute > w {
+		return invalid("the %d-minute time limit is longer than the exam window (%d minutes)", in.DurationMinutes, int(w.Minutes()))
 	}
 	in.StartsAt, in.EndsAt = in.StartsAt.UTC(), in.EndsAt.UTC()
 	if in.LANCIDR == "" {
@@ -163,7 +171,7 @@ func (s *ExamService) Create(ctx context.Context, actorID int64, in ExamInput) (
 		return nil, err
 	}
 	e := &models.Exam{Title: in.Title, Description: in.Description, CreatedBy: actorID,
-		StartsAt: in.StartsAt, EndsAt: in.EndsAt, LANCIDR: in.LANCIDR, Status: models.ExamDraft}
+		StartsAt: in.StartsAt, EndsAt: in.EndsAt, LANCIDR: in.LANCIDR, Status: models.ExamDraft, DurationMinutes: in.DurationMinutes}
 	if in.Proctoring != nil {
 		e.Proctoring = in.Proctoring.Resolve().Settings()
 	}
@@ -198,7 +206,7 @@ func (s *ExamService) Update(ctx context.Context, e *models.Exam, in ExamInput) 
 		return nil, err
 	}
 	fields := map[string]any{"title": in.Title, "description": in.Description,
-		"starts_at": in.StartsAt, "ends_at": in.EndsAt, "lan_cidr": in.LANCIDR}
+		"starts_at": in.StartsAt, "ends_at": in.EndsAt, "lan_cidr": in.LANCIDR, "duration_minutes": in.DurationMinutes}
 	if err := s.repo.UpdateExam(ctx, e.ID, fields); err != nil {
 		return nil, err
 	}
@@ -437,8 +445,10 @@ type QuestionInput struct {
 	Prompt        string              `json:"prompt"`
 	Options       []string            `json:"options"`
 	CorrectOption *int                `json:"correct_option"`
-	Marks         float64             `json:"marks"`
-	Position      int                 `json:"position"`
+	// GAP: accepted answers for each blank ("_____") in the prompt, in order.
+	Blanks   [][]string `json:"blanks"`
+	Marks    float64    `json:"marks"`
+	Position int        `json:"position"`
 }
 
 func (in *QuestionInput) toModel() (*models.Question, error) {
@@ -471,10 +481,30 @@ func (in *QuestionInput) toModel() (*models.Question, error) {
 			return nil, invalid("correct_option must index one of the options")
 		}
 		q.Options, q.CorrectOption = opts, in.CorrectOption
+	case models.QuestionGap:
+		n := models.CountBlanks(in.Prompt)
+		if n == 0 || n > 10 {
+			return nil, invalid("a fill-in-the-gap question needs 1–10 blanks written as _____ (three or more underscores)")
+		}
+		if len(in.Blanks) != n {
+			return nil, invalid("the question has %d blank(s) but %d answer(s) were given", n, len(in.Blanks))
+		}
+		blanks := make([][]string, n)
+		for i, alts := range in.Blanks {
+			for _, a := range alts {
+				if a = strings.TrimSpace(a); a != "" && len(a) <= 200 {
+					blanks[i] = append(blanks[i], a)
+				}
+			}
+			if len(blanks[i]) == 0 || len(blanks[i]) > 10 {
+				return nil, invalid("blank %d needs 1–10 accepted answers", i+1)
+			}
+		}
+		q.Options, q.Blanks = nil, blanks
 	case models.QuestionText:
 		q.Options = nil
 	default:
-		return nil, invalid("kind must be MCQ or TEXT")
+		return nil, invalid("kind must be MCQ, TEXT or GAP")
 	}
 	return q, nil
 }

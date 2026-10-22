@@ -75,6 +75,9 @@ passwords. A DRAFT demo exam is created when `SEED_ON_START=true` or
   `go run ./cmd/student -matric IFT/22/9203 -name "Awodele Kehinde Gabriel" -department "Information Technology" -photo photo.png`
 - **Whole roster:** Dashboard → Student roster → CSV (`matric_no,full_name[,department]`) + bulk photos named `IFT-22-9203.jpg`.
 - **Questions from a PDF:** Dashboard → exam → Questions → *Import from PDF*. Review the preview, then import. See the format in [docs/sample-questions.pdf](docs/sample-questions.pdf).
+- **Fill-in-the-gap questions:** choose *Fill in the gap*, type `_____` for each blank and enter the accepted answers (alternatives separated by `/`). Marked automatically, with part marks.
+- **Time limit:** set *Time limit (minutes)* when creating an exam (e.g. 25), or *Time limit → Change* on the exam page. Each student gets that long from when they start; they are submitted automatically when it runs out.
+- **Example exam paper:** [docs/exam-paper/computing-comprehensive-exam.pdf](docs/exam-paper/computing-comprehensive-exam.pdf) (30 questions, 100 marks, print-ready). To run it in the app, import [the staff copy](docs/exam-paper/computing-comprehensive-exam-import.pdf).
 - **Marking theory answers:** Dashboard → exam → Marking. Write a marking guide (key points, marks, keywords) to get suggested marks; you confirm every mark. Optional AI suggestions: set `AI_MARKING=true` and `ANTHROPIC_API_KEY` (answers are sent to Anthropic; needs internet). See DOCUMENTATION §7.
 
 ## Repository layout

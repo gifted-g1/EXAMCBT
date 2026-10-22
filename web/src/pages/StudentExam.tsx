@@ -277,6 +277,7 @@ function Identify({
           <h1 className="text-2xl font-semibold text-slate-900">{gate.title}</h1>
           <p className="text-sm text-slate-600">
             Ends at {new Date(gate.ends_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+            {gate.duration_minutes > 0 && <> · You will have <b>{gate.duration_minutes} minutes</b> from when you start</>}
           </p>
         </header>
 

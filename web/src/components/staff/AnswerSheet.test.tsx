@@ -13,7 +13,7 @@ const script: AnswerScript = {
   score: 2,
   max_score: 9,
   auto_marked_max: 4,
-  counts: { correct: 1, incorrect: 1, unanswered: 1, needs_marking: 1, marked: 0 },
+  counts: { correct: 1, incorrect: 1, unanswered: 1, needs_marking: 1, marked: 0, partial: 0 },
   items: [
     { question_id: 1, number: 1, kind: 'MCQ', prompt: 'Which layer routes?', options: ['Link', 'Network'], correct_option: 1, response: '1', status: 'correct', marks: 2, awarded: 2 },
     { question_id: 2, number: 2, kind: 'MCQ', prompt: 'HTTPS port?', options: ['80', '443'], correct_option: 1, response: '0', status: 'incorrect', marks: 1, awarded: 0 },

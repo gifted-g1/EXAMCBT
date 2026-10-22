@@ -49,7 +49,8 @@ export function PdfImport({ examId, onImported }: { examId: number; onImported: 
   const selected = rows?.filter((r) => r.include) ?? []
   const missingAnswer = selected.filter((r) => r.kind === 'MCQ' && r.correct_option == null)
   const tooFewOptions = selected.filter((r) => r.kind === 'MCQ' && (r.options?.length ?? 0) < 2)
-  const blocked = selected.length === 0 || missingAnswer.length > 0 || tooFewOptions.length > 0
+  const gapBad = selected.filter((r) => r.kind === 'GAP' && (r.blanks?.length ?? 0) !== countBlanks(r.prompt))
+  const blocked = selected.length === 0 || missingAnswer.length > 0 || tooFewOptions.length > 0 || gapBad.length > 0
 
   const importAll = async () => {
     setBusy(true)
@@ -58,7 +59,9 @@ export function PdfImport({ examId, onImported }: { examId: number; onImported: 
       const payload: QuestionInput[] = selected.map((r) =>
         r.kind === 'MCQ'
           ? { kind: 'MCQ', prompt: r.prompt, options: r.options, correct_option: r.correct_option ?? 0, marks: r.marks }
-          : { kind: 'TEXT', prompt: r.prompt, marks: r.marks },
+          : r.kind === 'GAP'
+            ? { kind: 'GAP', prompt: r.prompt, blanks: r.blanks ?? [], marks: r.marks }
+            : { kind: 'TEXT', prompt: r.prompt, marks: r.marks },
       )
       await staffApi.addQuestions(examId, payload)
       setDone(`Imported ${payload.length} question(s) from ${meta?.file}.`)
@@ -78,7 +81,7 @@ export function PdfImport({ examId, onImported }: { examId: number; onImported: 
           <h3 className="font-semibold">Import questions from a PDF</h3>
           <p className="mt-1 max-w-2xl text-sm text-slate-500">
             Number questions <code>1.</code> <code>2.</code>, letter options <code>A.</code> <code>B.</code>, and give answers as{' '}
-            <code>Answer: B</code> (or in an <em>Answer Key</em> section). Questions without options become written answers. Text PDFs
+            <code>Answer: B</code> (or in an <em>Answer Key</em> section). Questions with blanks (<code>_____</code>) become fill-in-the-gap, with <code>Answer: (i) ... (ii) ...</code>. Other questions without options become written answers. Text PDFs
             only — scanned images can&apos;t be read.
           </p>
         </div>
@@ -128,7 +131,7 @@ export function PdfImport({ examId, onImported }: { examId: number; onImported: 
                   />
                   <div className="min-w-0 flex-1 space-y-2">
                     <p className="text-xs font-medium text-slate-500">
-                      Q{r.number} · {r.kind === 'MCQ' ? 'Multiple choice' : 'Written answer'} ·{' '}
+                      Q{r.number} · {r.kind === 'MCQ' ? 'Multiple choice' : r.kind === 'GAP' ? 'Fill in the gap' : 'Written answer'} ·{' '}
                       <label>
                         marks{' '}
                         <input
@@ -143,6 +146,25 @@ export function PdfImport({ examId, onImported }: { examId: number; onImported: 
                       </label>
                     </p>
                     <p className="whitespace-pre-wrap font-medium">{r.prompt}</p>
+                    {r.kind === 'GAP' && (
+                      <div className="space-y-1 text-sm">
+                        {Array.from({ length: countBlanks(r.prompt) }, (_, bi) => (
+                          <label key={bi} className="flex items-center gap-2">
+                            <span className="w-16 shrink-0 text-slate-500">Blank {bi + 1}</span>
+                            <input
+                              aria-label={`Question ${r.number} blank ${bi + 1} answer`}
+                              className="flex-1 rounded border-0 px-2 py-0.5 ring-1 ring-slate-300"
+                              value={(r.blanks?.[bi] ?? []).join('/')}
+                              onChange={(e) => {
+                                const b = Array.from({ length: countBlanks(r.prompt) }, (_, j) => r.blanks?.[j] ?? [])
+                                b[bi] = e.target.value === '' ? [] : e.target.value.split('/') // trimmed on the server
+                                update(i, { blanks: b })
+                              }}
+                            />
+                          </label>
+                        ))}
+                      </div>
+                    )}
                     {r.kind === 'MCQ' && (
                       <fieldset className="space-y-1 text-sm">
                         <legend className="sr-only">Correct option for question {r.number}</legend>
@@ -186,6 +208,9 @@ export function PdfImport({ examId, onImported }: { examId: number; onImported: 
                 Choose the correct option for Q{missingAnswer.map((r) => r.number).join(', Q')} (or untick them).
               </span>
             )}
+            {gapBad.length > 0 && (
+              <span className="text-sm text-amber-700">Give an answer for every blank in Q{gapBad.map((r) => r.number).join(', Q')}.</span>
+            )}
             {tooFewOptions.length > 0 && (
               <span className="text-sm text-amber-700">Q{tooFewOptions.map((r) => r.number).join(', Q')} need at least two options.</span>
             )}
@@ -195,3 +220,5 @@ export function PdfImport({ examId, onImported }: { examId: number; onImported: 
     </Card>
   )
 }
+
+const countBlanks = (s: string) => (s.match(/_{3,}/g) ?? []).length

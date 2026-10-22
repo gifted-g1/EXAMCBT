@@ -165,6 +165,7 @@ components:
         lan_cidr: { type: string, example: 192.168.1.0/24 }
         pin_code: { type: string, nullable: true, example: '4821' }
         questions_count: { type: integer }
+        duration_minutes: { type: integer, description: 'Per-student time limit from when they start; 0 = until ends_at.' }
     ExamInput:
       type: object
       required: [title, starts_at, ends_at]
@@ -175,6 +176,7 @@ components:
         ends_at: { type: string, format: date-time, description: 'After starts_at; window ≤ 12 h.' }
         lan_cidr: { type: string, description: 'Private CIDR overlapping the server LAN; blank = server LAN.' }
         require_pin: { type: boolean }
+        duration_minutes: { type: integer, minimum: 0, maximum: 720, description: 'e.g. 25; must fit in the window. 0 = no limit.' }
     AccessCard:
       type: object
       properties:
@@ -191,20 +193,24 @@ components:
         id: { type: integer, format: int64 }
         exam_id: { type: integer, format: int64 }
         position: { type: integer }
-        kind: { type: string, enum: [MCQ, TEXT] }
-        prompt: { type: string }
+        kind: { type: string, enum: [MCQ, TEXT, GAP] }
+        prompt: { type: string, description: 'GAP: each blank is written as three or more underscores.' }
         options: { type: array, items: { type: string }, nullable: true }
         correct_option: { type: integer, nullable: true, description: Staff only. }
+        blanks: { type: array, items: { type: array, items: { type: string } }, description: 'GAP, staff only: accepted answers per blank.' }
+        marking_guide: { type: array, items: { type: object, properties: { point: { type: string }, marks: { type: number }, keywords: { type: array, items: { type: string } } } }, description: 'TEXT, staff only.' }
+        model_answer: { type: string, description: 'TEXT, staff only.' }
         marks: { type: number }
     QuestionInput:
       type: object
       required: [prompt]
       properties:
-        kind: { type: string, enum: [MCQ, TEXT], default: MCQ }
+        kind: { type: string, enum: [MCQ, TEXT, GAP], default: MCQ }
         prompt: { type: string }
         options: { type: array, items: { type: string }, minItems: 2, maxItems: 8 }
         correct_option: { type: integer }
-        marks: { type: number, default: 1 }
+        blanks: { type: array, items: { type: array, items: { type: string } }, description: 'GAP: 1-10 accepted answers for each blank, in order. Matching ignores case, extra spaces and trailing punctuation.' }
+        marks: { type: number, default: 1, description: 'GAP: split evenly across blanks.' }
         position: { type: integer }
     GateInfo:
       type: object
@@ -217,6 +223,7 @@ components:
         server_time: { type: string, format: date-time }
         consent_version: { type: string }
         face_match_threshold: { type: number, example: 0.75 }
+        duration_minutes: { type: integer }
     SessionState:
       type: object
       description: Never contains correct answers.
@@ -225,7 +232,7 @@ components:
         status: { $ref: '#/components/schemas/SessionStatus' }
         exam_id: { type: integer, format: int64 }
         exam_title: { type: string }
-        ends_at: { type: string, format: date-time }
+        ends_at: { type: string, format: date-time, description: "This student's deadline: start + time limit, capped at the window end." }
         server_time: { type: string, format: date-time }
         student:
           type: object
@@ -239,14 +246,15 @@ components:
             properties:
               id: { type: integer, format: int64 }
               position: { type: integer }
-              kind: { type: string, enum: [MCQ, TEXT] }
+              kind: { type: string, enum: [MCQ, TEXT, GAP] }
               prompt: { type: string }
               options: { type: array, items: { type: string } }
               marks: { type: number }
+              blanks: { type: integer, description: 'GAP: number of blanks (never the answers).' }
         answers:
           type: object
           additionalProperties: { type: string }
-          description: question_id → response (MCQ responses are option indexes).
+          description: 'question_id → response (MCQ: option index; GAP: JSON array with one string per blank).'
     SessionRow:
       type: object
       properties:
@@ -413,7 +421,7 @@ paths:
               required: [question_id, response]
               properties:
                 question_id: { type: integer, format: int64 }
-                response: { type: string, maxLength: 20000, description: 'MCQ: option index as a string' }
+                response: { type: string, maxLength: 20000, description: 'MCQ: option index as a string; GAP: JSON array of strings, one per blank' }
       responses:
         '200': { description: Saved, content: { application/json: { schema: { type: object, properties: { saved_at: { type: string, format: date-time } } } } } }
         '400': { $ref: '#/components/responses/Validation' }

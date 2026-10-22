@@ -135,6 +135,8 @@ type Scheduler struct {
 	grace     time.Duration
 	retention time.Duration
 	log       *slog.Logger
+	// Overdue, when set, submits sessions past their personal time limit.
+	Overdue func(ctx context.Context)
 }
 
 func NewScheduler(repo *repositories.Repo, rdb *store.Redis, blobs store.Blobs, exams *ExamService, grace time.Duration, retentionDays int, log *slog.Logger) *Scheduler {
@@ -186,6 +188,9 @@ func (s *Scheduler) lifecycle(ctx context.Context) {
 		} else {
 			s.log.Info("scheduler: exam closed", "exam_id", e.ID)
 		}
+	}
+	if s.Overdue != nil {
+		s.Overdue(ctx)
 	}
 }
 

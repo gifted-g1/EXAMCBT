@@ -150,6 +150,7 @@ func Build(ctx context.Context, cfg *config.Config, log *slog.Logger) (*App, err
 	students := services.NewStudentService(repo, a.Redis, a.Blobs, a.Tokens, matcher, recorder, a.Hub, cfg, log)
 	exams.OnClosed = students.AutoSubmitExam
 	a.scheduler = services.NewScheduler(repo, a.Redis, a.Blobs, exams, cfg.SubmitGrace, cfg.RetentionDays, log)
+	a.scheduler.Overdue = students.AutoSubmitOverdue
 
 	host, _ := os.Hostname()
 	consumer := store.ConsumerName("api", host, os.Getpid())

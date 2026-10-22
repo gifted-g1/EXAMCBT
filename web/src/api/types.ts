@@ -3,7 +3,7 @@ export type ExamStatus = 'DRAFT' | 'SCHEDULED' | 'ACTIVE' | 'CLOSED'
 export type SessionStatus = 'INIT' | 'ACTIVE' | 'SUBMITTED' | 'CLOSED'
 export type Severity = 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL'
 export type ReviewStatus = 'PENDING' | 'CONFIRMED' | 'DISMISSED'
-export type QuestionKind = 'MCQ' | 'TEXT'
+export type QuestionKind = 'MCQ' | 'TEXT' | 'GAP'
 
 export interface User {
   id: number
@@ -26,6 +26,7 @@ export interface Exam {
   pin_code?: string
   proctoring: Proctoring
   questions_count: number
+  duration_minutes: number
 }
 
 export interface Question {
@@ -36,6 +37,7 @@ export interface Question {
   prompt: string
   options: string[] | null
   correct_option?: number | null
+  blanks?: string[][] | null
   marks: number
   marking_guide?: MarkingPoint[] | null
   model_answer?: string
@@ -111,6 +113,7 @@ export interface GateInfo {
   consent_version: string
   face_match_threshold: number
   proctoring: Proctoring
+  duration_minutes: number
 }
 
 export interface QuestionView {
@@ -120,6 +123,8 @@ export interface QuestionView {
   prompt: string
   options?: string[]
   marks: number
+  /** GAP: number of blanks. */
+  blanks?: number
 }
 
 export interface SessionState {
@@ -127,7 +132,9 @@ export interface SessionState {
   status: SessionStatus
   exam_id: number
   exam_title: string
+  /** This student's deadline (start + time limit, capped at the window end). */
   ends_at: string
+  duration_minutes: number
   server_time: string
   student: { matric_no: string; full_name: string }
   questions: QuestionView[]
@@ -177,7 +184,7 @@ export interface Proctoring {
 export const proctoringNeedsMedia = (p?: Proctoring) =>
   !p || p.face_verification || p.camera_monitoring || p.audio_monitoring
 
-export type AnswerStatus = 'correct' | 'incorrect' | 'unanswered' | 'needs_marking' | 'marked'
+export type AnswerStatus = 'correct' | 'incorrect' | 'unanswered' | 'needs_marking' | 'marked' | 'partial'
 
 export interface ScriptItem {
   question_id: number
@@ -191,6 +198,9 @@ export interface ScriptItem {
   marks: number
   awarded: number | null
   comment?: string
+  blanks?: string[][]
+  blank_answers?: string[]
+  blank_correct?: boolean[]
 }
 
 /** A student's marked answer sheet (staff only). */
@@ -218,6 +228,7 @@ export interface QuestionStat {
   correct_option?: number | null
   correct: number
   incorrect: number
+  partial?: number
   unanswered: number
   answered: number
   option_counts?: number[]

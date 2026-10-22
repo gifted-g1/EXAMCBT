@@ -75,6 +75,7 @@ export function ExamDetail({ user }: { user: User }) {
               {new Date(exam.ends_at).toLocaleTimeString([], { timeStyle: 'short' })}
               <span className="font-mono text-xs">{exam.lan_cidr}</span>
             </p>
+            <TimeLimit exam={exam} canEdit={canManage && exam.status !== 'CLOSED'} onSaved={setExam} />
           </div>
           {canManage && (
             <div className="flex flex-wrap gap-2">
@@ -330,6 +331,67 @@ function LiveMonitor({ exam, canManage }: { exam: Exam; canManage: boolean }) {
           }}
         />
       )}
+    </div>
+  )
+}
+
+/** Shows and edits the per-student time limit (e.g. 25 minutes). */
+function TimeLimit({ exam, canEdit, onSaved }: { exam: Exam; canEdit: boolean; onSaved: (e: Exam) => void }) {
+  const [editing, setEditing] = useState(false)
+  const [value, setValue] = useState(exam.duration_minutes ? String(exam.duration_minutes) : '')
+  const [error, setError] = useState<string | null>(null)
+  const windowMin = Math.round((new Date(exam.ends_at).getTime() - new Date(exam.starts_at).getTime()) / 60000)
+
+  const save = async () => {
+    setError(null)
+    try {
+      const updated = await staffApi.updateExam(exam.id, {
+        title: exam.title,
+        description: exam.description,
+        starts_at: exam.starts_at,
+        ends_at: exam.ends_at,
+        lan_cidr: exam.lan_cidr,
+        duration_minutes: value.trim() === '' ? 0 : Number(value),
+      })
+      onSaved({ ...exam, ...updated, questions_count: exam.questions_count })
+      setEditing(false)
+    } catch (e) {
+      setError(errorMessage(e))
+    }
+  }
+
+  if (!editing)
+    return (
+      <p className="mt-1 text-sm text-slate-600">
+        Time limit:{' '}
+        <b>{exam.duration_minutes ? `${exam.duration_minutes} minutes per student` : `none (whole ${windowMin}-minute window)`}</b>
+        {canEdit && (
+          <button type="button" className="ml-2 text-brand-700 underline" onClick={() => setEditing(true)}>
+            Change
+          </button>
+        )}
+      </p>
+    )
+  return (
+    <div className="mt-2 flex flex-wrap items-center gap-2 text-sm">
+      <label htmlFor="time-limit">Time limit (minutes)</label>
+      <input
+        id="time-limit"
+        type="number"
+        min={1}
+        max={windowMin}
+        className="w-24 rounded-md border-0 px-2 py-1 ring-1 ring-slate-300"
+        value={value}
+        placeholder="none"
+        onChange={(e) => setValue(e.target.value)}
+      />
+      <Button className="px-3 py-1" onClick={save}>
+        Save
+      </Button>
+      <Button variant="ghost" className="px-3 py-1" onClick={() => setEditing(false)}>
+        Cancel
+      </Button>
+      {error && <span className="text-rose-600">{error}</span>}
     </div>
   )
 }

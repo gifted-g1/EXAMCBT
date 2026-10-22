@@ -9,6 +9,7 @@ const state = (endsInMs: number): SessionState => ({
   exam_id: 1,
   exam_title: 'Networks',
   ends_at: new Date(Date.now() + endsInMs).toISOString(),
+  duration_minutes: 0,
   server_time: new Date().toISOString(),
   student: { matric_no: 'IFT/22/9203', full_name: 'A' },
   questions: [{ id: 1, position: 1, kind: 'TEXT', prompt: 'Q', marks: 1 }],

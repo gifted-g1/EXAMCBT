@@ -148,7 +148,7 @@ func (r *Repo) NextQuestionPosition(ctx context.Context, examID int64) (int, err
 
 func (r *Repo) UpdateQuestion(ctx context.Context, examID, id int64, q *models.Question) error {
 	res := r.q(ctx).Model(&models.Question{}).Where("id = ? AND exam_id = ?", id, examID).
-		Select("kind", "prompt", "options", "correct_option", "marks", "position").Updates(q)
+		Select("kind", "prompt", "options", "correct_option", "blanks", "marks", "position").Updates(q)
 	if res.Error == nil && res.RowsAffected == 0 {
 		return ErrNotFound
 	}
@@ -177,4 +177,11 @@ func (r *Repo) SetExamProctoring(ctx context.Context, id int64, p models.Proctor
 func (r *Repo) SetMarkingGuide(ctx context.Context, q *models.Question) error {
 	return r.q(ctx).Model(&models.Question{}).Where("id = ? AND exam_id = ?", q.ID, q.ExamID).
 		Select("marking_guide", "model_answer").Updates(q).Error
+}
+
+// ActiveTimedExams returns open exams that have a per-student time limit.
+func (r *Repo) ActiveTimedExams(ctx context.Context) ([]models.Exam, error) {
+	var out []models.Exam
+	err := r.q(ctx).Where("status = ? AND duration_minutes > 0", models.ExamActive).Find(&out).Error
+	return out, err
 }

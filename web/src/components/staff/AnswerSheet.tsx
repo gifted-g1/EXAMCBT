@@ -11,6 +11,7 @@ const STATUS: Record<AnswerStatus, { label: string; icon: string; chip: string; 
   unanswered: { label: 'Not answered', icon: '—', chip: 'bg-slate-100 text-slate-700', ring: 'ring-slate-200' },
   needs_marking: { label: 'Needs marking', icon: '✎', chip: 'bg-amber-100 text-amber-800', ring: 'ring-amber-200' },
   marked: { label: 'Marked', icon: '✎', chip: 'bg-sky-100 text-sky-800', ring: 'ring-sky-200' },
+  partial: { label: 'Partly right', icon: '◐', chip: 'bg-orange-100 text-orange-800', ring: 'ring-orange-200' },
 }
 
 type Filter = 'all' | 'missed' | AnswerStatus
@@ -29,7 +30,7 @@ export function AnswerSheet({ sessionId, onClose }: { sessionId: number; onClose
   }, [sessionId, onClose])
 
   const shown = (data?.items ?? []).filter((it) =>
-    filter === 'all' ? true : filter === 'missed' ? it.status === 'incorrect' || it.status === 'unanswered' : it.status === filter,
+    filter === 'all' ? true : filter === 'missed' ? it.status === 'incorrect' || it.status === 'unanswered' || it.status === 'partial' : it.status === filter,
   )
   const pct = data && data.auto_marked_max > 0 ? Math.round((data.score / data.auto_marked_max) * 100) : null
 
@@ -63,7 +64,7 @@ export function AnswerSheet({ sessionId, onClose }: { sessionId: number; onClose
           !error && <Spinner />
         ) : (
           <>
-            <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-6">
+            <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-7">
               <div className="col-span-2 rounded-xl bg-slate-900 p-4 text-white sm:col-span-1">
                 <p className="text-xs text-slate-400">Score</p>
                 <p className="text-2xl font-bold tabular-nums">
@@ -72,7 +73,7 @@ export function AnswerSheet({ sessionId, onClose }: { sessionId: number; onClose
                 </p>
                 {pct != null && <p className="text-xs text-slate-400">{pct}% of marked so far</p>}
               </div>
-              {(['correct', 'incorrect', 'unanswered', 'needs_marking', 'marked'] as const).map((k) => (
+              {(['correct', 'partial', 'incorrect', 'unanswered', 'needs_marking', 'marked'] as const).map((k) => (
                 <div key={k} className={`rounded-xl p-4 ring-1 ${STATUS[k].ring}`}>
                   <p className="text-xs text-slate-500">{STATUS[k].label}</p>
                   <p className="text-2xl font-bold tabular-nums text-slate-900">{data.counts?.[k] ?? 0}</p>
@@ -88,7 +89,7 @@ export function AnswerSheet({ sessionId, onClose }: { sessionId: number; onClose
               {(
                 [
                   ['all', `All (${data.items.length})`],
-                  ['missed', `Missed (${data.counts.incorrect + data.counts.unanswered})`],
+                  ['missed', `Missed (${data.counts.incorrect + data.counts.unanswered + (data.counts.partial ?? 0)})`],
                   ['correct', `Correct (${data.counts.correct})`],
                   ['needs_marking', `Needs marking (${data.counts.needs_marking})`],
                   ['marked', `Marked (${data.counts.marked ?? 0})`],
@@ -159,6 +160,20 @@ function ScriptRow({ item }: { item: ScriptItem }) {
             )
           })}
         </ul>
+      ) : item.kind === 'GAP' ? (
+        <ol className="mt-3 space-y-1.5 text-sm">
+          {(item.blanks ?? []).map((accepted, bi) => {
+            const got = item.blank_answers?.[bi] ?? ''
+            const ok = item.blank_correct?.[bi] ?? false
+            return (
+              <li key={bi} className={`flex flex-wrap items-center gap-2 rounded-lg px-3 py-1.5 ${ok ? 'bg-emerald-50 text-emerald-900' : 'bg-rose-50 text-rose-900'}`}>
+                <span className="font-semibold">Blank {bi + 1}:</span>
+                <span>{got || <span className="italic opacity-70">blank</span>}</span>
+                <span className="text-xs font-semibold">{ok ? '✓' : `✗ expected ${accepted.join(' / ')}`}</span>
+              </li>
+            )
+          })}
+        </ol>
       ) : (
         <div className="mt-3 whitespace-pre-wrap rounded-lg bg-slate-50 p-3 text-sm text-slate-800">
           {item.response || <span className="italic text-slate-400">No answer written.</span>}

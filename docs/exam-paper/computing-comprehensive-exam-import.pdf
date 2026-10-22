@@ -1,0 +1,245 @@
+%PDF-1.4
+%‚„œ”
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [5 0 R 7 0 R 9 0 R 11 0 R 13 0 R 15 0 R] /Count 6 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 6 0 R >>
+endobj
+6 0 obj
+<< /Length 3798 >>
+stream
+BT /F2 20.0 Tf 56.0 673.0 Td (Faculty of Computing Comprehensive) Tj ET
+BT /F2 20.0 Tf 56.0 644.0 Td (Examination) Tj ET
+BT /F2 12.0 Tf 56.0 618.6 Td (STAFF COPY - contains fill-in-the-gap answers. Do not give to candidates.) Tj ET
+BT /F1 10.5 Tf 56.0 595.4 Td (Import into Exam Shield: open an exam, choose Questions, then Import from PDF. Set the exam's) Tj ET
+BT /F1 10.5 Tf 56.0 580.1 Td (time limit to 30 minutes. Sections A and C are marked by examiners in the Marking tab; Section B is) Tj ET
+BT /F1 10.5 Tf 56.0 564.9 Td (marked automatically.) Tj ET
+BT /F2 15.0 Tf 56.0 523.2 Td (Section A: Theory and Analytical Questions) Tj ET
+BT /F2 10.5 Tf 56.0 498.9 Td (1. A dynamic array doubles its capacity whenever it is full. Using amortised analysis, show that) Tj ET
+BT /F2 10.5 Tf 56.0 483.7 Td (the cost of appending n elements is O\(n\) in total, so each append is O\(1\) amortised, even) Tj ET
+BT /F2 10.5 Tf 56.0 468.5 Td (though a single append can cost O\(n\). Explain one practical reason some libraries grow by a) Tj ET
+BT /F2 10.5 Tf 56.0 453.3 Td (factor of 1.5 instead of 2. [3 marks]) Tj ET
+BT /F2 10.5 Tf 56.0 429.0 Td (2. A 12-person engineering team maintains a single e-commerce application and proposes to) Tj ET
+BT /F2 10.5 Tf 56.0 413.8 Td (split it into about 20 microservices. Compare this proposal with restructuring it as a modular) Tj ET
+BT /F2 10.5 Tf 56.0 398.6 Td (monolith, considering deployment independence, data consistency, operational overhead and) Tj ET
+BT /F2 10.5 Tf 56.0 383.4 Td (Conway's law. State your assumptions and recommend one option. [4 marks]) Tj ET
+BT /F2 10.5 Tf 56.0 359.1 Td (3. Distinguish between IT governance and IT management. Explain how a governance) Tj ET
+BT /F2 10.5 Tf 56.0 343.9 Td (framework such as COBIT helps an organisation align IT investment with business objectives) Tj ET
+BT /F2 10.5 Tf 56.0 328.7 Td (and measure the value delivered. [3 marks]) Tj ET
+BT /F2 10.5 Tf 56.0 304.5 Td (4. A university plans to replace its 15-year-old on-premises student records system with a) Tj ET
+BT /F2 10.5 Tf 56.0 289.2 Td (cloud-based ERP platform within one academic year. Identify three significant risks of this) Tj ET
+BT /F2 10.5 Tf 56.0 274.0 Td (digital transformation \(technical, organisational or contractual\) and propose a specific) Tj ET
+BT /F2 10.5 Tf 56.0 258.8 Td (mitigation for each. [4 marks]) Tj ET
+BT /F2 10.5 Tf 56.0 234.6 Td (5. Compare link-state routing \(for example OSPF\) with distance-vector routing \(for example) Tj ET
+BT /F2 10.5 Tf 56.0 219.3 Td (RIP\) in terms of convergence speed, scalability and resource use. Explain the count-to-infinity) Tj ET
+BT /F2 10.5 Tf 56.0 204.1 Td (problem and how split horizon with poison reverse reduces it. [3 marks]) Tj ET
+BT /F2 10.5 Tf 56.0 179.9 Td (6. Define a Service Level Indicator \(SLI\), a Service Level Objective \(SLO\) and an error budget.) Tj ET
+BT /F2 10.5 Tf 56.0 164.7 Td (Explain how an error budget policy can be used to balance release velocity against reliability,) Tj ET
+BT /F2 10.5 Tf 56.0 149.4 Td (with a numerical example for a 99.9% monthly availability SLO. [3 marks]) Tj ET
+BT /F2 10.5 Tf 56.0 125.2 Td (7. Explain why passwords should be stored using a slow, salted, memory-hard function such as) Tj ET
+BT /F2 10.5 Tf 56.0 110.0 Td (Argon2id or bcrypt rather than a single round of SHA-256. Discuss the roles of the salt and a) Tj ET
+BT /F2 10.5 Tf 56.0 94.8 Td (pepper, and the economics of an offline attack after a database breach. [3 marks]) Tj ET
+BT /F2 10.5 Tf 56.0 70.5 Td (8. A bank's fraud-detection model reports 99% accuracy on a test set in which only 0.5% of) Tj ET
+0.6 g
+BT /F1 8.0 Tf 56.0 34.0 Td (Faculty of Computing Comprehensive Examination - staff copy) Tj ET
+BT /F1 8.0 Tf 479.0 34.0 Td (Page 1 of 6) Tj ET
+0 g
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 8 0 R >>
+endobj
+8 0 obj
+<< /Length 2030 >>
+stream
+BT /F2 10.5 Tf 56.0 766.8 Td (transactions are fraudulent. Explain why accuracy is misleading here. Recommend more) Tj ET
+BT /F2 10.5 Tf 56.0 751.5 Td (suitable evaluation metrics and describe how you would choose the decision threshold when a) Tj ET
+BT /F2 10.5 Tf 56.0 736.3 Td (missed fraud costs far more than a false alarm. [4 marks]) Tj ET
+BT /F2 10.5 Tf 56.0 712.1 Td (9. Describe the dirty read, non-repeatable read and phantom read anomalies, and state which) Tj ET
+BT /F2 10.5 Tf 56.0 696.9 Td (ANSI SQL isolation levels prevent each. Explain, with an example, why snapshot isolation still) Tj ET
+BT /F2 10.5 Tf 56.0 681.6 Td (permits write skew. [3 marks]) Tj ET
+BT /F2 10.5 Tf 56.0 657.4 Td (10. Explain how a virtual address is translated to a physical address in a paged virtual-memory) Tj ET
+BT /F2 10.5 Tf 56.0 642.2 Td (system with a Translation Lookaside Buffer \(TLB\). Show how the TLB hit ratio and page-fault) Tj ET
+BT /F2 10.5 Tf 56.0 627.0 Td (rate affect the effective memory access time. [3 marks]) Tj ET
+BT /F2 10.5 Tf 56.0 602.7 Td (11. A battery-powered IoT soil sensor must report a reading every 10 minutes over an unreliable) Tj ET
+BT /F2 10.5 Tf 56.0 587.5 Td (wireless link for at least two years. Compare a polling design with an interrupt-driven,) Tj ET
+BT /F2 10.5 Tf 56.0 572.3 Td (deep-sleep design, and compare MQTT with HTTP for this device, in terms of energy use,) Tj ET
+BT /F2 10.5 Tf 56.0 557.1 Td (reliability and security. [4 marks]) Tj ET
+BT /F2 10.5 Tf 56.0 532.8 Td (12. State the CAP theorem and explain how the PACELC formulation extends it. For a globally) Tj ET
+BT /F2 10.5 Tf 56.0 517.6 Td (replicated online shopping-cart service, justify whether you would favour availability or) Tj ET
+BT /F2 10.5 Tf 56.0 502.4 Td (consistency during a network partition, and what you would favour in normal operation. [3 marks]) Tj ET
+0.6 g
+BT /F1 8.0 Tf 56.0 34.0 Td (Faculty of Computing Comprehensive Examination - staff copy) Tj ET
+BT /F1 8.0 Tf 479.0 34.0 Td (Page 2 of 6) Tj ET
+0 g
+endstream
+endobj
+9 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 10 0 R >>
+endobj
+10 0 obj
+<< /Length 4335 >>
+stream
+BT /F2 15.0 Tf 56.0 740.2 Td (Section B: Fill in the Gaps) Tj ET
+BT /F2 10.5 Tf 56.0 716.0 Td (13. Binary search on a sorted array of n elements has a worst-case time complexity of \(i\)) Tj ET
+BT /F2 10.5 Tf 56.0 700.8 Td (______, whereas building a binary heap bottom-up from n unsorted elements takes \(ii\) ______) Tj ET
+BT /F2 10.5 Tf 56.0 685.6 Td (time. [2 marks]) Tj ET
+BT /F1 10.0 Tf 74.0 671.1 Td (Answer: O\(log n\) / log n / logarithmic | O\(n\) / linear / n) Tj ET
+BT /F2 10.5 Tf 56.0 646.8 Td (14. Among the SOLID principles, the \(i\) ______ Principle states that a class should have only) Tj ET
+BT /F2 10.5 Tf 56.0 631.6 Td (one reason to change, and the \(ii\) ______ Principle states that software entities should be) Tj ET
+BT /F2 10.5 Tf 56.0 616.4 Td (open for extension but closed for modification. [2 marks]) Tj ET
+BT /F1 10.0 Tf 74.0 601.9 Td (Answer: Single Responsibility / Single-Responsibility / SRP | Open/Closed / Open-Closed / Open) Tj ET
+BT /F1 10.0 Tf 74.0 587.4 Td (Closed / OCP) Tj ET
+BT /F2 10.5 Tf 56.0 563.2 Td (15. In ITIL, the practice that restores normal service as quickly as possible after an unplanned) Tj ET
+BT /F2 10.5 Tf 56.0 547.9 Td (interruption is \(i\) ______ management, while the practice that identifies and removes the) Tj ET
+BT /F2 10.5 Tf 56.0 532.7 Td (underlying cause of recurring incidents is \(ii\) ______ management. [2 marks]) Tj ET
+BT /F1 10.0 Tf 74.0 518.2 Td (Answer: incident | problem) Tj ET
+BT /F2 10.5 Tf 56.0 494.0 Td (16. TCP establishes a connection with a three-way handshake of SYN, \(i\) ______ and ACK) Tj ET
+BT /F2 10.5 Tf 56.0 478.8 Td (segments. An IPv4 subnet with prefix length /26 provides \(ii\) ______ usable host addresses. [2 marks]) Tj ET
+BT /F1 10.0 Tf 74.0 464.3 Td (Answer: SYN-ACK / SYN ACK / SYN/ACK | 62 / sixty-two / sixty two) Tj ET
+BT /F2 10.5 Tf 56.0 440.0 Td (17. In Kubernetes, the smallest deployable unit is the \(i\) ______. When a \(ii\) ______ probe fails,) Tj ET
+BT /F2 10.5 Tf 56.0 424.8 Td (the kubelet restarts the container, whereas when a \(iii\) ______ probe fails, the pod is removed) Tj ET
+BT /F2 10.5 Tf 56.0 409.6 Td (from Service endpoints without being restarted. [2 marks]) Tj ET
+BT /F1 10.0 Tf 74.0 395.1 Td (Answer: Pod | liveness | readiness) Tj ET
+BT /F2 10.5 Tf 56.0 370.9 Td (18. To send a confidential message with public-key cryptography, the sender encrypts it with) Tj ET
+BT /F2 10.5 Tf 56.0 355.6 Td (the recipient's \(i\) ______ key, and a digital signature is created with the signer's \(ii\) ______) Tj ET
+BT /F2 10.5 Tf 56.0 340.4 Td (key. A single-page web application using OAuth 2.0 should use the authorization code flow with) Tj ET
+BT /F2 10.5 Tf 56.0 325.2 Td (\(iii\) ______. [2 marks]) Tj ET
+BT /F1 10.0 Tf 74.0 310.7 Td (Answer: public | private | PKCE / Proof Key for Code Exchange) Tj ET
+BT /F2 10.5 Tf 56.0 286.5 Td (19. In gradient descent, the hyperparameter that scales the size of each parameter update is) Tj ET
+BT /F2 10.5 Tf 56.0 271.2 Td (the \(i\) ______. A model that performs well on its training data but poorly on unseen data is said) Tj ET
+BT /F2 10.5 Tf 56.0 256.0 Td (to be \(ii\) ______. [2 marks]) Tj ET
+BT /F1 10.0 Tf 74.0 241.5 Td (Answer: learning rate / step size | overfitting / overfitted / overfit / over-fitting) Tj ET
+BT /F2 10.5 Tf 56.0 217.3 Td (20. The ACID property which guarantees that the effects of a committed transaction survive a) Tj ET
+BT /F2 10.5 Tf 56.0 202.1 Td (system crash is \(i\) ______. In SQL, the clause that filters groups after aggregation is \(ii\)) Tj ET
+BT /F2 10.5 Tf 56.0 186.8 Td (______. [2 marks]) Tj ET
+BT /F1 10.0 Tf 74.0 172.3 Td (Answer: durability | HAVING) Tj ET
+BT /F2 10.5 Tf 56.0 148.1 Td (21. In a pipelined CPU, a stall caused by an instruction needing the result of an earlier) Tj ET
+BT /F2 10.5 Tf 56.0 132.9 Td (instruction that has not yet been written back is a \(i\) ______ hazard. It is commonly reduced by) Tj ET
+BT /F2 10.5 Tf 56.0 117.7 Td (a hardware technique called \(ii\) ______, also known as bypassing. [2 marks]) Tj ET
+BT /F1 10.0 Tf 74.0 103.2 Td (Answer: data / RAW / read-after-write | forwarding / operand forwarding / data forwarding) Tj ET
+0.6 g
+BT /F1 8.0 Tf 56.0 34.0 Td (Faculty of Computing Comprehensive Examination - staff copy) Tj ET
+BT /F1 8.0 Tf 479.0 34.0 Td (Page 3 of 6) Tj ET
+0 g
+endstream
+endobj
+11 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 12 0 R >>
+endobj
+12 0 obj
+<< /Length 594 >>
+stream
+BT /F2 10.5 Tf 56.0 766.8 Td (22. A Raft cluster of five servers can continue to commit entries with at most \(i\) ______ servers) Tj ET
+BT /F2 10.5 Tf 56.0 751.5 Td (failed. In a blockchain, each block stores the cryptographic \(ii\) ______ of the previous block,) Tj ET
+BT /F2 10.5 Tf 56.0 736.3 Td (which makes past blocks tamper-evident. [2 marks]) Tj ET
+BT /F1 10.0 Tf 74.0 721.8 Td (Answer: 2 / two | hash / hash value / digest) Tj ET
+0.6 g
+BT /F1 8.0 Tf 56.0 34.0 Td (Faculty of Computing Comprehensive Examination - staff copy) Tj ET
+BT /F1 8.0 Tf 479.0 34.0 Td (Page 4 of 6) Tj ET
+0 g
+endstream
+endobj
+13 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 14 0 R >>
+endobj
+14 0 obj
+<< /Length 5157 >>
+stream
+BT /F2 15.0 Tf 56.0 740.2 Td (Section C: Applied Technical Problems) Tj ET
+BT /F2 10.5 Tf 56.0 716.0 Td (23. Consider the following function: function fib\(n\): if n < 2: return n return fib\(n - 1\) + fib\(n - 2\) \(a\)) Tj ET
+BT /F2 10.5 Tf 56.0 700.8 Td (State its time complexity and explain why. \(1 mark\) \(b\) Write pseudocode for a version that) Tj ET
+BT /F2 10.5 Tf 56.0 685.6 Td (runs in O\(n\) time and O\(1\) extra space. \(3 marks\) \(c\) Name one technique that computes fib\(n\)) Tj ET
+BT /F2 10.5 Tf 56.0 670.3 Td (in O\(log n\) arithmetic operations. \(1 mark\) [5 marks]) Tj ET
+BT /F2 10.5 Tf 56.0 646.1 Td (24. An integration test passes on developers' machines but fails in about 10% of CI runs. The) Tj ET
+BT /F2 10.5 Tf 56.0 630.9 Td (test creates an order, calls an endpoint that publishes an event asynchronously, and then) Tj ET
+BT /F2 10.5 Tf 56.0 615.7 Td (immediately asserts that a notification row exists in a database shared by all CI jobs. \(a\)) Tj ET
+BT /F2 10.5 Tf 56.0 600.4 Td (Identify two likely causes of the flakiness. \(2 marks\) \(b\) Describe how you would confirm each) Tj ET
+BT /F2 10.5 Tf 56.0 585.2 Td (cause. \(1 mark\) \(c\) Propose fixes to the test and the test environment that make it) Tj ET
+BT /F2 10.5 Tf 56.0 570.0 Td (deterministic. \(2 marks\) [5 marks]) Tj ET
+BT /F2 10.5 Tf 56.0 545.8 Td (25. Staff at a branch office connected over a site-to-site VPN report two problems: \(1\) they can) Tj ET
+BT /F2 10.5 Tf 56.0 530.5 Td (ping 8.8.8.8 but cannot open any website by name; \(2\) after the first problem is fixed, small web) Tj ET
+BT /F2 10.5 Tf 56.0 515.3 Td (pages load but large downloads and some HTTPS sites stall. \(a\) Explain a systematic) Tj ET
+BT /F2 10.5 Tf 56.0 500.1 Td (diagnosis of problem \(1\), naming the tools or commands you would use. \(2 marks\) \(b\) Explain) Tj ET
+BT /F2 10.5 Tf 56.0 484.9 Td (the most likely cause of problem \(2\) and two ways to fix it. \(3 marks\) [5 marks]) Tj ET
+BT /F2 10.5 Tf 56.0 460.6 Td (26. A team deploys a stateless web service to production by running a single manual command) Tj ET
+BT /F2 10.5 Tf 56.0 445.4 Td (from a laptop. Each release causes about two minutes of downtime, and a faulty release last) Tj ET
+BT /F2 10.5 Tf 56.0 430.2 Td (month took an hour to roll back. Design a replacement delivery process. \(a\) Outline the CI/CD) Tj ET
+BT /F2 10.5 Tf 56.0 415.0 Td (pipeline stages, including how infrastructure is managed as code and how its state is stored) Tj ET
+BT /F2 10.5 Tf 56.0 399.7 Td (safely. \(2 marks\) \(b\) Choose blue-green or canary deployment and justify the choice. \(1 mark\) \(c\)) Tj ET
+BT /F2 10.5 Tf 56.0 384.5 Td (Explain how releases are rolled back automatically using monitoring signals. \(2 marks\) [5 marks]) Tj ET
+BT /F2 10.5 Tf 56.0 360.3 Td (27. A login handler contains the following code: query = "SELECT * FROM users WHERE) Tj ET
+BT /F2 10.5 Tf 56.0 345.1 Td (email = '" + email + "' AND password = '" + password + "'" row = db.execute\(query\) if row:) Tj ET
+BT /F2 10.5 Tf 56.0 329.8 Td (create_session\(row.id\) \(a\) Identify two security weaknesses and explain how each could be) Tj ET
+BT /F2 10.5 Tf 56.0 314.6 Td (exploited. \(2 marks\) \(b\) Rewrite the logic in pseudocode to remove both weaknesses. \(2 marks\) \(c\)) Tj ET
+BT /F2 10.5 Tf 56.0 299.4 Td (Name one additional control that limits online password-guessing attacks. \(1 mark\) [5 marks]) Tj ET
+BT /F2 10.5 Tf 56.0 275.2 Td (28. A machine-learning model used to pre-screen loan applications approves applicants from) Tj ET
+BT /F2 10.5 Tf 56.0 259.9 Td (one demographic group at a markedly lower rate than others, and its precision has fallen) Tj ET
+BT /F2 10.5 Tf 56.0 244.7 Td (steadily in the six months since deployment. \(a\) Explain two fairness metrics you would) Tj ET
+BT /F2 10.5 Tf 56.0 229.5 Td (compute and what each would reveal. \(2 marks\) \(b\) Explain how you would detect and respond) Tj ET
+BT /F2 10.5 Tf 56.0 214.3 Td (to data drift and concept drift. \(2 marks\) \(c\) Describe one human-oversight mechanism) Tj ET
+BT /F2 10.5 Tf 56.0 199.0 Td (appropriate for this decision. \(1 mark\) [5 marks]) Tj ET
+BT /F2 10.5 Tf 56.0 174.8 Td (29. A retailer has the tables Customers\(customer_id, name, region\) and Orders\(order_id,) Tj ET
+BT /F2 10.5 Tf 56.0 159.6 Td (customer_id, order_date, amount\). \(a\) Write an SQL query returning each region's total order) Tj ET
+BT /F2 10.5 Tf 56.0 144.4 Td (amount for 2025, only for regions whose total exceeds 100000, highest first. \(3 marks\) \(b\)) Tj ET
+BT /F2 10.5 Tf 56.0 129.1 Td (Propose an index that would speed up the query and explain why. \(1 mark\) \(c\) The table is) Tj ET
+BT /F2 10.5 Tf 56.0 113.9 Td (loaded by a nightly pipeline that sometimes reruns after failures. Explain how to make the load) Tj ET
+BT /F2 10.5 Tf 56.0 98.7 Td (idempotent. \(1 mark\) [5 marks]) Tj ET
+BT /F2 10.5 Tf 56.0 74.5 Td (30. A payment service consumes charge requests from a message queue that provides) Tj ET
+0.6 g
+BT /F1 8.0 Tf 56.0 34.0 Td (Faculty of Computing Comprehensive Examination - staff copy) Tj ET
+BT /F1 8.0 Tf 479.0 34.0 Td (Page 5 of 6) Tj ET
+0 g
+endstream
+endobj
+15 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 16 0 R >>
+endobj
+16 0 obj
+<< /Length 822 >>
+stream
+BT /F2 10.5 Tf 56.0 766.8 Td (at-least-once delivery. Occasionally a customer is charged twice for one purchase. \(a\) Explain) Tj ET
+BT /F2 10.5 Tf 56.0 751.5 Td (how duplicate charges arise in this design. \(1 mark\) \(b\) Design an idempotency mechanism that) Tj ET
+BT /F2 10.5 Tf 56.0 736.3 Td (prevents them, stating where the idempotency key comes from and how it is stored. \(2 marks\) \(c\)) Tj ET
+BT /F2 10.5 Tf 56.0 721.1 Td (The service also publishes a 'payment completed' event after updating its database.) Tj ET
+BT /F2 10.5 Tf 56.0 705.9 Td (Explain the dual-write problem and how the transactional outbox pattern solves it. \(2 marks\) [5 marks]) Tj ET
+0.6 g
+BT /F1 8.0 Tf 56.0 34.0 Td (Faculty of Computing Comprehensive Examination - staff copy) Tj ET
+BT /F1 8.0 Tf 479.0 34.0 Td (Page 6 of 6) Tj ET
+0 g
+endstream
+endobj
+xref
+0 17
+0000000000 65535 f 
+0000000015 00000 n 
+0000000064 00000 n 
+0000000154 00000 n 
+0000000251 00000 n 
+0000000353 00000 n 
+0000000489 00000 n 
+0000004338 00000 n 
+0000004474 00000 n 
+0000006555 00000 n 
+0000006692 00000 n 
+0000011079 00000 n 
+0000011217 00000 n 
+0000011862 00000 n 
+0000012000 00000 n 
+0000017209 00000 n 
+0000017347 00000 n 
+trailer
+<< /Size 17 /Root 1 0 R >>
+startxref
+18220
+%%EOF

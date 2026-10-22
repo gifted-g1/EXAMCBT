@@ -5,6 +5,7 @@
 package models
 
 import (
+	"regexp"
 	"time"
 
 	"gorm.io/datatypes"
@@ -50,22 +51,41 @@ const (
 )
 
 type Exam struct {
-	ID             int64              `gorm:"primaryKey;autoIncrement" json:"id"`
-	Title          string             `gorm:"size:150;not null" json:"title"`
-	Description    string             `gorm:"type:text" json:"description"`
-	CreatedBy      int64              `gorm:"not null;index" json:"created_by"`
-	StartsAt       time.Time          `gorm:"not null;index:idx_status_window,priority:2" json:"starts_at"`
-	EndsAt         time.Time          `gorm:"not null;index:idx_status_window,priority:3" json:"ends_at"`
-	Status         ExamStatus         `gorm:"size:16;not null;default:DRAFT;index:idx_status_window,priority:1" json:"status"`
-	LANCIDR        string             `gorm:"column:lan_cidr;size:43;not null" json:"lan_cidr"`
-	PinCode        *string            `gorm:"size:4" json:"pin_code,omitempty"`
-	Proctoring     ProctoringSettings `gorm:"column:proctoring;type:json;serializer:json" json:"proctoring"`
-	MediaPurgedAt  *time.Time         `json:"media_purged_at,omitempty"`
-	CreatedAt      time.Time          `json:"created_at"`
-	UpdatedAt      time.Time          `json:"updated_at"`
-	Creator        *User              `gorm:"foreignKey:CreatedBy;constraint:OnDelete:RESTRICT" json:"-"`
-	QuestionsCount int64              `gorm:"-" json:"questions_count"`
+	ID          int64              `gorm:"primaryKey;autoIncrement" json:"id"`
+	Title       string             `gorm:"size:150;not null" json:"title"`
+	Description string             `gorm:"type:text" json:"description"`
+	CreatedBy   int64              `gorm:"not null;index" json:"created_by"`
+	StartsAt    time.Time          `gorm:"not null;index:idx_status_window,priority:2" json:"starts_at"`
+	EndsAt      time.Time          `gorm:"not null;index:idx_status_window,priority:3" json:"ends_at"`
+	Status      ExamStatus         `gorm:"size:16;not null;default:DRAFT;index:idx_status_window,priority:1" json:"status"`
+	LANCIDR     string             `gorm:"column:lan_cidr;size:43;not null" json:"lan_cidr"`
+	PinCode     *string            `gorm:"size:4" json:"pin_code,omitempty"`
+	Proctoring  ProctoringSettings `gorm:"column:proctoring;type:json;serializer:json" json:"proctoring"`
+	// DurationMinutes is each student's time limit from when they start;
+	// 0 means "until the exam window ends". Never runs past EndsAt.
+	DurationMinutes int        `gorm:"not null;default:0" json:"duration_minutes"`
+	MediaPurgedAt   *time.Time `json:"media_purged_at,omitempty"`
+	CreatedAt       time.Time  `json:"created_at"`
+	UpdatedAt       time.Time  `json:"updated_at"`
+	Creator         *User      `gorm:"foreignKey:CreatedBy;constraint:OnDelete:RESTRICT" json:"-"`
+	QuestionsCount  int64      `gorm:"-" json:"questions_count"`
 }
+
+// Deadline is when a session started at startedAt must be submitted.
+func (e *Exam) Deadline(startedAt time.Time) time.Time {
+	if e.DurationMinutes > 0 {
+		if d := startedAt.Add(time.Duration(e.DurationMinutes) * time.Minute); d.Before(e.EndsAt) {
+			return d
+		}
+	}
+	return e.EndsAt
+}
+
+// BlankRe finds the blanks ("_____", three or more underscores) in a GAP prompt.
+var BlankRe = regexp.MustCompile(`_{3,}`)
+
+// CountBlanks returns how many blanks a prompt has.
+func CountBlanks(prompt string) int { return len(BlankRe.FindAllStringIndex(prompt, -1)) }
 
 // PinRequired reports whether students must present a PIN.
 func (e *Exam) PinRequired() bool { return e.PinCode != nil && *e.PinCode != "" }
@@ -75,6 +95,7 @@ type QuestionKind string
 const (
 	QuestionMCQ  QuestionKind = "MCQ"
 	QuestionText QuestionKind = "TEXT"
+	QuestionGap  QuestionKind = "GAP" // fill in the gap(s), auto-marked
 )
 
 type Question struct {
@@ -85,7 +106,9 @@ type Question struct {
 	Prompt        string                      `gorm:"type:text;not null" json:"prompt"`
 	Options       datatypes.JSONSlice[string] `gorm:"type:json" json:"options"`
 	CorrectOption *int                        `json:"correct_option,omitempty"`
-	Marks         float64                     `gorm:"type:decimal(5,2);not null;default:1" json:"marks"`
+	// GAP questions: accepted answers for each blank, in order. Staff only.
+	Blanks datatypes.JSONSlice[[]string] `gorm:"type:json" json:"blanks,omitempty"`
+	Marks  float64                       `gorm:"type:decimal(5,2);not null;default:1" json:"marks"`
 	// Written (TEXT) questions only: the examiner's key points and an
 	// optional model answer. Never sent to students.
 	MarkingGuide datatypes.JSONSlice[MarkingPoint] `gorm:"type:json" json:"marking_guide,omitempty"`

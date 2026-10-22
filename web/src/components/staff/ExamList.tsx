@@ -80,6 +80,7 @@ function CreateExam({ onCreated }: { onCreated: () => void }) {
   const [end, setEnd] = useState(toLocalInput(new Date(now.getTime() + 2 * 3600_000)))
   const [cidr, setCidr] = useState('')
   const [pin, setPin] = useState(true)
+  const [duration, setDuration] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
 
@@ -95,6 +96,7 @@ function CreateExam({ onCreated }: { onCreated: () => void }) {
         ends_at: new Date(end).toISOString(),
         lan_cidr: cidr.trim(),
         require_pin: pin,
+        duration_minutes: duration.trim() === '' ? 0 : Number(duration),
       })
       onCreated()
       navigate(`/staff/exams/${exam.id}`)
@@ -119,6 +121,17 @@ function CreateExam({ onCreated }: { onCreated: () => void }) {
         </Field>
         <Field label="Ends">
           <input type="datetime-local" className={inputClass} value={end} onChange={(e) => setEnd(e.target.value)} required />
+        </Field>
+        <Field label="Time limit (minutes)" hint="Each student gets this long from when they start, e.g. 25. Leave blank to allow the whole window.">
+          <input
+            type="number"
+            min={1}
+            max={720}
+            className={`${inputClass} w-32`}
+            value={duration}
+            onChange={(e) => setDuration(e.target.value)}
+            placeholder="none"
+          />
         </Field>
         <Field label="Instructions (shown to students)">
           <textarea className={inputClass} value={description} onChange={(e) => setDescription(e.target.value)} rows={2} />

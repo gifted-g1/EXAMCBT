@@ -77,21 +77,22 @@ func NewStudentService(repo *repositories.Repo, rdb *store.Redis, blobs store.Bl
 
 // GateInfo is what a student sees before identifying themselves.
 type GateInfo struct {
-	ExamID         int64     `json:"exam_id"`
-	Title          string    `json:"title"`
-	Description    string    `json:"description"`
-	StartsAt       time.Time `json:"starts_at"`
-	EndsAt         time.Time `json:"ends_at"`
-	ServerTime     time.Time `json:"server_time"`
-	ConsentVersion string    `json:"consent_version"`
-	FaceThreshold  float64   `json:"face_match_threshold"`
+	ExamID          int64     `json:"exam_id"`
+	Title           string    `json:"title"`
+	Description     string    `json:"description"`
+	StartsAt        time.Time `json:"starts_at"`
+	EndsAt          time.Time `json:"ends_at"`
+	DurationMinutes int       `json:"duration_minutes"` // per-student time limit; 0 = whole window
+	ServerTime      time.Time `json:"server_time"`
+	ConsentVersion  string    `json:"consent_version"`
+	FaceThreshold   float64   `json:"face_match_threshold"`
 	// Proctoring tells the page what to require: camera, selfie, fullscreen…
 	Proctoring models.Proctoring `json:"proctoring"`
 }
 
 func (s *StudentService) Gate(e *models.Exam) GateInfo {
 	return GateInfo{ExamID: e.ID, Title: e.Title, Description: e.Description, StartsAt: e.StartsAt,
-		EndsAt: e.EndsAt, ServerTime: time.Now().UTC(), ConsentVersion: s.cfg.ConsentVersion,
+		EndsAt: e.EndsAt, DurationMinutes: e.DurationMinutes, ServerTime: time.Now().UTC(), ConsentVersion: s.cfg.ConsentVersion,
 		FaceThreshold: s.matcher.Threshold(), Proctoring: e.Proctoring.Resolve()}
 }
 
@@ -151,6 +152,13 @@ func (s *StudentService) Verify(ctx context.Context, e *models.Exam, in VerifyIn
 		return nil, err
 	} else if existing != nil {
 		if existing.Status == models.SessionSubmitted || existing.Status == models.SessionClosed {
+			return nil, ErrAlreadySubmitted
+		}
+		// Time limit used up (e.g. the computer was off): submit, don't resume.
+		if time.Now().After(e.Deadline(existing.StartedAt).Add(s.cfg.SubmitGrace)) {
+			if _, err := s.finalize(ctx, existing.ID, true); err != nil {
+				return nil, err
+			}
 			return nil, ErrAlreadySubmitted
 		}
 		if existing.DeviceFP != "" && existing.DeviceFP != fp {
@@ -223,7 +231,7 @@ func (s *StudentService) Verify(ctx context.Context, e *models.Exam, in VerifyIn
 			Metadata: map[string]any{"reason": fr.needsReview, "assurance": s.matcher.Assurance()}})
 	}
 
-	expires := e.EndsAt.Add(s.cfg.SubmitGrace)
+	expires := e.Deadline(sess.StartedAt).Add(s.cfg.SubmitGrace)
 	token, err := s.tokens.IssueStudent(sess.ID, e.ID, st.ID, fp, expires)
 	if err != nil {
 		release()
@@ -357,17 +365,19 @@ type QuestionView struct {
 	Prompt   string              `json:"prompt"`
 	Options  []string            `json:"options,omitempty"`
 	Marks    float64             `json:"marks"`
+	Blanks   int                 `json:"blanks,omitempty"` // GAP: number of blanks (never the answers)
 }
 
 // SessionState never includes correct answers.
 type SessionState struct {
-	SessionID  int64                `json:"session_id"`
-	Status     models.SessionStatus `json:"status"`
-	ExamID     int64                `json:"exam_id"`
-	ExamTitle  string               `json:"exam_title"`
-	EndsAt     time.Time            `json:"ends_at"`
-	ServerTime time.Time            `json:"server_time"`
-	Student    struct {
+	SessionID       int64                `json:"session_id"`
+	Status          models.SessionStatus `json:"status"`
+	ExamID          int64                `json:"exam_id"`
+	ExamTitle       string               `json:"exam_title"`
+	EndsAt          time.Time            `json:"ends_at"` // this student's deadline
+	DurationMinutes int                  `json:"duration_minutes"`
+	ServerTime      time.Time            `json:"server_time"`
+	Student         struct {
 		MatricNo string `json:"matric_no"`
 		FullName string `json:"full_name"`
 	} `json:"student"`
@@ -394,13 +404,13 @@ func (s *StudentService) State(ctx context.Context, sessionID int64) (*SessionSt
 		return nil, err
 	}
 	st := &SessionState{SessionID: sess.ID, Status: sess.Status, ExamID: e.ID, ExamTitle: e.Title, Proctoring: e.Proctoring.Resolve(),
-		EndsAt: e.EndsAt, ServerTime: time.Now().UTC(), Answers: map[string]string{}}
+		EndsAt: e.Deadline(sess.StartedAt), DurationMinutes: e.DurationMinutes, ServerTime: time.Now().UTC(), Answers: map[string]string{}}
 	if sess.Student != nil {
 		st.Student.MatricNo, st.Student.FullName = sess.Student.MatricNo, sess.Student.FullName
 	}
 	st.Questions = make([]QuestionView, len(qs))
 	for i, q := range qs {
-		st.Questions[i] = QuestionView{ID: q.ID, Position: q.Position, Kind: q.Kind, Prompt: q.Prompt, Options: q.Options, Marks: q.Marks}
+		st.Questions[i] = QuestionView{ID: q.ID, Position: q.Position, Kind: q.Kind, Prompt: q.Prompt, Options: q.Options, Marks: q.Marks, Blanks: len(q.Blanks)}
 	}
 	for _, a := range ans {
 		st.Answers[strconv.FormatInt(a.QuestionID, 10)] = a.Response
@@ -425,7 +435,7 @@ func (s *StudentService) activeSession(ctx context.Context, c *auth.StudentClaim
 	if err != nil {
 		return nil, nil, err
 	}
-	if e.Status == models.ExamClosed || time.Now().After(e.EndsAt.Add(s.cfg.SubmitGrace)) {
+	if e.Status == models.ExamClosed || time.Now().After(e.Deadline(sess.StartedAt).Add(s.cfg.SubmitGrace)) {
 		return nil, nil, ErrSessionEnded
 	}
 	if ip := httpx.ClientIPFrom(ctx); ip != nil && !s.cfg.OpenAccess() && !(ip.IsLoopback() && s.cfg.AllowLoopbackExam) {
@@ -463,6 +473,11 @@ func (s *StudentService) SaveAnswer(ctx context.Context, c *auth.StudentClaims, 
 			return time.Time{}, invalid("response must be an option index")
 		}
 	}
+	if q.Kind == models.QuestionGap && response != "" {
+		if g := GapAnswers(response); g == nil || len(g) > len(q.Blanks) {
+			return time.Time{}, invalid("response must be a JSON list with one answer per blank")
+		}
+	}
 	now := time.Now().UTC()
 	if err := s.repo.UpsertAnswer(ctx, &models.Answer{SessionID: sess.ID, QuestionID: q.ID, Response: response, SavedAt: now}); err != nil {
 		return time.Time{}, err
@@ -474,25 +489,25 @@ func (s *StudentService) SaveAnswer(ctx context.Context, c *auth.StudentClaims, 
 // long network drop) but nobody else claimed them, they are re-acquired.
 // The returned exam carries the current end time and proctoring switches, so
 // time extensions and toggles reach students within one heartbeat.
-func (s *StudentService) Heartbeat(ctx context.Context, c *auth.StudentClaims) (*models.Exam, error) {
+func (s *StudentService) Heartbeat(ctx context.Context, c *auth.StudentClaims) (*models.Exam, time.Time, error) {
 	sess, e, err := s.activeSession(ctx, c)
 	if err != nil {
-		return nil, err
+		return nil, time.Time{}, err
 	}
 	ok, err := s.rdb.RefreshSession(ctx, c.DeviceFP, e.ID, sess.StudentID, s.cfg.SessionLockTTL)
 	if err != nil {
-		return nil, err
+		return nil, time.Time{}, err
 	}
 	if !ok {
 		if err := s.rdb.ClaimSession(ctx, c.DeviceFP, e.ID, sess.StudentID, s.cfg.SessionLockTTL); err != nil {
-			return nil, ErrLockLost
+			return nil, time.Time{}, ErrLockLost
 		}
 	}
 	now := time.Now().UTC()
 	if err := s.repo.TouchSession(ctx, sess.ID, now); err != nil {
-		return nil, err
+		return nil, time.Time{}, err
 	}
-	return e, nil
+	return e, e.Deadline(sess.StartedAt), nil
 }
 
 // eventEnabled reports whether the exam's proctoring settings record a given
@@ -660,6 +675,32 @@ func grade(ctx context.Context, tx *repositories.Repo, sess *models.ExamSession)
 		}
 	}
 	return score, nil
+}
+
+// AutoSubmitOverdue finalises open sessions whose personal time limit (plus
+// grace) has passed while the exam itself is still open.
+func (s *StudentService) AutoSubmitOverdue(ctx context.Context) {
+	exams, err := s.repo.ActiveTimedExams(ctx)
+	if err != nil {
+		s.log.Error("auto-submit overdue: list exams", "err", err)
+		return
+	}
+	now := time.Now()
+	for i := range exams {
+		e := &exams[i]
+		sessions, err := s.repo.OpenSessionsForExam(ctx, e.ID)
+		if err != nil {
+			s.log.Error("auto-submit overdue: list sessions", "exam_id", e.ID, "err", err)
+			continue
+		}
+		for _, sess := range sessions {
+			if now.After(e.Deadline(sess.StartedAt).Add(s.cfg.SubmitGrace)) {
+				if _, err := s.finalize(ctx, sess.ID, true); err != nil {
+					s.log.Error("auto-submit overdue: finalize", "session_id", sess.ID, "err", err)
+				}
+			}
+		}
+	}
 }
 
 // AutoSubmitExam finalises every open session of a closed exam.

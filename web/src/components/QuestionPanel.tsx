@@ -23,15 +23,15 @@ export function QuestionPanel({
     if (q) setDraft(answers[String(q.id)] ?? '')
   }, [q?.id])
 
-  // Debounced save for free-text answers.
+  // Debounced save for typed answers (written and fill-in-the-gap).
   useEffect(() => {
-    if (!q || q.kind !== 'TEXT' || draft === (answers[String(q.id)] ?? '')) return
+    if (!q || q.kind === 'MCQ' || draft === (answers[String(q.id)] ?? '')) return
     const t = setTimeout(() => onAnswer(q.id, draft), 500)
     return () => clearTimeout(t)
   }, [draft, q, answers, onAnswer])
 
   if (!q) return <p className="text-slate-500">This exam has no questions.</p>
-  const answered = (id: number) => (answers[String(id)] ?? '') !== ''
+  const answered = (id: number) => hasResponse(answers[String(id)] ?? '')
 
   return (
     <div className="flex flex-col gap-6 lg:flex-row">
@@ -63,9 +63,15 @@ export function QuestionPanel({
         <p className="text-xs font-medium uppercase tracking-wide text-slate-500">
           Question {index + 1} of {questions.length} · {q.marks} mark{q.marks === 1 ? '' : 's'}
         </p>
-        <h2 id="q-title" className="mt-2 whitespace-pre-wrap text-lg font-semibold text-slate-900">
-          {q.prompt}
-        </h2>
+        {q.kind === 'GAP' ? (
+          <p id="q-title" className="mt-2 text-sm text-slate-600">
+            Fill in each blank.
+          </p>
+        ) : (
+          <h2 id="q-title" className="mt-2 whitespace-pre-wrap text-lg font-semibold text-slate-900">
+            {q.prompt}
+          </h2>
+        )}
 
         {q.kind === 'MCQ' ? (
           <fieldset className="mt-5 space-y-2">
@@ -94,6 +100,17 @@ export function QuestionPanel({
               )
             })}
           </fieldset>
+        ) : q.kind === 'GAP' ? (
+          <GapInputs
+            prompt={q.prompt}
+            count={q.blanks ?? 0}
+            value={draft}
+            onChange={(v) => {
+              setDraft(v)
+              onDraft?.(q.id, v)
+            }}
+            onBlur={() => draft !== (answers[String(q.id)] ?? '') && onAnswer(q.id, draft)}
+          />
         ) : (
           <textarea
             aria-label="Your answer"
@@ -118,6 +135,74 @@ export function QuestionPanel({
           </Button>
         </div>
       </section>
+    </div>
+  )
+}
+
+/** A GAP answer is a JSON list with one string per blank. */
+export function parseGap(v: string, count: number): string[] {
+  let arr: unknown = []
+  try {
+    arr = v ? JSON.parse(v) : []
+  } catch {
+    arr = []
+  }
+  const out = Array.isArray(arr) ? arr.map((x) => (typeof x === 'string' ? x : '')) : []
+  while (out.length < count) out.push('')
+  return out.slice(0, count)
+}
+
+function hasResponse(v: string): boolean {
+  if (v.startsWith('[')) {
+    try {
+      const a = JSON.parse(v)
+      if (Array.isArray(a)) return a.some((x) => typeof x === 'string' && x.trim() !== '')
+    } catch {
+      /* not a gap answer */
+    }
+  }
+  return v !== ''
+}
+
+const BLANK = /_{3,}/
+
+/** The question text with an input box in place of each "_____". */
+function GapInputs({
+  prompt,
+  count,
+  value,
+  onChange,
+  onBlur,
+}: {
+  prompt: string
+  count: number
+  value: string
+  onChange: (v: string) => void
+  onBlur: () => void
+}) {
+  const parts = prompt.split(BLANK)
+  const n = Math.max(count, parts.length - 1)
+  const vals = parseGap(value, n)
+  const set = (i: number, s: string) => onChange(JSON.stringify(vals.map((x, j) => (j === i ? s : x))))
+  return (
+    <div className="mt-3 whitespace-pre-wrap text-lg leading-loose text-slate-900">
+      {parts.map((text, i) => (
+        <span key={i}>
+          {text}
+          {i < parts.length - 1 && (
+            <input
+              aria-label={`Blank ${i + 1}`}
+              className="mx-1 inline-block w-44 rounded-md border-0 px-2 py-1 text-base ring-1 ring-inset ring-slate-400 focus:ring-2 focus:ring-brand-500"
+              value={vals[i]}
+              maxLength={200}
+              spellCheck={false}
+              autoComplete="off"
+              onChange={(e) => set(i, e.target.value)}
+              onBlur={onBlur}
+            />
+          )}
+        </span>
+      ))}
     </div>
   )
 }

@@ -2,6 +2,7 @@ package services
 
 import (
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 
@@ -48,4 +49,31 @@ func TestMarkAnswerUsesExaminerMark(t *testing.T) {
 
 	st, _ = markAnswer(q, nil)
 	assert.Equal(t, StatusUnanswered, st)
+}
+
+func TestGapMarking(t *testing.T) {
+	q := models.Question{Kind: models.QuestionGap, Marks: 3, Blanks: [][]string{{"SYN"}, {"SYN-ACK", "SYN ACK"}, {"ACK"}}}
+	st, aw := markAnswer(q, &models.Answer{Response: `[" syn ","syn  ack","ACK."]`})
+	assert.Equal(t, StatusCorrect, st, "case, spacing and trailing full stop are ignored")
+	assert.Equal(t, 3.0, *aw)
+
+	st, aw = markAnswer(q, &models.Answer{Response: `["SYN","FIN",""]`})
+	assert.Equal(t, StatusPartial, st)
+	assert.Equal(t, 1.0, *aw)
+
+	st, aw = markAnswer(q, &models.Answer{Response: `["x"]`})
+	assert.Equal(t, StatusIncorrect, st)
+	assert.Equal(t, 0.0, *aw)
+
+	st, _ = markAnswer(q, &models.Answer{Response: `["",""]`})
+	assert.Equal(t, StatusUnanswered, st)
+}
+
+func TestExamDeadline(t *testing.T) {
+	start := time.Date(2026, 10, 22, 9, 0, 0, 0, time.UTC)
+	e := models.Exam{EndsAt: start.Add(time.Hour), DurationMinutes: 25}
+	assert.Equal(t, start.Add(25*time.Minute), e.Deadline(start))
+	assert.Equal(t, e.EndsAt, e.Deadline(start.Add(50*time.Minute)), "never past the window")
+	e.DurationMinutes = 0
+	assert.Equal(t, e.EndsAt, e.Deadline(start))
 }

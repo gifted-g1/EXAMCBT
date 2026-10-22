@@ -92,13 +92,17 @@ export interface ExamInput {
   ends_at: string
   lan_cidr: string
   require_pin?: boolean
+  /** Per-student time limit in minutes; 0 = until the window ends. */
+  duration_minutes?: number
 }
 
 export interface QuestionInput {
-  kind: 'MCQ' | 'TEXT'
+  kind: 'MCQ' | 'TEXT' | 'GAP'
   prompt: string
   options?: string[]
   correct_option?: number
+  /** GAP: accepted answers for each blank, in order. */
+  blanks?: string[][]
   marks?: number
 }
 
@@ -213,10 +217,11 @@ async function authedBlob(path: string): Promise<string | null> {
 /** A question as parsed from a PDF (preview only — nothing saved yet). */
 export interface ParsedQuestion {
   number: number
-  kind: 'MCQ' | 'TEXT'
+  kind: 'MCQ' | 'TEXT' | 'GAP'
   prompt: string
   options?: string[]
   correct_option: number | null
+  blanks?: string[][]
   marks: number
   warnings?: string[]
 }

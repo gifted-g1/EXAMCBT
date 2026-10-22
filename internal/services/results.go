@@ -2,6 +2,7 @@ package services
 
 import (
 	"context"
+	"encoding/json"
 	"strconv"
 	"strings"
 
@@ -14,15 +15,34 @@ const (
 	StatusIncorrect    = "incorrect"
 	StatusUnanswered   = "unanswered"
 	StatusNeedsMarking = "needs_marking"
+	StatusPartial      = "partial" // some blanks of a GAP question right
 )
 
 // markAnswer is the single marking rule used by grading, answer sheets and
 // question analysis, so they can never disagree. Written answers are never
 // auto-marked: awarded stays nil until an examiner confirms a mark.
+// Fill-in-the-gap answers earn marks in proportion to the blanks right.
 func markAnswer(q models.Question, a *models.Answer) (status string, awarded *float64) {
 	zero := 0.0
-	if a == nil || strings.TrimSpace(a.Response) == "" {
+	if a == nil || !hasAnswer(q, a.Response) {
 		return StatusUnanswered, &zero
+	}
+	if q.Kind == models.QuestionGap && len(q.Blanks) > 0 && a.AwardedMarks == nil {
+		right := GapResults(q, a.Response)
+		got := 0
+		for _, ok := range right {
+			if ok {
+				got++
+			}
+		}
+		m := round2(q.Marks * float64(got) / float64(len(right)))
+		switch got {
+		case len(right):
+			return StatusCorrect, &m
+		case 0:
+			return StatusIncorrect, &zero
+		}
+		return StatusPartial, &m
 	}
 	if q.Kind != models.QuestionMCQ || q.CorrectOption == nil {
 		if a.AwardedMarks != nil {
@@ -38,6 +58,53 @@ func markAnswer(q models.Question, a *models.Answer) (status string, awarded *fl
 	return StatusIncorrect, &zero
 }
 
+// GapAnswers decodes a GAP response: a JSON array with one string per blank.
+func GapAnswers(resp string) []string {
+	var out []string
+	if json.Unmarshal([]byte(resp), &out) != nil {
+		return nil
+	}
+	return out
+}
+
+func hasAnswer(q models.Question, resp string) bool {
+	if q.Kind != models.QuestionGap {
+		return strings.TrimSpace(resp) != ""
+	}
+	for _, g := range GapAnswers(resp) {
+		if strings.TrimSpace(g) != "" {
+			return true
+		}
+	}
+	return false
+}
+
+// normGap makes gap matching forgiving about case, spacing and trailing
+// punctuation: " Round  Robin." matches "round robin".
+func normGap(s string) string {
+	s = strings.ToLower(strings.Join(strings.Fields(s), " "))
+	return strings.TrimRight(s, ".,;:")
+}
+
+// GapResults reports, per blank, whether the response matches one of that
+// blank's accepted answers.
+func GapResults(q models.Question, resp string) []bool {
+	got := GapAnswers(resp)
+	out := make([]bool, len(q.Blanks))
+	for i, accepted := range q.Blanks {
+		if i >= len(got) {
+			break
+		}
+		g := normGap(got[i])
+		for _, ok := range accepted {
+			if g != "" && g == normGap(ok) {
+				out[i] = true
+			}
+		}
+	}
+	return out
+}
+
 // ScriptItem is one question on a student's answer sheet.
 type ScriptItem struct {
 	QuestionID    int64               `json:"question_id"`
@@ -51,6 +118,11 @@ type ScriptItem struct {
 	Marks         float64             `json:"marks"`
 	Awarded       *float64            `json:"awarded"`
 	Comment       string              `json:"comment,omitempty"` // examiner's note on a written answer
+	// GAP only: accepted answers per blank, what the student wrote, and
+	// which blanks were right.
+	Blanks       [][]string `json:"blanks,omitempty"`
+	BlankAnswers []string   `json:"blank_answers,omitempty"`
+	BlankCorrect []bool     `json:"blank_correct,omitempty"`
 }
 
 // AnswerScript is a student's marked answer sheet. Staff only: it contains
@@ -89,7 +161,7 @@ func (s *ProctorService) AnswerScript(ctx context.Context, sessionID int64) (*An
 	}
 	byQ := answersByQuestion(ans)
 	out := &AnswerScript{SessionID: sess.ID, ExamID: e.ID, ExamTitle: e.Title, Status: sess.Status,
-		Counts: map[string]int{StatusCorrect: 0, StatusIncorrect: 0, StatusUnanswered: 0, StatusNeedsMarking: 0, StatusMarked: 0},
+		Counts: map[string]int{StatusCorrect: 0, StatusIncorrect: 0, StatusUnanswered: 0, StatusNeedsMarking: 0, StatusMarked: 0, StatusPartial: 0},
 		Items:  []ScriptItem{}}
 	if sess.Student != nil {
 		out.MatricNo, out.FullName = sess.Student.MatricNo, sess.Student.FullName
@@ -102,10 +174,16 @@ func (s *ProctorService) AnswerScript(ctx context.Context, sessionID int64) (*An
 		if a != nil {
 			it.Response, it.Comment = a.Response, a.MarkerComment
 		}
+		if q.Kind == models.QuestionGap {
+			it.Blanks = q.Blanks
+			if a != nil {
+				it.BlankAnswers, it.BlankCorrect = GapAnswers(a.Response), GapResults(q, a.Response)
+			}
+		}
 		out.Items = append(out.Items, it)
 		out.Counts[st]++
 		out.MaxScore += q.Marks
-		if q.Kind == models.QuestionMCQ || st == StatusMarked {
+		if q.Kind != models.QuestionText || st == StatusMarked {
 			out.AutoMarkedMax += q.Marks
 		}
 		if awarded != nil {
@@ -133,6 +211,7 @@ type QuestionStat struct {
 	CorrectOption *int                `json:"correct_option,omitempty"`
 	Correct       int                 `json:"correct"`
 	Incorrect     int                 `json:"incorrect"`
+	Partial       int                 `json:"partial"`
 	Unanswered    int                 `json:"unanswered"`
 	Answered      int                 `json:"answered"`
 	OptionCounts  []int               `json:"option_counts,omitempty"` // students per option (MCQ)
@@ -174,6 +253,8 @@ func (s *ProctorService) ItemAnalysis(ctx context.Context, e *models.Exam) ([]Qu
 				st.Correct++
 			case StatusIncorrect:
 				st.Incorrect++
+			case StatusPartial:
+				st.Partial++
 			case StatusUnanswered:
 				st.Unanswered++
 			}
@@ -184,7 +265,7 @@ func (s *ProctorService) ItemAnalysis(ctx context.Context, e *models.Exam) ([]Qu
 				}
 			}
 		}
-		if q.Kind == models.QuestionMCQ && len(rows) > 0 {
+		if q.Kind != models.QuestionText && len(rows) > 0 {
 			p := round2(float64(st.Correct) / float64(len(rows)) * 100)
 			st.PercentRight = &p
 			best := -1

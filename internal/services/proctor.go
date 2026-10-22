@@ -75,6 +75,7 @@ func (s *ProctorService) Flag(ctx context.Context, sess *models.ExamSession, eve
 
 // ReportRow is one student's line in the exam report.
 type ReportRow struct {
+	SessionID      int64      `json:"session_id"`
 	MatricNo       string     `json:"matric_no"`
 	FullName       string     `json:"full_name"`
 	Status         string     `json:"status"`
@@ -123,7 +124,7 @@ func (s *ProctorService) Report(ctx context.Context, e *models.Exam) (*Report, e
 	rep := &Report{Exam: e, GeneratedAt: time.Now().UTC()}
 	var sumScore, sumInt float64
 	for _, r := range rows {
-		rep.Rows = append(rep.Rows, ReportRow{MatricNo: r.MatricNo, FullName: r.FullName, Status: string(r.Status),
+		rep.Rows = append(rep.Rows, ReportRow{SessionID: r.ID, MatricNo: r.MatricNo, FullName: r.FullName, Status: string(r.Status),
 			Score: r.Score, MaxScore: max, IntegrityScore: r.IntegrityScore, FaceMatch: r.FaceMatchScore,
 			Violations: r.ViolationsCount, HighViolations: r.HighCount, AutoSubmitted: r.AutoSubmitted,
 			StartedAt: r.StartedAt, EndedAt: r.EndedAt, NeedsMarking: hasText})

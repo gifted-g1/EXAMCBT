@@ -658,11 +658,9 @@ func grade(ctx context.Context, tx *repositories.Repo, sess *models.ExamSession)
 	}
 	var score float64
 	for _, q := range qs {
-		if q.Kind != models.QuestionMCQ || q.CorrectOption == nil {
-			continue
-		}
-		if r, ok := byQ[q.ID]; ok && r == strconv.Itoa(*q.CorrectOption) {
-			score += q.Marks
+		r, ok := byQ[q.ID]
+		if _, awarded := markAnswer(q, r, ok); awarded != nil {
+			score += *awarded
 		}
 	}
 	return score, nil

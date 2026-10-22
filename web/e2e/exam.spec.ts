@@ -236,4 +236,21 @@ test('answers survive going offline and a reload while offline', async ({ page, 
 
   const report = await (await request.get(`/api/staff/exams/${exam.id}/report`, { headers: auth })).json()
   expect(report.rows[0].score).toBe(2)
+
+  // Staff review what the student got and missed.
+  await page.goto('/staff')
+  await page.getByLabel('Staff ID').fill('20010078')
+  await page.getByLabel(/^Password/).fill('MUSTAPHA')
+  await page.getByRole('button', { name: 'Sign in' }).click()
+  await expect(page.getByRole('heading', { name: 'Exams' })).toBeVisible()
+  await page.goto(`/staff/exams/${exam.id}`)
+  await page.getByRole('tab', { name: 'Report' }).click()
+  await page.getByRole('button', { name: 'View answers' }).click()
+  const sheet = page.getByRole('dialog', { name: 'Answer sheet' })
+  await expect(sheet.getByText(/^✓\s*Correct$/)).toHaveCount(2)
+  await expect(sheet.getByText(/^✎\s*Needs marking$/)).toHaveCount(1)
+  await expect(sheet.getByText('The lights went off but my work stayed.')).toBeVisible()
+  await sheet.getByRole('button', { name: /Missed/ }).click()
+  await expect(sheet.getByText('Pick B')).toHaveCount(0)
+  await expect(page.getByRole('heading', { name: 'Question analysis' })).toBeVisible()
 })

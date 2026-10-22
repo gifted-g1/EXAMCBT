@@ -621,3 +621,81 @@ func TestOpenAccessModeBehindLoadBalancer(t *testing.T) {
 	r = h.do(http.MethodPost, "/api/student/heartbeat", nil, public)
 	assert.Equal(t, 200, r.Code, r.Raw)
 }
+
+func TestAnswerScriptAndItemAnalysis(t *testing.T) {
+	h := newHarness(t)
+	h.login("20010078", "MUSTAPHA")
+	now := time.Now().UTC()
+	r := h.do(http.MethodPost, "/api/staff/exams", map[string]any{"title": "Results", "starts_at": now.Add(-time.Minute),
+		"ends_at": now.Add(time.Hour), "lan_cidr": "127.0.0.0/8", "proctoring": map[string]bool{"face_verification": false}}, nil)
+	examID := num(r.Body["id"])
+	r = h.do(http.MethodPost, fmt.Sprintf("/api/staff/exams/%d/questions", examID), map[string]any{"questions": []map[string]any{
+		{"prompt": "Q1", "options": []string{"a", "b", "c"}, "correct_option": 1, "marks": 2},
+		{"prompt": "Q2", "options": []string{"a", "b", "c"}, "correct_option": 2},
+		{"prompt": "Q3", "options": []string{"a", "b"}, "correct_option": 0},
+		{"kind": "TEXT", "prompt": "Explain", "marks": 5},
+	}}, nil)
+	qs := r.Body["questions"].([]any)
+	qid := func(i int) int64 { return num(qs[i].(map[string]any)["id"]) }
+	require.Equal(t, 200, h.do(http.MethodPost, fmt.Sprintf("/api/staff/exams/%d/status", examID), map[string]string{"action": "open"}, nil).Code)
+
+	sit := func(matric, device string, answers map[int64]string) {
+		r := h.multipart("/api/student/verify", map[string]string{"matric_no": matric, "consent": "true"}, nil, fp(device))
+		require.Equal(t, 200, r.Code, r.Raw)
+		for q, a := range answers {
+			require.Equal(t, 200, h.do(http.MethodPut, "/api/student/answers", map[string]any{"question_id": q, "response": a}, fp(device)).Code)
+		}
+		require.Equal(t, 200, h.do(http.MethodPost, "/api/student/submit", nil, fp(device)).Code)
+	}
+	// A: Q1 right, Q2 wrong (a), Q3 skipped, written answer given.
+	sit("IFT/22/9203", devA, map[int64]string{qid(0): "1", qid(1): "0", qid(3): "Because..."})
+	// B: Q1 wrong (a), Q2 wrong (a), Q3 right.
+	sit("IFT/22/9101", devB, map[int64]string{qid(0): "0", qid(1): "0", qid(2): "0"})
+
+	r = h.do(http.MethodGet, fmt.Sprintf("/api/staff/exams/%d/report", examID), nil, nil)
+	var sidA int64
+	for _, row := range r.Body["rows"].([]any) {
+		if row.(map[string]any)["matric_no"] == "IFT/22/9203" {
+			sidA = num(row.(map[string]any)["session_id"])
+		}
+	}
+	require.NotZero(t, sidA)
+
+	r = h.do(http.MethodGet, fmt.Sprintf("/api/staff/sessions/%d/answers", sidA), nil, nil)
+	require.Equal(t, 200, r.Code, r.Raw)
+	assert.Equal(t, 2.0, r.Body["score"])
+	assert.Equal(t, 9.0, r.Body["max_score"])
+	counts := r.Body["counts"].(map[string]any)
+	assert.EqualValues(t, 1, counts["correct"])
+	assert.EqualValues(t, 1, counts["incorrect"])
+	assert.EqualValues(t, 1, counts["unanswered"])
+	assert.EqualValues(t, 1, counts["needs_marking"])
+	items := r.Body["items"].([]any)
+	first := items[0].(map[string]any)
+	assert.Equal(t, "correct", first["status"])
+	assert.EqualValues(t, 1, first["correct_option"])
+	assert.Equal(t, "1", first["response"])
+	assert.Equal(t, "Because...", items[3].(map[string]any)["response"])
+	assert.Nil(t, items[3].(map[string]any)["awarded"], "written answers wait for an examiner")
+
+	r = h.do(http.MethodGet, fmt.Sprintf("/api/staff/exams/%d/item-analysis", examID), nil, nil)
+	require.Equal(t, 200, r.Code, r.Raw)
+	assert.EqualValues(t, 2, r.Body["candidates"])
+	stats := r.Body["questions"].([]any)
+	q2 := stats[1].(map[string]any)
+	assert.EqualValues(t, 0, q2["correct"])
+	assert.EqualValues(t, 2, q2["incorrect"])
+	assert.Equal(t, 0.0, q2["percent_right"])
+	assert.EqualValues(t, 0, q2["common_wrong"], "both picked option a")
+	q1 := stats[0].(map[string]any)
+	assert.Equal(t, 50.0, q1["percent_right"])
+	q3 := stats[2].(map[string]any)
+	assert.EqualValues(t, 1, q3["unanswered"])
+
+	// Viewing is shared among staff (like the live monitor), but students
+	// can never reach these endpoints.
+	h.login("19980012", "ADEGOKE")
+	assert.Equal(t, 200, h.do(http.MethodGet, fmt.Sprintf("/api/staff/sessions/%d/answers", sidA), nil, nil).Code)
+	h.token = ""
+	assert.Equal(t, http.StatusUnauthorized, h.do(http.MethodGet, fmt.Sprintf("/api/staff/sessions/%d/answers", sidA), nil, nil).Code)
+}

@@ -241,3 +241,34 @@ func (h *Handlers) WS(shutdown context.Context) gin.HandlerFunc {
 		h.Hub.Serve(shutdown, c.Writer, c.Request, examID)
 	}
 }
+
+// AnswerScript: GET /api/staff/sessions/:sid/answers — one student's marked
+// answer sheet (their answer, the correct answer, marks per question).
+func (h *Handlers) AnswerScript(c *gin.Context) {
+	sess, ok := h.sessionFor(c, false)
+	if !ok {
+		return
+	}
+	script, err := h.Proctor.AnswerScript(c.Request.Context(), sess.ID)
+	if err != nil {
+		fail(c, err)
+		return
+	}
+	h.audit(c, "answer_script_view", strconv.FormatInt(sess.ID, 10), nil)
+	c.JSON(http.StatusOK, script)
+}
+
+// ItemAnalysis: GET /api/staff/exams/:id/item-analysis — how the class did
+// on each question (right / wrong / skipped, most chosen wrong option).
+func (h *Handlers) ItemAnalysis(c *gin.Context) {
+	e, ok := h.examFor(c, false)
+	if !ok {
+		return
+	}
+	stats, candidates, err := h.Proctor.ItemAnalysis(c.Request.Context(), e)
+	if err != nil {
+		fail(c, err)
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"candidates": candidates, "questions": stats})
+}

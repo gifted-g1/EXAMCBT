@@ -1,6 +1,8 @@
 import { ApiError, request, type RequestOptions } from './client'
 import type {
   AccessCard,
+  AnswerScript,
+  QuestionStat,
   Proctoring,
   Exam,
   Question,
@@ -144,6 +146,9 @@ export const staffApi = {
   review: (examId: number, vid: number, status: 'CONFIRMED' | 'DISMISSED' | 'PENDING') =>
     authed<{ integrity_score: number }>(`${s}/exams/${examId}/violations/${vid}/review`, { method: 'POST', body: { status } }),
   report: (id: number) => authed<Report>(`${s}/exams/${id}/report`),
+  answerScript: (sid: number) => authed<AnswerScript>(`${s}/sessions/${sid}/answers`),
+  itemAnalysis: (id: number) =>
+    authed<{ candidates: number; questions: QuestionStat[] | null }>(`${s}/exams/${id}/item-analysis`),
   reportCSV: async (id: number) => {
     const url = await authedBlob(`${s}/exams/${id}/report?format=csv`)
     return url

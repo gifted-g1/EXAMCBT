@@ -237,3 +237,13 @@ func (r *Repo) SessionByExamStudent(ctx context.Context, examID, studentID int64
 	}
 	return &s, nil
 }
+
+// AnswersForExam returns every saved answer of every session of an exam in
+// one query (for per-question analysis).
+func (r *Repo) AnswersForExam(ctx context.Context, examID int64) ([]models.Answer, error) {
+	var out []models.Answer
+	err := r.q(ctx).Table("answers AS a").Select("a.*").
+		Joins("JOIN exam_sessions s ON s.id = a.session_id").
+		Where("s.exam_id = ?", examID).Scan(&out).Error
+	return out, err
+}

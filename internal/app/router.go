@@ -99,9 +99,11 @@ func NewRouter(shutdown context.Context, a *App) *gin.Engine {
 	s.GET("/exams/:id/violations", h.ListViolations)
 	s.POST("/exams/:id/violations/:vid/review", h.ReviewViolation)
 	s.GET("/exams/:id/report", h.Report)
+	s.GET("/exams/:id/item-analysis", h.ItemAnalysis)
 	s.POST("/exams/:id/purge-media", admin, h.PurgeMedia)
 
 	s.GET("/sessions/:sid", h.SessionDetail)
+	s.GET("/sessions/:sid/answers", h.AnswerScript)
 	s.GET("/sessions/:sid/image/:which", h.SessionImage)
 	s.POST("/sessions/:sid/unlock", h.UnlockSession)
 	s.POST("/sessions/:sid/terminate", h.TerminateSession)

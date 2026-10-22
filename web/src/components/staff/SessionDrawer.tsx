@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { authedImage, staffApi } from '../../api/staff'
 import type { SessionRow, Violation } from '../../api/types'
 import { eventLabels } from '../AlertFeed'
 import { Button, ErrorText, SeverityBadge, Spinner, StatusBadge, errorMessage } from '../ui'
+import { AnswerSheet } from './AnswerSheet'
 
 function AuthedImg({ src, alt }: { src: string; alt: string }) {
   const [url, setUrl] = useState<string | null>(null)
@@ -45,6 +46,8 @@ export function SessionDrawer({
   const [error, setError] = useState<string | null>(null)
   const [evidence, setEvidence] = useState<string | null>(null)
   const [note, setNote] = useState('')
+  const [showSheet, setShowSheet] = useState(false)
+  const closeSheet = useCallback(() => setShowSheet(false), [])
 
   const load = () =>
     staffApi.session(sessionId).then(
@@ -128,6 +131,11 @@ export function SessionDrawer({
                 <figcaption className="mt-1 text-xs text-slate-500">ID card</figcaption>
               </figure>
             </div>
+
+            <Button variant="secondary" onClick={() => setShowSheet(true)}>
+              View answer sheet
+            </Button>
+            {showSheet && <AnswerSheet sessionId={s.id} onClose={closeSheet} />}
 
             {canManage && s.status === 'ACTIVE' && (
               <div className="flex flex-wrap gap-2">

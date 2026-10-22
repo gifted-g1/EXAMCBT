@@ -127,6 +127,7 @@ export interface SessionState {
 }
 
 export interface ReportRow {
+  session_id: number
   matric_no: string
   full_name: string
   status: string
@@ -166,3 +167,50 @@ export interface Proctoring {
 
 export const proctoringNeedsMedia = (p?: Proctoring) =>
   !p || p.face_verification || p.camera_monitoring || p.audio_monitoring
+
+export type AnswerStatus = 'correct' | 'incorrect' | 'unanswered' | 'needs_marking'
+
+export interface ScriptItem {
+  question_id: number
+  number: number
+  kind: QuestionKind
+  prompt: string
+  options?: string[]
+  correct_option?: number | null
+  response: string
+  status: AnswerStatus
+  marks: number
+  awarded: number | null
+}
+
+/** A student's marked answer sheet (staff only). */
+export interface AnswerScript {
+  session_id: number
+  exam_id: number
+  exam_title: string
+  matric_no: string
+  full_name: string
+  status: SessionStatus
+  score: number
+  max_score: number
+  auto_marked_max: number
+  counts: Record<AnswerStatus, number>
+  items: ScriptItem[]
+}
+
+/** Class-wide result for one question. */
+export interface QuestionStat {
+  question_id: number
+  number: number
+  kind: QuestionKind
+  prompt: string
+  options?: string[]
+  correct_option?: number | null
+  correct: number
+  incorrect: number
+  unanswered: number
+  answered: number
+  option_counts?: number[]
+  common_wrong?: number | null
+  percent_right: number | null
+}

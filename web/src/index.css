@@ -102,3 +102,19 @@ html {
     opacity: 0;
   }
 }
+
+/* Printing an answer sheet prints only the sheet. */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .print-area,
+  .print-area * {
+    visibility: visible;
+  }
+  .print-area {
+    position: absolute;
+    inset: 0 auto auto 0;
+    width: 100%;
+  }
+}

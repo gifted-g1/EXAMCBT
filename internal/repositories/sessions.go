@@ -276,3 +276,17 @@ func (r *Repo) SetAnswerSuggestion(ctx context.Context, id int64, s datatypes.JS
 func (r *Repo) SetScore(ctx context.Context, sessionID int64, score float64) error {
 	return r.q(ctx).Model(&models.ExamSession{}).Where("id = ?", sessionID).UpdateColumn("score", score).Error
 }
+
+// DrawnQuestionIDs returns the question draw of every session of an exam
+// (nil for sessions that see all questions).
+func (r *Repo) DrawnQuestionIDs(ctx context.Context, examID int64) ([][]int64, error) {
+	var ss []models.ExamSession
+	if err := r.q(ctx).Select("id", "question_ids").Where("exam_id = ?", examID).Find(&ss).Error; err != nil {
+		return nil, err
+	}
+	out := make([][]int64, len(ss))
+	for i, s := range ss {
+		out[i] = s.QuestionIDs
+	}
+	return out, nil
+}

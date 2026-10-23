@@ -75,7 +75,7 @@ export function ExamDetail({ user }: { user: User }) {
               {new Date(exam.ends_at).toLocaleTimeString([], { timeStyle: 'short' })}
               <span className="font-mono text-xs">{exam.lan_cidr}</span>
             </p>
-            <TimeLimit exam={exam} canEdit={canManage && exam.status !== 'CLOSED'} onSaved={setExam} />
+            <ExamSettings exam={exam} canEdit={canManage && exam.status !== 'CLOSED'} onSaved={setExam} />
           </div>
           {canManage && (
             <div className="flex flex-wrap gap-2">
@@ -335,12 +335,15 @@ function LiveMonitor({ exam, canManage }: { exam: Exam; canManage: boolean }) {
   )
 }
 
-/** Shows and edits the per-student time limit (e.g. 25 minutes). */
-function TimeLimit({ exam, canEdit, onSaved }: { exam: Exam; canEdit: boolean; onSaved: (e: Exam) => void }) {
+/** Shows and edits the time limit and how many random questions each student gets. */
+function ExamSettings({ exam, canEdit, onSaved }: { exam: Exam; canEdit: boolean; onSaved: (e: Exam) => void }) {
   const [editing, setEditing] = useState(false)
-  const [value, setValue] = useState(exam.duration_minutes ? String(exam.duration_minutes) : '')
+  const [minutes, setMinutes] = useState(exam.duration_minutes ? String(exam.duration_minutes) : '')
+  const [perStudent, setPerStudent] = useState(exam.questions_per_student ? String(exam.questions_per_student) : '')
   const [error, setError] = useState<string | null>(null)
   const windowMin = Math.round((new Date(exam.ends_at).getTime() - new Date(exam.starts_at).getTime()) / 60000)
+  const pool = exam.questions_count
+  const drawn = exam.questions_per_student > 0 && exam.questions_per_student < pool
 
   const save = async () => {
     setError(null)
@@ -351,7 +354,8 @@ function TimeLimit({ exam, canEdit, onSaved }: { exam: Exam; canEdit: boolean; o
         starts_at: exam.starts_at,
         ends_at: exam.ends_at,
         lan_cidr: exam.lan_cidr,
-        duration_minutes: value.trim() === '' ? 0 : Number(value),
+        duration_minutes: minutes.trim() === '' ? 0 : Number(minutes),
+        questions_per_student: perStudent.trim() === '' ? 0 : Number(perStudent),
       })
       onSaved({ ...exam, ...updated, questions_count: exam.questions_count })
       setEditing(false)
@@ -365,6 +369,15 @@ function TimeLimit({ exam, canEdit, onSaved }: { exam: Exam; canEdit: boolean; o
       <p className="mt-1 text-sm text-slate-600">
         Time limit:{' '}
         <b>{exam.duration_minutes ? `${exam.duration_minutes} minutes per student` : `none (whole ${windowMin}-minute window)`}</b>
+        {' · '}Questions:{' '}
+        <b>
+          {drawn
+            ? `${exam.questions_per_student} random questions per student from ${pool}`
+            : `all ${pool} for every student`}
+        </b>
+        {exam.questions_per_student > pool && pool > 0 && (
+          <span className="ml-1 text-amber-700">(only {pool} in the bank, so everyone gets all)</span>
+        )}
         {canEdit && (
           <button type="button" className="ml-2 text-brand-700 underline" onClick={() => setEditing(true)}>
             Change
@@ -381,10 +394,22 @@ function TimeLimit({ exam, canEdit, onSaved }: { exam: Exam; canEdit: boolean; o
         min={1}
         max={windowMin}
         className="w-24 rounded-md border-0 px-2 py-1 ring-1 ring-slate-300"
-        value={value}
+        value={minutes}
         placeholder="none"
-        onChange={(e) => setValue(e.target.value)}
+        onChange={(e) => setMinutes(e.target.value)}
       />
+      <label htmlFor="per-student">Questions per student</label>
+      <input
+        id="per-student"
+        type="number"
+        min={1}
+        max={500}
+        className="w-24 rounded-md border-0 px-2 py-1 ring-1 ring-slate-300"
+        value={perStudent}
+        placeholder="all"
+        onChange={(e) => setPerStudent(e.target.value)}
+      />
+      <span className="text-slate-500">of {pool}</span>
       <Button className="px-3 py-1" onClick={save}>
         Save
       </Button>

@@ -328,6 +328,8 @@ curl -s $B/api/student/gate   # → 403 {"error":"LAN_REQUIRED",...}
 
 Write each blank in a `GAP` prompt as three or more underscores (`_____`) and send `blanks`, one list of accepted answers per blank, in order: `{"kind":"GAP","prompt":"HTTPS uses port _____.","blanks":[["443"]],"marks":1}`. Students' answers are saved as a JSON array with one string per blank. Accepted answers are never sent to students. In a PDF import, a question with blanks and an `Answer:` line becomes `GAP`. Separate blanks with `|` or label them `(i) … (ii) …`, and separate alternatives for one blank with ` / `, for example `Answer: (i) SYN (ii) SYN-ACK / SYN ACK`.
 
+**Random questions per student.** `questions_per_student` (e.g. `30`) gives each student their own draw from the exam's question pool when they start; `0` or a number at least the pool size gives everyone every question. The draw keeps the pool's proportions of `MCQ`, `GAP` and `TEXT` questions and prefers the questions handed out least so far (random among equals), so no two students share a question until the pool is used up. The draw is stored on the session (`exam_sessions.question_ids`), so a student who reloads or resumes sees the same questions in the same order. Answers to questions outside a student's draw are rejected. Scores, answer sheets and the report count each student out of their own questions; question analysis counts each question only for the students who were given it (`seen`).
+
 **Time limit.** `duration_minutes` on an exam (e.g. `25`) gives each student that long from the moment they start, never past `ends_at`. `0` means the whole window. The countdown, token expiry and answer acceptance (plus `SUBMIT_GRACE`) all use the student's own deadline. The scheduler submits sessions that run out of time automatically, and a student who returns after their time is up is submitted rather than resumed. Set it when creating the exam, or under *Time limit → Change* on the exam page.
 
 ### Theory (written-answer) marking
@@ -601,6 +603,11 @@ Docker publishes MySQL, Redis and MinIO nowhere. The API is published on `127.0.
 ---
 
 ## 15. Changelog
+
+### 1.3.0 — 2026-10-23
+- Random questions per student (`questions_per_student`): balanced, least-used draw that keeps the mix of question types, stored per session. Migration `000006_question_draw`.
+- Question bank: 19 subjects, 247 questions, with fill-in-the-gap questions.
+- Docker build uses Go 1.24.
 
 ### 1.2.0 — 2026-10-22
 - Fill-in-the-gap (`GAP`) questions: auto-marked with partial credit, inline answer boxes for students, PDF import support (including answer lines that wrap).

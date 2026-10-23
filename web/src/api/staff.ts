@@ -94,6 +94,8 @@ export interface ExamInput {
   require_pin?: boolean
   /** Per-student time limit in minutes; 0 = until the window ends. */
   duration_minutes?: number
+  /** Random questions per student from the pool; 0 = every question. */
+  questions_per_student?: number
 }
 
 export interface QuestionInput {

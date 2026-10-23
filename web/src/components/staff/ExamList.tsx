@@ -81,6 +81,7 @@ function CreateExam({ onCreated }: { onCreated: () => void }) {
   const [cidr, setCidr] = useState('')
   const [pin, setPin] = useState(true)
   const [duration, setDuration] = useState('')
+  const [perStudent, setPerStudent] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
 
@@ -97,6 +98,7 @@ function CreateExam({ onCreated }: { onCreated: () => void }) {
         lan_cidr: cidr.trim(),
         require_pin: pin,
         duration_minutes: duration.trim() === '' ? 0 : Number(duration),
+        questions_per_student: perStudent.trim() === '' ? 0 : Number(perStudent),
       })
       onCreated()
       navigate(`/staff/exams/${exam.id}`)
@@ -131,6 +133,17 @@ function CreateExam({ onCreated }: { onCreated: () => void }) {
             value={duration}
             onChange={(e) => setDuration(e.target.value)}
             placeholder="none"
+          />
+        </Field>
+        <Field label="Questions per student" hint="Each student gets this many random questions from the exam's question bank, e.g. 30. Leave blank to give everyone every question.">
+          <input
+            type="number"
+            min={1}
+            max={500}
+            className={`${inputClass} w-32`}
+            value={perStudent}
+            onChange={(e) => setPerStudent(e.target.value)}
+            placeholder="all"
           />
         </Field>
         <Field label="Instructions (shown to students)">

@@ -27,6 +27,7 @@ export interface Exam {
   proctoring: Proctoring
   questions_count: number
   duration_minutes: number
+  questions_per_student: number
 }
 
 export interface Question {
@@ -231,6 +232,8 @@ export interface QuestionStat {
   partial?: number
   unanswered: number
   answered: number
+  /** Students who were given this question (differs when questions are drawn at random). */
+  seen?: number
   option_counts?: number[]
   common_wrong?: number | null
   percent_right: number | null

@@ -94,6 +94,9 @@ type ExamInput struct {
 	RequirePIN  bool      `json:"require_pin"`
 	// DurationMinutes is each student's time limit (0 = until ends_at).
 	DurationMinutes int `json:"duration_minutes"`
+	// QuestionsPerStudent draws that many random questions per student
+	// from the exam's pool (0 = everyone gets every question).
+	QuestionsPerStudent int `json:"questions_per_student"`
 	// Proctoring is optional on create; omitted switches default to on.
 	Proctoring *models.ProctoringSettings `json:"proctoring,omitempty"`
 }
@@ -111,6 +114,9 @@ func (s *ExamService) validateInput(in *ExamInput) error {
 	}
 	if in.EndsAt.Sub(in.StartsAt) > 12*time.Hour {
 		return invalid("exam window cannot exceed 12 hours")
+	}
+	if in.QuestionsPerStudent < 0 || in.QuestionsPerStudent > 500 {
+		return invalid("questions per student must be between 0 and 500 (0 = all questions)")
 	}
 	if in.DurationMinutes < 0 || in.DurationMinutes > 720 {
 		return invalid("time limit must be between 0 and 720 minutes (0 = no limit)")
@@ -171,7 +177,7 @@ func (s *ExamService) Create(ctx context.Context, actorID int64, in ExamInput) (
 		return nil, err
 	}
 	e := &models.Exam{Title: in.Title, Description: in.Description, CreatedBy: actorID,
-		StartsAt: in.StartsAt, EndsAt: in.EndsAt, LANCIDR: in.LANCIDR, Status: models.ExamDraft, DurationMinutes: in.DurationMinutes}
+		StartsAt: in.StartsAt, EndsAt: in.EndsAt, LANCIDR: in.LANCIDR, Status: models.ExamDraft, DurationMinutes: in.DurationMinutes, QuestionsPerStudent: in.QuestionsPerStudent}
 	if in.Proctoring != nil {
 		e.Proctoring = in.Proctoring.Resolve().Settings()
 	}
@@ -206,7 +212,7 @@ func (s *ExamService) Update(ctx context.Context, e *models.Exam, in ExamInput) 
 		return nil, err
 	}
 	fields := map[string]any{"title": in.Title, "description": in.Description,
-		"starts_at": in.StartsAt, "ends_at": in.EndsAt, "lan_cidr": in.LANCIDR, "duration_minutes": in.DurationMinutes}
+		"starts_at": in.StartsAt, "ends_at": in.EndsAt, "lan_cidr": in.LANCIDR, "duration_minutes": in.DurationMinutes, "questions_per_student": in.QuestionsPerStudent}
 	if err := s.repo.UpdateExam(ctx, e.ID, fields); err != nil {
 		return nil, err
 	}

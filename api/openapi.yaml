@@ -166,6 +166,7 @@ components:
         pin_code: { type: string, nullable: true, example: '4821' }
         questions_count: { type: integer }
         duration_minutes: { type: integer, description: 'Per-student time limit from when they start; 0 = until ends_at.' }
+        questions_per_student: { type: integer }
     ExamInput:
       type: object
       required: [title, starts_at, ends_at]
@@ -177,6 +178,7 @@ components:
         lan_cidr: { type: string, description: 'Private CIDR overlapping the server LAN; blank = server LAN.' }
         require_pin: { type: boolean }
         duration_minutes: { type: integer, minimum: 0, maximum: 720, description: 'e.g. 25; must fit in the window. 0 = no limit.' }
+        questions_per_student: { type: integer, minimum: 0, maximum: 500, description: 'Random questions per student from the pool; 0 = all.' }
     AccessCard:
       type: object
       properties:

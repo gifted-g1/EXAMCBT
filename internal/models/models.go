@@ -63,12 +63,15 @@ type Exam struct {
 	Proctoring  ProctoringSettings `gorm:"column:proctoring;type:json;serializer:json" json:"proctoring"`
 	// DurationMinutes is each student's time limit from when they start;
 	// 0 means "until the exam window ends". Never runs past EndsAt.
-	DurationMinutes int        `gorm:"not null;default:0" json:"duration_minutes"`
-	MediaPurgedAt   *time.Time `json:"media_purged_at,omitempty"`
-	CreatedAt       time.Time  `json:"created_at"`
-	UpdatedAt       time.Time  `json:"updated_at"`
-	Creator         *User      `gorm:"foreignKey:CreatedBy;constraint:OnDelete:RESTRICT" json:"-"`
-	QuestionsCount  int64      `gorm:"-" json:"questions_count"`
+	DurationMinutes int `gorm:"not null;default:0" json:"duration_minutes"`
+	// QuestionsPerStudent, when > 0 and smaller than the pool, gives each
+	// student their own random draw of that many questions.
+	QuestionsPerStudent int        `gorm:"not null;default:0" json:"questions_per_student"`
+	MediaPurgedAt       *time.Time `json:"media_purged_at,omitempty"`
+	CreatedAt           time.Time  `json:"created_at"`
+	UpdatedAt           time.Time  `json:"updated_at"`
+	Creator             *User      `gorm:"foreignKey:CreatedBy;constraint:OnDelete:RESTRICT" json:"-"`
+	QuestionsCount      int64      `gorm:"-" json:"questions_count"`
 }
 
 // Deadline is when a session started at startedAt must be submitted.
@@ -151,8 +154,11 @@ type ExamSession struct {
 	Score          *float64      `gorm:"type:decimal(7,2)" json:"score,omitempty"`
 	AutoSubmitted  bool          `gorm:"not null;default:false" json:"auto_submitted"`
 	Status         SessionStatus `gorm:"size:16;not null;default:INIT;index:idx_status" json:"status"`
-	Exam           *Exam         `gorm:"constraint:OnDelete:CASCADE" json:"-"`
-	Student        *Student      `gorm:"constraint:OnDelete:CASCADE" json:"student,omitempty"`
+	// QuestionIDs are this student's questions in their order; nil means
+	// every question of the exam in the standard order.
+	QuestionIDs datatypes.JSONSlice[int64] `gorm:"type:json" json:"question_ids,omitempty"`
+	Exam        *Exam                      `gorm:"constraint:OnDelete:CASCADE" json:"-"`
+	Student     *Student                   `gorm:"constraint:OnDelete:CASCADE" json:"student,omitempty"`
 }
 
 type Severity string

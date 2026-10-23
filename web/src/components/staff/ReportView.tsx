@@ -174,6 +174,7 @@ function QuestionAnalysis({ examId }: { examId: number }) {
                   <p className="mt-2 text-xs text-slate-500">
                     <span className="text-emerald-700">{q.correct} right</span> · <span className="text-rose-700">{q.incorrect} wrong</span> ·{' '}
                     {q.unanswered} skipped
+                    {q.seen != null && q.seen !== data.candidates && <> · given to {q.seen}</>}
                     {q.correct_option != null && (
                       <>
                         {' '}

@@ -155,6 +155,7 @@ func (s *ProctorService) AnswerScript(ctx context.Context, sessionID int64) (*An
 	if err != nil {
 		return nil, err
 	}
+	qs = AssignedQuestions(qs, sess.QuestionIDs)
 	ans, err := s.repo.Answers(ctx, sess.ID)
 	if err != nil {
 		return nil, err
@@ -214,6 +215,7 @@ type QuestionStat struct {
 	Partial       int                 `json:"partial"`
 	Unanswered    int                 `json:"unanswered"`
 	Answered      int                 `json:"answered"`
+	Seen          int                 `json:"seen"`                    // students who were given this question
 	OptionCounts  []int               `json:"option_counts,omitempty"` // students per option (MCQ)
 	CommonWrong   *int                `json:"common_wrong,omitempty"`  // most chosen wrong option
 	PercentRight  *float64            `json:"percent_right"`
@@ -246,6 +248,10 @@ func (s *ProctorService) ItemAnalysis(ctx context.Context, e *models.Exam) ([]Qu
 			st.OptionCounts = make([]int, len(q.Options))
 		}
 		for _, r := range rows {
+			if r.QuestionIDs != nil && !containsID(r.QuestionIDs, q.ID) {
+				continue // this student was not given the question
+			}
+			st.Seen++
 			a := resp[key{r.ID, q.ID}]
 			status, _ := markAnswer(q, a)
 			switch status {
@@ -265,8 +271,8 @@ func (s *ProctorService) ItemAnalysis(ctx context.Context, e *models.Exam) ([]Qu
 				}
 			}
 		}
-		if q.Kind != models.QuestionText && len(rows) > 0 {
-			p := round2(float64(st.Correct) / float64(len(rows)) * 100)
+		if q.Kind != models.QuestionText && st.Seen > 0 {
+			p := round2(float64(st.Correct) / float64(st.Seen) * 100)
 			st.PercentRight = &p
 			best := -1
 			for oi, n := range st.OptionCounts {

@@ -213,6 +213,13 @@ func (s *StudentService) Verify(ctx context.Context, e *models.Exam, in VerifyIn
 			LastSeenAt: &now, IntegrityScore: 100, FaceMatchScore: fr.score, ReferenceKey: fr.refKey,
 			IDPhotoKey: fr.idKey, ConsentAt: &now, ConsentVersion: s.cfg.ConsentVersion, Status: models.SessionActive,
 		}
+		if e.QuestionsPerStudent > 0 {
+			ids, err := drawFor(ctx, tx, e)
+			if err != nil {
+				return err
+			}
+			sess.QuestionIDs = ids
+		}
 		return tx.CreateSession(ctx, sess)
 	})
 	if err != nil {
@@ -408,6 +415,7 @@ func (s *StudentService) State(ctx context.Context, sessionID int64) (*SessionSt
 	if sess.Student != nil {
 		st.Student.MatricNo, st.Student.FullName = sess.Student.MatricNo, sess.Student.FullName
 	}
+	qs = AssignedQuestions(qs, sess.QuestionIDs)
 	st.Questions = make([]QuestionView, len(qs))
 	for i, q := range qs {
 		st.Questions[i] = QuestionView{ID: q.ID, Position: q.Position, Kind: q.Kind, Prompt: q.Prompt, Options: q.Options, Marks: q.Marks, Blanks: len(q.Blanks)}
@@ -463,6 +471,9 @@ func (s *StudentService) SaveAnswer(ctx context.Context, c *auth.StudentClaims, 
 		if qs[i].ID == questionID {
 			q = &qs[i]
 		}
+	}
+	if q != nil && sess.QuestionIDs != nil && !containsID(sess.QuestionIDs, q.ID) {
+		q = nil // not one of this student's questions
 	}
 	if q == nil {
 		return time.Time{}, invalid("question does not belong to this exam")
@@ -663,6 +674,7 @@ func grade(ctx context.Context, tx *repositories.Repo, sess *models.ExamSession)
 	if err != nil {
 		return 0, err
 	}
+	qs = AssignedQuestions(qs, sess.QuestionIDs)
 	ans, err := tx.Answers(ctx, sess.ID)
 	if err != nil {
 		return 0, err

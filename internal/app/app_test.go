@@ -879,3 +879,70 @@ func TestGapQuestionsAndTimeLimit(t *testing.T) {
 	assert.Equal(t, "partial", item["status"])
 	assert.Equal(t, []any{true, false}, item["blank_correct"])
 }
+
+func TestRandomQuestionDraw(t *testing.T) {
+	h := newHarness(t)
+	h.login("20010078", "MUSTAPHA")
+	now := time.Now().UTC()
+	r := h.do(http.MethodPost, "/api/staff/exams", map[string]any{"title": "Drawn", "starts_at": now.Add(-time.Minute),
+		"ends_at": now.Add(time.Hour), "lan_cidr": "127.0.0.0/8", "proctoring": map[string]bool{"face_verification": false},
+		"duration_minutes": 30, "questions_per_student": 4}, nil)
+	require.Equal(t, 201, r.Code, r.Raw)
+	examID := num(r.Body["id"])
+	assert.EqualValues(t, 4, r.Body["questions_per_student"])
+
+	var qs []map[string]any
+	for i := 0; i < 6; i++ {
+		qs = append(qs, map[string]any{"prompt": fmt.Sprintf("MCQ %d", i), "options": []string{"a", "b"}, "correct_option": 0, "marks": 1})
+	}
+	qs = append(qs, map[string]any{"kind": "TEXT", "prompt": "Essay 1", "marks": 5}, map[string]any{"kind": "TEXT", "prompt": "Essay 2", "marks": 5})
+	require.Equal(t, 201, h.do(http.MethodPost, fmt.Sprintf("/api/staff/exams/%d/questions", examID), map[string]any{"questions": qs}, nil).Code)
+	require.Equal(t, 200, h.do(http.MethodPost, fmt.Sprintf("/api/staff/exams/%d/status", examID), map[string]string{"action": "open"}, nil).Code)
+
+	paper := func(matric, device string) (int64, []int64, map[string]int) {
+		r := h.multipart("/api/student/verify", map[string]string{"matric_no": matric, "consent": "true"}, nil, fp(device))
+		require.Equal(t, 200, r.Code, r.Raw)
+		st := h.do(http.MethodGet, "/api/student/session", nil, fp(device))
+		var ids []int64
+		kinds := map[string]int{}
+		for _, q := range st.Body["questions"].([]any) {
+			m := q.(map[string]any)
+			ids = append(ids, num(m["id"]))
+			kinds[m["kind"].(string)]++
+		}
+		return num(st.Body["session_id"]), ids, kinds
+	}
+	sidA, a, kindsA := paper("IFT/22/9203", devA)
+	require.Len(t, a, 4)
+	assert.Equal(t, map[string]int{"MCQ": 3, "TEXT": 1}, kindsA, "same mix as the pool (6:2)")
+	for _, id := range a { // "0": option A for MCQs, a short text for the essay
+		require.Equal(t, 200, h.do(http.MethodPut, "/api/student/answers", map[string]any{"question_id": id, "response": "0"}, fp(devA)).Code)
+	}
+	require.Equal(t, 200, h.do(http.MethodPost, "/api/student/submit", nil, fp(devA)).Code)
+
+	_, b, kindsB := paper("IFT/22/9101", devB)
+	require.Len(t, b, 4)
+	assert.Equal(t, kindsA, kindsB)
+	for _, id := range a {
+		assert.NotContains(t, b, id, "the two students share no questions")
+	}
+	// A question from someone else's paper is rejected.
+	assert.Equal(t, 400, h.do(http.MethodPut, "/api/student/answers", map[string]any{"question_id": a[0], "response": "0"}, fp(devB)).Code)
+
+	r = h.do(http.MethodGet, fmt.Sprintf("/api/staff/sessions/%d/answers", sidA), nil, nil)
+	require.Equal(t, 200, r.Code, r.Raw)
+	assert.Len(t, r.Body["items"].([]any), 4, "answer sheet shows only the student's questions")
+	assert.Equal(t, 8.0, r.Body["max_score"], "3 MCQ x 1 + 1 essay x 5")
+	assert.Equal(t, 3.0, r.Body["score"])
+
+	r = h.do(http.MethodGet, fmt.Sprintf("/api/staff/exams/%d/report", examID), nil, nil)
+	for _, row := range r.Body["rows"].([]any) {
+		assert.Equal(t, 8.0, row.(map[string]any)["max_score"])
+	}
+	r = h.do(http.MethodGet, fmt.Sprintf("/api/staff/exams/%d/item-analysis", examID), nil, nil)
+	seen := 0.0
+	for _, q := range r.Body["questions"].([]any) {
+		seen += q.(map[string]any)["seen"].(float64)
+	}
+	assert.Equal(t, 8.0, seen, "each question counted only for students who got it")
+}

@@ -115,8 +115,10 @@ func (s *ProctorService) Report(ctx context.Context, e *models.Exam) (*Report, e
 	}
 	var max float64
 	hasText := false
+	marks := make(map[int64]float64, len(qs))
 	for _, q := range qs {
 		max += q.Marks
+		marks[q.ID] = q.Marks
 		if q.Kind == models.QuestionText {
 			hasText = true
 		}
@@ -124,8 +126,15 @@ func (s *ProctorService) Report(ctx context.Context, e *models.Exam) (*Report, e
 	rep := &Report{Exam: e, GeneratedAt: time.Now().UTC()}
 	var sumScore, sumInt float64
 	for _, r := range rows {
+		rowMax := max // out of the student's own questions when they had a draw
+		if r.QuestionIDs != nil {
+			rowMax = 0
+			for _, id := range r.QuestionIDs {
+				rowMax += marks[id]
+			}
+		}
 		rep.Rows = append(rep.Rows, ReportRow{SessionID: r.ID, MatricNo: r.MatricNo, FullName: r.FullName, Status: string(r.Status),
-			Score: r.Score, MaxScore: max, IntegrityScore: r.IntegrityScore, FaceMatch: r.FaceMatchScore,
+			Score: r.Score, MaxScore: rowMax, IntegrityScore: r.IntegrityScore, FaceMatch: r.FaceMatchScore,
 			Violations: r.ViolationsCount, HighViolations: r.HighCount, AutoSubmitted: r.AutoSubmitted,
 			StartedAt: r.StartedAt, EndedAt: r.EndedAt, NeedsMarking: hasText})
 		if r.Score != nil {
